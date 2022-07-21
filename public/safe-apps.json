@@ -1,0 +1,462 @@
+[
+  {
+    "id": 20,
+    "url": "https://safe-cmm.gnosis.io",
+    "name": "Gnosis Custom Market Maker",
+    "iconUrl": "https://safe-cmm.gnosis.io/img/appIcon.svg",
+    "description": "Allows you to deploy, withdraw and manage your custom market maker strategies",
+    "chainIds": [
+      "4",
+      "100"
+    ],
+    "provider": null,
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 25,
+    "url": "https://safe-apps.dev.gnosisdev.com/wallet-connect",
+    "name": "WalletConnect",
+    "iconUrl": "https://safe-apps.dev.gnosisdev.com/wallet-connect/wallet-connect.svg",
+    "description": "Connect your Safe to any dApp that supports WalletConnect",
+    "chainIds": [
+      "1",
+      "4",
+      "5",
+      "10",
+      "56",
+      "100",
+      "137",
+      "246",
+      "73799",
+      "42161",
+      "43114",
+      "1313161554"
+    ],
+    "provider": null,
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": [
+      "dashboard-widgets"
+    ]
+  },
+  {
+    "id": 17,
+    "url": "https://cloudflare-ipfs.com/ipfs/QmSpfd5UwhUBZxKouqSsY3bFynyDy6sToVLigLwSWRms9s",
+    "name": "Gnosis Auction Starter",
+    "iconUrl": "https://cloudflare-ipfs.com/ipfs/QmSpfd5UwhUBZxKouqSsY3bFynyDy6sToVLigLwSWRms9s/logo.svg",
+    "description": "Safe app to start new auctions on Gnosis Auction",
+    "chainIds": [
+      "1",
+      "4",
+      "100",
+      "137"
+    ],
+    "provider": null,
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 33,
+    "url": "https://cloudflare-ipfs.com/ipfs/QmSddkqicov3HC1Urzv5AKPy2S7KqcnMQR5fjBnrFs2Z7A",
+    "name": "CSV Airdrop",
+    "iconUrl": "https://cloudflare-ipfs.com/ipfs/QmSddkqicov3HC1Urzv5AKPy2S7KqcnMQR5fjBnrFs2Z7A/logo.svg",
+    "description": "Upload your CSV transfer file to send arbitrarily many tokens of various amounts to a list of recipients.",
+    "chainIds": [
+      "1",
+      "4",
+      "56",
+      "100",
+      "137"
+    ],
+    "provider": null,
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 57,
+    "url": "https://app.zerion.io",
+    "name": "Zerion",
+    "iconUrl": "https://app.zerion.io//logo.svg",
+    "description": "Zerion — Invest in DeFi from one place",
+    "chainIds": [
+      "4",
+      "1",
+      "100"
+    ],
+    "provider": {
+      "url": "http://zerion.io",
+      "name": "Zerion"
+    },
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": [
+      "nft"
+    ]
+  },
+  {
+    "id": 10,
+    "url": "https://cloudflare-ipfs.com/ipfs/QmTvrLwJtyjG8QFHgvqdPhcV5DBMQ7oZceSU4uvPw9vQaj",
+    "name": "Idle v4",
+    "iconUrl": "https://cloudflare-ipfs.com/ipfs/QmTvrLwJtyjG8QFHgvqdPhcV5DBMQ7oZceSU4uvPw9vQaj/logo.svg",
+    "description": "Always the best yield, with no effort",
+    "chainIds": [
+      "1",
+      "4"
+    ],
+    "provider": null,
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 15,
+    "url": "https://cloudflare-ipfs.com/ipfs/QmWZDNujzAHeALnzAvmT975TejAmwWmYTpVqgZrexBAVrt",
+    "name": "Liquity Frontend",
+    "iconUrl": "https://cloudflare-ipfs.com/ipfs/QmWZDNujzAHeALnzAvmT975TejAmwWmYTpVqgZrexBAVrt/logo256.png",
+    "description": "Simple frontend with high kickback rate, hosted on Arweave and ENS for maximal decentralisation.",
+    "chainIds": [
+      "1",
+      "4"
+    ],
+    "provider": null,
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 56,
+    "url": "https://cloudflare-ipfs.com/ipfs/QmVD89ufHaoMNfJYrYFdPiXSWwqdgCaXHKauUSnGZfaopw/",
+    "name": "Token Approval Manager",
+    "iconUrl": "https://cloudflare-ipfs.com/ipfs/QmVD89ufHaoMNfJYrYFdPiXSWwqdgCaXHKauUSnGZfaopw/logo.svg",
+    "description": "View and revoke all your token approvals",
+    "chainIds": [
+      "1",
+      "4",
+      "100"
+    ],
+    "provider": null,
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 13,
+    "url": "https://safe-apps.dev.gnosisdev.com/compound",
+    "name": "Compound",
+    "iconUrl": "https://safe-apps.dev.gnosisdev.com/compound/Compound.png",
+    "description": "Money markets on the Ethereum blockchain",
+    "chainIds": [
+      "1",
+      "4"
+    ],
+    "provider": null,
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 5,
+    "url": "https://cloudflare-ipfs.com/ipfs/QmQovvfYYMUXjZfNbysQDUEXR8nr55iJRwcYgJQGJR7KEA",
+    "name": "OpenZeppelin",
+    "iconUrl": "https://cloudflare-ipfs.com/ipfs/QmQovvfYYMUXjZfNbysQDUEXR8nr55iJRwcYgJQGJR7KEA/openzeppelin.png",
+    "description": "Securely manage and monitor your Ethereum project.",
+    "chainIds": [
+      "1",
+      "4"
+    ],
+    "provider": null,
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 37,
+    "url": "https://zodiac-safe-app-prod.on.fleek.co/",
+    "name": "Zodiac",
+    "iconUrl": "https://zodiac-safe-app-prod.on.fleek.co/zodiac-app-logo.png",
+    "description": "The expansion pack for DAOs",
+    "chainIds": [
+      "1",
+      "4",
+      "56",
+      "100",
+      "137"
+    ],
+    "provider": null,
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 24,
+    "url": "https://safe-apps.dev.gnosisdev.com/tx-builder",
+    "name": "Transaction Builder",
+    "iconUrl": "https://safe-apps.dev.gnosisdev.com/tx-builder/tx-builder.png",
+    "description": "A Safe app to compose custom transactions",
+    "chainIds": [
+      "1",
+      "4",
+      "5",
+      "10",
+      "56",
+      "43114",
+      "100",
+      "137",
+      "246",
+      "42161",
+      "73799",
+      "1313161554"
+    ],
+    "provider": null,
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": [
+      "dashboard-widgets"
+    ]
+  },
+  {
+    "id": 55,
+    "url": "https://earn.alkemi.network/",
+    "name": "Alkemi Earn",
+    "iconUrl": "https://earn.alkemi.network/images/icon-512x512.png",
+    "description": "Lend and borrow your crypto and earn yields through professional DeFi",
+    "chainIds": [
+      "1",
+      "4"
+    ],
+    "provider": null,
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 8,
+    "url": "https://invoicing.request.network",
+    "name": "Request Invoicing",
+    "iconUrl": "https://invoicing.request.network/logo512.png",
+    "description": "The easiest way to get your invoices paid in crypto",
+    "chainIds": [
+      "1",
+      "4",
+      "56",
+      "100",
+      "137",
+      "42161"
+    ],
+    "provider": {
+      "url": "https://request.network",
+      "name": "Request"
+    },
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 48,
+    "url": "https://app.ens.domains",
+    "name": "Dorito Test",
+    "iconUrl": "https://app.ens.domains/android-chrome-144x144.png",
+    "description": "Just a lovely test, don't mind me :)",
+    "chainIds": [
+      "1",
+      "4"
+    ],
+    "provider": null,
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 51,
+    "url": "https://safe-apps.dev.gnosisdev.com/ramp-network",
+    "name": "Ramp Network",
+    "iconUrl": "https://safe-apps.dev.gnosisdev.com/ramp-network/ramp.svg",
+    "description": "Buy crypto directly from your Safe",
+    "chainIds": [
+      "1",
+      "4",
+      "56",
+      "100",
+      "137"
+    ],
+    "provider": null,
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 59,
+    "url": "https://gnosis-safe.llamapay.io/",
+    "name": "LlamaPay",
+    "iconUrl": "https://gnosis-safe.llamapay.io/favicons/favicon.svg",
+    "description": "Automate transactions and stream them by the second.",
+    "chainIds": [
+      "1",
+      "4",
+      "10",
+      "56",
+      "100",
+      "137",
+      "42161",
+      "43114"
+    ],
+    "provider": null,
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 16,
+    "url": "https://cloudflare-ipfs.com/ipfs/QmRJWEqpSxvkb2hKCb4DnJrYdEVRADAJouqxvp8mbY3SnE",
+    "name": "Sablier",
+    "iconUrl": "https://cloudflare-ipfs.com/ipfs/QmRJWEqpSxvkb2hKCb4DnJrYdEVRADAJouqxvp8mbY3SnE/logo.svg",
+    "description": "Safe App for interacting with the Sablier protocol",
+    "chainIds": [
+      "1",
+      "4",
+      "56",
+      "137"
+    ],
+    "provider": {
+      "url": "https://sablier.finance",
+      "name": "Sablier"
+    },
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 36,
+    "url": "https://safe-apps.dev.gnosisdev.com/drain-safe",
+    "name": "Drain Account",
+    "iconUrl": "https://safe-apps.dev.gnosisdev.com/drain-safe/logo.svg",
+    "description": "Transfer all your assets in batch",
+    "chainIds": [
+      "1",
+      "4",
+      "5",
+      "10",
+      "56",
+      "43114",
+      "100",
+      "137",
+      "246",
+      "42161",
+      "73799",
+      "1313161554"
+    ],
+    "provider": null,
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 58,
+    "url": "https://cowswap.exchange/",
+    "name": "CowSwap",
+    "iconUrl": "https://cowswap.exchange/favicon.png",
+    "description": "Save money on token swaps by trading directly with peers and avoiding front-running attacks",
+    "chainIds": [
+      "1",
+      "4",
+      "100"
+    ],
+    "provider": null,
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 22,
+    "url": "http://google.com",
+    "name": "Broken App",
+    "iconUrl": "https://app.dodoex.io/DODO.svg",
+    "description": "A broken app for testing Character encoding String datatypes have historically allocated one byte per character, and, although the exact character set varied by region, character encodings were simila",
+    "chainIds": [
+      "4"
+    ],
+    "provider": {
+      "url": "https://1inch.exchange",
+      "name": "1inch corporation"
+    },
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 3,
+    "url": "https://app.ens.domains",
+    "name": "ENS App",
+    "iconUrl": "https://app.ens.domains/android-chrome-144x144.png",
+    "description": "Decentralised naming for wallets, websites, & more.",
+    "chainIds": [
+      "1",
+      "4"
+    ],
+    "provider": null,
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 14,
+    "url": "https://cloudflare-ipfs.com/ipfs/QmXLxxczMH4MBEYDeeN9zoiHDzVkeBmB5rBjA3UniPEFcA",
+    "name": "Synthetix",
+    "iconUrl": "https://cloudflare-ipfs.com/ipfs/QmXLxxczMH4MBEYDeeN9zoiHDzVkeBmB5rBjA3UniPEFcA/Synthetix.png",
+    "description": "Trade synthetic assets on Ethereum",
+    "chainIds": [
+      "1",
+      "4"
+    ],
+    "provider": null,
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  },
+  {
+    "id": 9,
+    "url": "https://cloudflare-ipfs.com/ipfs/QmTa21pi77hiT1sLCGy5BeVwcyzExUSp2z7byxZukye8hr",
+    "name": "PoolTogether",
+    "iconUrl": "https://cloudflare-ipfs.com/ipfs/QmTa21pi77hiT1sLCGy5BeVwcyzExUSp2z7byxZukye8hr/pool-together.png",
+    "description": "No-loss lotteries on your Gnosis Safe",
+    "chainIds": [
+      "1",
+      "4"
+    ],
+    "provider": {
+      "url": "https://avolabs.io/",
+      "name": "Avo Labs"
+    },
+    "accessControl": {
+      "type": "NO_RESTRICTIONS"
+    },
+    "tags": []
+  }
+]
