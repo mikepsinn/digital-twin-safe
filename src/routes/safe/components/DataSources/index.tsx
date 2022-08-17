@@ -21,7 +21,7 @@ const setConnectAppLogoFallback = (error: SyntheticEvent<HTMLImageElement, Event
 const DataSources = (): ReactElement => {
   const columns = generateColumns()
   const [token, setToken] = useState('')
-  const [connectData, setConnectData] = useState([])
+  const [connectData, setDataSources] = useState([])
 
   useEffect(() => {
     const _token = token === '' ? 'demo' : token
@@ -33,7 +33,7 @@ const DataSources = (): ReactElement => {
 
     fetch('https://app.quantimo.do/api/v3/connectors/list', options)
       .then((response) => response.json())
-      .then((response) => setConnectData(response.connectors))
+      .then((response) => setDataSources(response.connectors))
       .catch((err) => console.error(err))
   }, [token])
 

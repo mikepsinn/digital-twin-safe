@@ -118,7 +118,7 @@ const Container = (): React.ReactElement => {
           render={() => wrapInSuspense(<TxList />)}
         />
         <Route exact path={SAFE_ROUTES.ADDRESS_BOOK} render={() => wrapInSuspense(<AddressBookTable />)} />
-        <Route exact path={SAFE_ROUTES.CONNECTORS} render={() => wrapInSuspense(<DataSources />)} />
+        <Route exact path={SAFE_ROUTES.DATA_SOURCES} render={() => wrapInSuspense(<DataSources />)} />
         <Route
           exact
           path={SAFE_ROUTES.APPS}

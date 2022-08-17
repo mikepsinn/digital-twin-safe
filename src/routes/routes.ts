@@ -59,7 +59,7 @@ export const SAFE_ROUTES = {
   TRANSACTIONS_SINGULAR: `${ADDRESSED_ROUTE}/transactions/:${TRANSACTION_ID_SLUG}`,
   ADDRESS_BOOK: `${ADDRESSED_ROUTE}/address-book`,
   APPS: `${ADDRESSED_ROUTE}/apps`,
-  CONNECTORS: `${ADDRESSED_ROUTE}/connectors`,
+  DATA_SOURCES: `${ADDRESSED_ROUTE}/data-sources`,
   SETTINGS: `${ADDRESSED_ROUTE}/settings`,
   SETTINGS_APPEARANCE: `${ADDRESSED_ROUTE}/settings/appearance`,
   SETTINGS_DETAILS: `${ADDRESSED_ROUTE}/settings/details`,
