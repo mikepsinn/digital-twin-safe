@@ -7,7 +7,7 @@ export const EDIT_ENTRY_BUTTON = 'edit-entry-btn'
 export const REMOVE_ENTRY_BUTTON = 'remove-entry-btn'
 export const SEND_ENTRY_BUTTON = 'send-entry-btn'
 
-type ConnectorsColumn = {
+type DataSourcesColumn = {
   id: string
   order: boolean
   disablePadding?: boolean
@@ -17,7 +17,7 @@ type ConnectorsColumn = {
   align?: TableCellProps['align']
 }
 
-export const generateColumns = (): List<ConnectorsColumn> => {
+export const generateColumns = (): List<DataSourcesColumn> => {
   const iconColumn = {
     id: ICON_ID,
     order: false,

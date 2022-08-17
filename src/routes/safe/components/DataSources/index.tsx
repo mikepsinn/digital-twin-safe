@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import Table from 'src/components/Table'
 import Col from 'src/components/layout/Col'
 import { SearchInputCard } from './components/SearchInputCard'
-import { ConnectItem } from './components/ConnectItem'
+import { DataSourceItem } from './components/DataSourceItem'
 import { generateColumns } from './columns'
 import fallbackConnectAppLogoSvg from 'src/assets/icons/apps.svg'
 
@@ -18,7 +18,7 @@ const setConnectAppLogoFallback = (error: SyntheticEvent<HTMLImageElement, Event
   error.currentTarget.src = fallbackConnectAppLogoSvg
 }
 
-const Connectors = (): ReactElement => {
+const DataSources = (): ReactElement => {
   const columns = generateColumns()
   const [token, setToken] = useState('')
   const [connectData, setConnectData] = useState([])
@@ -42,7 +42,7 @@ const Connectors = (): ReactElement => {
       <Menu>
         <Col start="sm" xs={12}>
           <Breadcrumb>
-            <BreadcrumbElement iconType="search" text="Connectors" />
+            <BreadcrumbElement iconType="search" text="DataSources" />
           </Breadcrumb>
         </Col>
       </Menu>
@@ -56,7 +56,7 @@ const Connectors = (): ReactElement => {
               defaultFixed
               defaultRowsPerPage={25}
               disableLoadingOnEmptyTable
-              label="Connectors"
+              label="Data Sources"
               size={connectData?.length || 0}
             >
               {(sortedData) =>
@@ -67,7 +67,7 @@ const Connectors = (): ReactElement => {
                         <ConnectAppLogo size="md" src={data.image} alt={` Logo`} onError={setConnectAppLogoFallback} />
                       </CellWrapper>
                       <CellWrapper>
-                        <ConnectItem data={data} />
+                        <DataSourceItem data={data} />
                       </CellWrapper>
                     </TableRow>
                   )
@@ -81,7 +81,7 @@ const Connectors = (): ReactElement => {
   )
 }
 
-export default Connectors
+export default DataSources
 
 const ContentWrapper = styled.div`
   display: flex;

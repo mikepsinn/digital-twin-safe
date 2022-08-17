@@ -7,7 +7,7 @@ type Props = {
   data: any
 }
 
-const ConnectItem = ({ data }: Props): React.ReactElement => (
+const DataSourceItem = ({ data }: Props): React.ReactElement => (
   <ContentWrapper>
     <Title size="lg">{data.displayName}</Title>
     <Content size="md">{data.longDescription}</Content>
@@ -35,7 +35,7 @@ const ConnectItem = ({ data }: Props): React.ReactElement => (
   </ContentWrapper>
 )
 
-export { ConnectItem }
+export { DataSourceItem }
 
 const ContentWrapper = styled.div`
   display: flex;
