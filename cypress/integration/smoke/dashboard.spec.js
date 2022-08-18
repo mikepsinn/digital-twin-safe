@@ -53,6 +53,9 @@ describe('Dashboard', () => {
     cy.contains('main p', 'Use WalletConnect')
     cy.get(`a[href*='/wallet-connect']`).should('exist')
 
+    // Featured data sources have a Safe-specific link
+    cy.get(`main section#featured-data-sources a[href^="/app/${SAFE}/apps?appUrl=http"]`).should('have.length', 2)
+
     // Featured apps have a Safe-specific link
     cy.get(`main section#featured-safe-apps a[href^="/app/${SAFE}/apps?appUrl=http"]`).should('have.length', 2)
   })

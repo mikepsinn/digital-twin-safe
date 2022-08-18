@@ -138,6 +138,11 @@ const useSidebarItems = (): ListItemType[] => {
         href: currentSafeRoutes.APPS,
       }),
       makeEntryItem({
+        label: 'Data Sources',
+        iconType: 'arrowDown',
+        href: currentSafeRoutes.DATA_SOURCES,
+      }),
+      makeEntryItem({
         label: 'Settings',
         iconType: 'settings',
         href: currentSafeRoutes.SETTINGS_DETAILS,
