@@ -42,7 +42,7 @@ const DataSources = (): ReactElement => {
       <Menu>
         <Col start="sm" xs={12}>
           <Breadcrumb>
-            <BreadcrumbElement iconType="search" text="DataSources" />
+            <BreadcrumbElement iconType="arrowDown" text="Data Sources" />
           </Breadcrumb>
         </Col>
       </Menu>

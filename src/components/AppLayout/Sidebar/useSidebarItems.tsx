@@ -139,7 +139,7 @@ const useSidebarItems = (): ListItemType[] => {
       }),
       makeEntryItem({
         label: 'Data Sources',
-        iconType: 'transactionsInactive',
+        iconType: 'arrowDown',
         href: currentSafeRoutes.DATA_SOURCES,
       }),
       makeEntryItem({
