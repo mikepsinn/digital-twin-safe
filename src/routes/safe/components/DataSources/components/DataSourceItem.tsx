@@ -11,7 +11,7 @@ const DataSourceItem = ({ data }: Props): React.ReactElement => (
     data.buttons.foreach(function (button) {
         const final_callback_url = window.location.href
         button.link += "&final_callback_url=" + window.location.href
-        // Create buttons from API buttons instead of hard coding
+        // Create buttons from API buttons in https://app.quantimo.do/api/v3/connectors/list?access_token=demo instead of hard coding
     })
   <ContentWrapper>
     <Title size="lg">{data.displayName}</Title>
