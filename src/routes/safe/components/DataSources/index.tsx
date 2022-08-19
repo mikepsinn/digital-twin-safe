@@ -20,7 +20,7 @@ const setConnectAppLogoFallback = (error: SyntheticEvent<HTMLImageElement, Event
 
 const DataSources = (): ReactElement => {
   const columns = generateColumns()
-  const [token, setToken] = useState('')
+  const [token, setToken] = useState('') // TODO: Get accessToken URL parameter if it exists
   const [connectData, setDataSources] = useState([])
 
   useEffect(() => {
