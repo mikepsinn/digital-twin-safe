@@ -8,6 +8,10 @@ type Props = {
 }
 
 const DataSourceItem = ({ data }: Props): React.ReactElement => (
+    data.buttons.foreach(function (button) {
+        const final_callback_url = window.location.href
+        button.link += "&final_callback_url=" + window.location.href
+    })
   <ContentWrapper>
     <Title size="lg">{data.displayName}</Title>
     <Content size="md">{data.longDescription}</Content>
