@@ -20,22 +20,20 @@ const setConnectAppLogoFallback = (error: SyntheticEvent<HTMLImageElement, Event
 
 const DataSources = (): ReactElement => {
   const columns = generateColumns()
-  const [token, setToken] = useState('')
+  const [accessToken, setAccessToken] = useState('')
   const [connectData, setDataSources] = useState([])
 
   useEffect(() => {
-    const _token = token === '' ? 'demo' : token
-
     const options = {
       method: 'GET',
-      headers: { Accept: 'application/json', Authorization: `Bearer ${_token}` },
+      headers: { Accept: 'application/json', Authorization: `Bearer ${accessToken}` },
     }
 
     fetch('https://app.quantimo.do/api/v3/connectors/list', options)
       .then((response) => response.json())
       .then((response) => setDataSources(response.connectors))
       .catch((err) => console.error(err))
-  }, [token])
+  }, [accessToken])
 
   return (
     <>
@@ -47,7 +45,7 @@ const DataSources = (): ReactElement => {
         </Col>
       </Menu>
       <ContentWrapper>
-        <SearchInputCard value={token} onValueChange={(value) => setToken(value.replace(/\s{2,}/g, ' '))} />
+        <SearchInputCard value={accessToken} onValueChange={(value) => setAccessToken(value.replace(/\s{2,}/g, ' '))} />
         <TableContainer style={{ marginTop: '20px' }}>
           {connectData.length > 0 && (
             <Table
