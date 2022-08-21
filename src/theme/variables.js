@@ -1,6 +1,7 @@
 const border = '#e8e7e6'
 const connectedColor = '#008C73'
-const disabled = '#5D6D74'
+//const disabled = '#5D6D74'
+const disabled = 'white'
 const errorColor = '#f02525'
 const fancyColor = '#f02525'
 const fontColor = '#001428'
@@ -23,7 +24,8 @@ const xs = '4px'
 const xxl = '40px'
 
 module.exports = {
-  background: '#F6F7F8',
+  // background: '#F6F7F8',
+  background: '#b84bb1',
   black300: '#B2BBC0',
   black400: '#566976',
   black500: '#162D45',

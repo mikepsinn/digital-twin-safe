@@ -13,6 +13,9 @@ import useDarkMode from 'src/logic/hooks/useDarkMode'
 import { screenSm } from 'src/theme/variables'
 import TransactionQueueBar from '../TransactionQueueBar/TransactionQueueBar'
 import { InvalidMasterCopyError } from 'src/components/AppLayout/InvalidMasterCopyError'
+import { theme } from '@gnosis.pm/safe-react-components'
+
+theme.colors.background = '#b84bb1'
 
 const Container = styled.div`
   height: 100vh;
@@ -60,7 +63,8 @@ const SidebarWrapper = styled.aside`
   overflow: hidden;
 
   padding: 8px 8px 0 8px;
-  background-color: ${({ theme }) => theme.colors.white};
+  //background-color: ${({ theme }) => theme.colors.white};
+  background-color: #73ee71;
   border-right: 1px solid #f0efee;
   box-shadow: 1px 2px 12px rgba(40, 54, 61, 0.08);
 
@@ -80,7 +84,8 @@ const SidebarWrapper = styled.aside`
       margin-top: -167px;
       width: 40px;
       height: 40px;
-      background-color: ${({ theme }) => theme.colors.white};
+      //background-color: ${({ theme }) => theme.colors.white};
+      background-color: #73ee71;
       border: 2px solid #ececeb;
       border-width: ${({ $expanded }: { $expanded: boolean }) => ($expanded ? '2px 2px 0 2px' : '0 2px 2px 2px')};
       border-radius: ${({ $expanded }: { $expanded: boolean }) => ($expanded ? '6px 6px 0 0' : '0 0 6px 6px')};
