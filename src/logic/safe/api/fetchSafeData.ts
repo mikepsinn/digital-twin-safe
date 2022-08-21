@@ -2931,3 +2931,12 @@ export async function getLifeForceScore(): Promise<number> {
   }
   return mean(scores)
 }
+
+// TODO
+// export async function createNftForVariable(variableName: string): Promise<string> {
+//   const meta = await getVariable(variableName)
+//   const recipient = await getSafeAddress()
+//   const image = variable.imageUrl
+//   // TODO const nftURL = createNft(safeAddress, variable, image)
+//   return nftURL
+// }
