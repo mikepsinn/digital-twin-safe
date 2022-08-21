@@ -2933,10 +2933,25 @@ export async function getLifeForceScore(): Promise<number> {
 }
 
 // TODO
+// import { useSelector } from 'react-redux'
+// import { getShortName } from 'src/config'
+// import { currentSafe } from 'src/logic/safe/store/selectors'
+// import { currentSession } from '../../currentSession/store/selectors'
+//
+// const useSafeAddress = (): { shortName: string; safeAddress: string } => {
+//   const safe = useSelector(currentSafe)
+//   const { currentShortName, currentSafeAddress } = useSelector(currentSession)
+//
+//   return {
+//     shortName: currentShortName || getShortName(),
+//     safeAddress: currentSafeAddress || safe.address,
+//   }
+// }
 // export async function createNftForVariable(variableName: string): Promise<string> {
 //   const meta = await getVariable(variableName)
-//   const recipient = await getSafeAddress()
+//   const { shortName, safeAddress } = useSafeAddress()
+//   const recipientAddress = safeAddress
 //   const image = variable.imageUrl
-//   // TODO const nftURL = createNft(safeAddress, variable, image)
+//   // TODO const nftURL = createNft(recipientAddress, variable, image)
 //   return nftURL
 // }
