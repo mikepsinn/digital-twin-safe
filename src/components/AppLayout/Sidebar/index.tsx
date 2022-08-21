@@ -14,6 +14,7 @@ import { openCookieBanner } from 'src/logic/cookies/store/actions/openCookieBann
 import { loadFromCookie } from 'src/logic/cookies/utils'
 import { COOKIES_KEY, BannerCookiesType, COOKIE_IDS } from 'src/logic/cookies/model/cookie'
 import { background, primaryLite } from 'src/theme/variables'
+import DataHeader from './DataHeader'
 
 const StyledDivider = styled(Divider)`
   margin: 16px -8px 0;
@@ -72,7 +73,7 @@ const lazyLoad = (path: string): React.ReactElement => {
   const Component = lazy(() => import(`${path}`))
   return wrapInSuspense(<Component />)
 }
-
+const helpListEnabled = false
 const isDesktop = process.env.REACT_APP_BUILD_FOR_DESKTOP
 
 const Sidebar = ({
@@ -106,6 +107,7 @@ const Sidebar = ({
 
   return (
     <>
+      <DataHeader />
       <SafeHeader
         address={safeAddress}
         safeName={safeName}
@@ -128,23 +130,25 @@ const Sidebar = ({
 
         <StyledDivider />
 
-        <HelpList>
-          {!isDesktop && BEAMER_ID && (
-            <Track {...OVERVIEW_EVENTS.WHATS_NEW}>
-              <StyledListItem id="whats-new-button" button onClick={handleClick}>
-                <ListIcon type="gift" color="secondary" size="sm" />
-                <StyledListItemText>What&apos;s new</StyledListItemText>
-              </StyledListItem>
-            </Track>
-          )}
+        {helpListEnabled && (
+          <HelpList>
+            {!isDesktop && BEAMER_ID && (
+              <Track {...OVERVIEW_EVENTS.WHATS_NEW}>
+                <StyledListItem id="whats-new-button" button onClick={handleClick}>
+                  <ListIcon type="gift" color="secondary" size="sm" />
+                  <StyledListItemText>What&apos;s new</StyledListItemText>
+                </StyledListItem>
+              </Track>
+            )}
 
-          <Track {...OVERVIEW_EVENTS.HELP_CENTER}>
-            <HelpCenterLink href="https://help.gnosis-safe.io/en/" target="_blank" title="Help Center of Gnosis Safe">
-              <ListIcon type="question" color="secondary" size="sm" />
-              <StyledListItemText>Help Center</StyledListItemText>
-            </HelpCenterLink>
-          </Track>
-        </HelpList>
+            <Track {...OVERVIEW_EVENTS.HELP_CENTER}>
+              <HelpCenterLink href="https://help.gnosis-safe.io/en/" target="_blank" title="Help Center of Gnosis Safe">
+                <ListIcon type="question" color="secondary" size="sm" />
+                <StyledListItemText>Help Center</StyledListItemText>
+              </HelpCenterLink>
+            </Track>
+          </HelpList>
+        )}
       </HelpContainer>
     </>
   )
