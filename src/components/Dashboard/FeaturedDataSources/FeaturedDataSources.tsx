@@ -1,23 +1,14 @@
-import { ReactElement, useMemo } from 'react'
-import { useAppList } from 'src/routes/safe/components/Apps/hooks/appList/useAppList'
+import { ReactElement } from 'react'
 import { Text } from '@gnosis.pm/safe-react-components'
-import { Link } from 'react-router-dom'
 import { Box, Grid } from '@material-ui/core'
 
 import styled from 'styled-components'
-import { getSafeAppUrl, SafeRouteParams } from 'src/routes/routes'
 import { Card, WidgetBody, WidgetContainer, WidgetTitle } from 'src/components/Dashboard/styled'
-import useSafeAddress from 'src/logic/currentSession/hooks/useSafeAddress'
-
-export const FEATURED_APPS_TAG = 'dashboard-widgets'
+import { getRapini } from '../../../logic/safe/api/fetchSafeData'
 
 const StyledImage = styled.img`
   width: 64px;
   height: 64px;
-`
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
 `
 
 const StyledGrid = styled(Grid)`
@@ -29,43 +20,52 @@ const StyledGridItem = styled(Grid)`
 `
 
 export const FeaturedDataSources = (): ReactElement | null => {
-  const { allApps, isLoading } = useAppList()
+  const { queries } = getRapini()
 
-  const { shortName, safeAddress } = useSafeAddress()
-  const featuredDataSources = useMemo(() => allApps.filter((app) => app.tags?.includes(FEATURED_APPS_TAG)), [allApps])
+  const { data, isLoading, isLoadingError } = queries.useGetConnectors()
 
-  const routesSlug: SafeRouteParams = {
-    shortName,
-    safeAddress,
-  }
+  if (!data || isLoadingError) return null
 
-  if (!featuredDataSources.length && !isLoading) return null
+  const connectors = data.connectors
+
+  if (!connectors) return null
+
+  if (!connectors.length && !isLoading) return null
+
+  const urls = {}
+  connectors.forEach((connector) => {
+    if (connector.buttons && connector.buttons.length) {
+      connector.buttons.forEach((button) => {
+        urls[connector.name] = button.link
+      })
+    }
+  })
 
   return (
     <Grid item xs={12} md>
       <WidgetContainer id="featured-safe-apps">
-        <WidgetTitle>Connect & Transact</WidgetTitle>
+        <WidgetTitle>Import Your Data</WidgetTitle>
         <WidgetBody>
           <StyledGrid container>
-            {featuredDataSources.map((app) => (
-              <StyledGridItem item xs md key={app.id}>
-                <StyledLink to={getSafeAppUrl(app.url, routesSlug)}>
+            {connectors.map((dataSource) => (
+              <StyledGridItem item xs md key={dataSource.id}>
+                <a href={urls[dataSource.name]} style={{ textDecoration: 'none' }}>
                   <Card>
                     <Grid container alignItems="center" spacing={3}>
                       <Grid item xs={12} md={3}>
-                        <StyledImage src={app.iconUrl} alt={app.name} />
+                        <StyledImage src={dataSource.image} alt={dataSource.name} />
                       </Grid>
                       <Grid item xs={12} md={9}>
                         <Box mb={1.01}>
-                          <Text size="xl">{app.description}</Text>
+                          <Text size="xl">{dataSource.longDescription}</Text>
                         </Box>
                         <Text color="primary" size="lg" strong>
-                          Use {app.name}
+                          Import {dataSource.displayName}
                         </Text>
                       </Grid>
                     </Grid>
                   </Card>
-                </StyledLink>
+                </a>
               </StyledGridItem>
             ))}
           </StyledGrid>
