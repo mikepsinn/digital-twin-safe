@@ -1,12 +1,16 @@
 // noinspection JSUnusedGlobalSymbols,TypeScriptRedundantGenericType
+import axios from 'axios'
+import type { AxiosInstance, AxiosRequestConfig } from 'axios'
+
+import { mean } from 'mathjs'
 
 export function getAccessToken(): string | null {
   const queryParams = new URLSearchParams(window.location.search)
   let accessToken = queryParams.get('accessToken')
   if (accessToken) {
-    localStorage.setItem('accessToken', accessToken)
+    storage.setItem('accessToken', accessToken)
   } else {
-    accessToken = localStorage.getItem('accessToken')
+    accessToken = storage.getItem('accessToken') || null
   }
   return accessToken && accessToken.length > 0 ? accessToken : null
 }
@@ -43,7 +47,6 @@ export const getDataSources = async (): Promise<any> => {
   return getRequest('/api/v3/connectors/list', { final_callback_url: window.location.href })
 }
 
-import type { AxiosInstance, AxiosRequestConfig } from 'axios'
 import {
   useQuery,
   useMutation,
@@ -55,6 +58,8 @@ import {
   UseMutationResult,
   UseQueryResult,
 } from 'react-query'
+import { storage } from '../../../utils/storage'
+
 export type AppSettings = {
   additionalSettings?: Record<string, unknown>
   appDescription?: string
@@ -2857,4 +2862,72 @@ function makeMutations(requests: ReturnType<typeof makeRequests>, config?: Confi
         options,
       ),
   } as const
+}
+
+export const getAxios = () => {
+  const accessToken = getAccessToken()
+  const headers = {
+    Accept: 'application/vnd.GitHub.v3+json',
+    //'Authorization': 'token <your-token-here> -- https://docs.GitHub.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
+  }
+  if (accessToken) {
+    headers['Authorization'] = `Bearer ${accessToken}`
+  }
+  return axios.create({
+    baseURL: 'https://app.quantimo.do/api/',
+    timeout: 30000,
+    headers: headers,
+  })
+}
+
+export const getQueries = () => {
+  const config = getRapini()
+  return config.queries
+}
+
+export const getRapini = () => {
+  return initialize(getAxios())
+}
+
+export async function getUser(): Promise<User | null> {
+  const { requests } = getRapini()
+  const user = await requests.getUser()
+  if (user) {
+    storage.setItem('user', JSON.stringify(user))
+  }
+  return user || null
+}
+
+const SLEEP_EFFICIENCY = 'Sleep Efficiency'
+const DAILY_STEP_COUNT = 'Daily Step Count'
+
+export async function getVariable(variableName: string): Promise<Variable | null> {
+  const { requests } = getRapini()
+  // let variable: Variable
+  // let cached = storage.getItem(variableName)
+  // if (cached) {
+  //   return variable
+  // }
+  const variables = await requests.getVariables(variableName)
+  const variable = variables[0] || null
+  if (variable) {
+    storage.setItem(variableName, variable)
+  }
+  return variable
+}
+
+export async function getLifeForceScore(): Promise<number> {
+  const sleep = await getVariable(SLEEP_EFFICIENCY)
+  const scores = [50]
+  if (sleep && sleep.lastValue) {
+    scores.push(sleep.lastValue)
+  }
+  const steps = await getVariable(DAILY_STEP_COUNT)
+  if (steps && steps.lastValue && steps.maximumRecordedValue) {
+    const min = steps.minimumRecordedValue || 0
+    const max = steps.maximumRecordedValue || 10000
+    const stepScore = ((steps.lastValue - min) / (max - min)) * 100
+    scores.push(stepScore)
+  }
+  return mean(scores)
 }
