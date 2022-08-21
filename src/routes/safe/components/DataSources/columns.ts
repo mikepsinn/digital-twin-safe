@@ -22,7 +22,7 @@ export const generateColumns = (): List<DataSourcesColumn> => {
     id: ICON_ID,
     order: false,
     disablePadding: false,
-    label: 'Icon',
+    label: '',
     width: 400,
     custom: false,
     align: 'center',
@@ -32,7 +32,7 @@ export const generateColumns = (): List<DataSourcesColumn> => {
     id: DETAILS_ID,
     order: false,
     disablePadding: false,
-    label: 'Detail',
+    label: '',
     custom: false,
   }
 

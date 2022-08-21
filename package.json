@@ -93,7 +93,7 @@
     "@truffle/hdwallet-provider": "^2.0.8",
     "@unstoppabledomains/resolution": "^7.1.4",
     "abi-decoder": "^2.4.0",
-    "axios": "0.21.4",
+    "axios": "0.27.x",
     "bignumber.js": "9.0.1",
     "bnc-onboard": "^1.38.2",
     "classnames": "^2.2.6",
@@ -111,6 +111,7 @@
     "immutable": "4.0.0-rc.12",
     "js-cookie": "^3.0.0",
     "lodash": "^4.17.21",
+    "mathjs": "^11.0.1",
     "notistack": "1.0.10",
     "object-hash": "^2.1.1",
     "qrcode.react": "1.0.1",
@@ -125,6 +126,7 @@
     "react-intersection-observer": "^8.32.0",
     "react-papaparse": "^3.16.1",
     "react-qr-reader": "^2.2.1",
+    "react-query": "3.x.x",
     "react-redux": "7.2.4",
     "react-router-dom": "5.2.0",
     "react-scripts": "^4.0.1",
@@ -188,7 +190,7 @@
     "redux-mock-store": "^1.5.4",
     "sass": "^1.32.0",
     "typechain": "^5.1.2",
-    "typescript": "^4.3.5",
+    "typescript": "4.5.5",
     "wait-on": "^6.0.0"
   }
 }

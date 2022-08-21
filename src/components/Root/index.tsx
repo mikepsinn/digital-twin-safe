@@ -21,7 +21,8 @@ import { loadChains } from 'src/config/cache/chains'
 import { setChainId } from 'src/logic/config/utils'
 import { _getChainId } from 'src/config'
 import { GATEWAY_URL } from 'src/utils/constants'
-
+import { QueryClient, QueryClientProvider } from 'react-query'
+const queryClient = new QueryClient()
 // Preloader is rendered outside of '#root' and acts as a loading spinner
 // for the app and then chains loading
 const removePreloader = () => {
@@ -81,9 +82,11 @@ const Root = (): React.ReactElement => (
   <>
     <LegacyRouteRedirection history={history} />
     <Providers store={store} history={history} styledTheme={styledTheme} muiTheme={theme}>
-      <Sentry.ErrorBoundary fallback={GlobalErrorBoundary}>
-        <RootConsumer />
-      </Sentry.ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <Sentry.ErrorBoundary fallback={GlobalErrorBoundary}>
+          <RootConsumer />
+        </Sentry.ErrorBoundary>
+      </QueryClientProvider>
     </Providers>
   </>
 )

@@ -12,12 +12,17 @@ const DataSourceItem = ({ data }: Props): React.ReactElement => (
     <Content size="md">{data.longDescription}</Content>
     <LeftContent>
       <ButtonWrapper>
-        {data.buttons.map((item, index) => (
-          <GreenButton key={index} bgColor={item.color} href={item.link} target="_blank" rel="noreferrer">
-            <ButtonIcon src={item.image} />
-            {item.text}
-          </GreenButton>
-        ))}
+        {data.buttons.map(
+          (item, index) => (
+            (item.link += '?clientId=quantimodo&final_callback_url=' + encodeURIComponent(window.location.href)),
+            (
+              <GreenButton key={index} bgColor={item.color} href={item.link}>
+                <ButtonIcon src={item.image} />
+                {item.text}
+              </GreenButton>
+            )
+          ),
+        )}
       </ButtonWrapper>
     </LeftContent>
   </ContentWrapper>
