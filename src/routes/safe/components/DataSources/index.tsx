@@ -6,11 +6,10 @@ import TableRow from '@material-ui/core/TableRow'
 import styled from 'styled-components'
 import Table from 'src/components/Table'
 import Col from 'src/components/layout/Col'
-import { SearchInputCard } from './components/SearchInputCard'
 import { DataSourceItem } from './components/DataSourceItem'
 import { generateColumns } from './columns'
 import fallbackConnectAppLogoSvg from 'src/assets/icons/apps.svg'
-
+import { getDataSources } from '../../../../logic/safe/api/fetchSafeData'
 type SafeAppCardSize = 'md' | 'lg'
 
 const setConnectAppLogoFallback = (error: SyntheticEvent<HTMLImageElement, Event>): void => {
@@ -20,24 +19,13 @@ const setConnectAppLogoFallback = (error: SyntheticEvent<HTMLImageElement, Event
 
 const DataSources = (): ReactElement => {
   const columns = generateColumns()
-  const [accessToken, setAccessToken] = useState('')
   const [dataSources, setDataSources] = useState([])
 
   useEffect(() => {
-    const options = {
-      method: 'GET',
-      headers: { Accept: 'application/json' },
-    }
-
-    if (accessToken && accessToken.length > 0) {
-      options.headers['Authorization'] = `Bearer ${accessToken}`
-    }
-
-    fetch('https://app.quantimo.do/api/v3/connectors/list', options)
-      .then((response) => response.json())
+    getDataSources()
       .then((response) => setDataSources(response.connectors))
       .catch((err) => console.error(err))
-  }, [accessToken])
+  }, [])
 
   //debugger
   if (typeof dataSources === 'undefined') {
@@ -54,7 +42,6 @@ const DataSources = (): ReactElement => {
         </Col>
       </Menu>
       <ContentWrapper>
-        <SearchInputCard value={accessToken} onValueChange={(value) => setAccessToken(value.replace(/\s{2,}/g, ' '))} />
         <TableContainer style={{ marginTop: '20px' }}>
           {dataSources && dataSources.length > 0 && (
             <Table
