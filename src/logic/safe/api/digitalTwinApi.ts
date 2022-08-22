@@ -1311,6 +1311,7 @@ export type Variable = {
   updated?: number
   updatedAt?: string
   updatedTime?: string
+  url: string
   userId: number
   userTaggedVariables?: Variable[]
   userTagVariables?: Variable[]
