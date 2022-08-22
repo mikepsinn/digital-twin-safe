@@ -1,16 +1,16 @@
-# Gnosis Safe
+#  👨‍🤝‍👨 The Digital Twin Safe 🔒
 
-![license](https://img.shields.io/github/license/gnosis/safe-react)
-![build](https://img.shields.io/github/workflow/status/gnosis/safe-react/Deploy%20to%20Mainnet%20network/main)
-![tests](https://img.shields.io/github/workflow/status/gnosis/safe-react/Unit%20tests%20&%20coverage/main?label=tests)
-![coverage](https://coveralls.io/repos/github/gnosis/safe-react/badge.svg?branch=main)
-![release](https://img.shields.io/github/v/release/gnosis/safe-react)
+### A little house for your digital twin. 🏡 
 
-The most trusted platform to store digital assets on Ethereum. More info at [gnosis-safe.io](https://gnosis-safe.io/)
+![human-file-system-banner-logo](https://user-images.githubusercontent.com/2808553/180306571-ac9cc741-6f34-4059-a814-6f8a72ed8322.png)
 
-For technical information please refer to the [Gnosis Developer Portal](https://docs.gnosis.io/safe/).
+Import data from all your apps and wearables so you can centrally own, control, and share all your digital exhaust.
 
-For support requests, please open up a [bug issue](https://github.com/gnosis/safe-react/issues/new?template=bug-report.md) or reach out via [Discord](https://chat.gnosis-safe.io).
+Based on the awesome [Gnosis Safe](https://gnosis-safe.io/), the most trusted platform to store digital assets on Ethereum.
+
+For technical information please refer to the [Developer Portal](https://docs.gnosis.io/safe/).
+
+For support requests, please open up a [bug issue](https://github.com/HumanFS/digital-twin-safe/issues/new?template=bug-report.md) or reach out via [Discord](https://chat.gnosis-safe.io).
 
 ## Transactions
 
@@ -128,6 +128,7 @@ Deployment to production is done manually. Please see the [release procedure](do
 - [React](https://reactjs.org/) - A JS library for building user interfaces
 - [Material UI 4.X](https://material-ui.com/) - React components that implement Google's Material Design
 - [redux, immutable, reselect, final-form](https://redux.js.org/) - React ecosystem libraries
+- [Gnosis Safe](https://gnosis-safe.io/) - The most trusted platform to store digital assets on Ethereum.
 
 ![app diagram](https://user-images.githubusercontent.com/381895/129330828-c067425b-d20b-4f67-82c7-c0598deb453a.png)
 
