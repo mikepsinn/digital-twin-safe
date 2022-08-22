@@ -22,7 +22,7 @@ import { OVERVIEW_EVENTS } from 'src/utils/events/overview'
 import Track from 'src/components/Track'
 import Notifications from 'src/components/AppLayout/Header/components/Notifications'
 
-const backgroundColor = '#594bf0'
+const backgroundColor = '#f14019'
 const styles = () => ({
   root: {
     // backgroundColor: 'white',

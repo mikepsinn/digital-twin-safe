@@ -25,7 +25,7 @@ const xxl = '40px'
 
 module.exports = {
   // background: '#F6F7F8',
-  background: '#b84bb1',
+  background: '#f14019',
   black300: '#B2BBC0',
   black400: '#566976',
   black500: '#162D45',

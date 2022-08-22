@@ -15,7 +15,7 @@ import TransactionQueueBar from '../TransactionQueueBar/TransactionQueueBar'
 import { InvalidMasterCopyError } from 'src/components/AppLayout/InvalidMasterCopyError'
 import { theme } from '@gnosis.pm/safe-react-components'
 
-theme.colors.background = '#b84bb1'
+theme.colors.background = '#f14019'
 
 const Container = styled.div`
   height: 100vh;

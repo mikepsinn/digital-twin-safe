@@ -20,7 +20,7 @@ const ModalStyled = styled(ModalMUI)`
 
   .overlay {
     //background-color: rgba(232, 231, 230, 0.75) !important;
-    background-color: #b84bb1 !important;
+    background-color: #f14019 !important;
   }
 
   .paper {
