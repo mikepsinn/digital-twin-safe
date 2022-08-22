@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { Card, Title, Text, Icon } from '@gnosis.pm/safe-react-components'
 
 import { generateSafeRoute, getShareUserVariableUrl, SAFE_ROUTES } from 'src/routes/routes'
-import { UserVariable } from 'src/logic/safe/api/digitalTwinApi'
+import { getAccessToken, UserVariable } from 'src/logic/safe/api/digitalTwinApi'
 import fallbackUserVariableLogoSvg from 'src/assets/icons/apps.svg'
 import { currentChainId } from 'src/logic/config/store/selectors'
 import { showNotification } from 'src/logic/notifications/store/notifications'
@@ -18,11 +18,21 @@ import { getShortName } from 'src/config'
 import { UserVariableDescriptionSK, UserVariableLogoSK, UserVariableTitleSK } from './UserVariableSkeleton'
 import { primary200, primary300 } from 'src/theme/variables'
 import useSafeAddress from 'src/logic/currentSession/hooks/useSafeAddress'
+import axios from 'axios'
+// import { ethers } from 'ethers'
+//import { NFTStorage } from 'nft.storage'
+// import healthDataABI from 'src/config/HealthDataNFTABI.json'
+// import networkMapping from 'src/config/networkMapping.json'
+//import Web3 from 'web3'
+//import { web3HttpProviderOptions } from '../../../../../../logic/wallets/getWeb3'
+//import Web3 from 'web3'
+import React from 'react'
+//import { NFTStorage } from 'nft.storage'
 
 type UserVariableCardSize = 'md' | 'lg'
 
 type UserVariableCardProps = {
-  safeVariable: UserVariable
+  userVariable: UserVariable
   size: UserVariableCardSize
   togglePin: (app: UserVariable) => void
   isPinned?: boolean
@@ -31,7 +41,7 @@ type UserVariableCardProps = {
 }
 
 const UserVariableCard = ({
-  safeVariable,
+  userVariable,
   size,
   togglePin,
   isPinned,
@@ -40,21 +50,95 @@ const UserVariableCard = ({
 }: UserVariableCardProps): React.ReactElement => {
   const chainId = useSelector(currentChainId)
   const dispatch = useDispatch()
+  //const safeAppsRpc = getSafeAppsRpcServiceUrl()
+  // const safeAppWeb3Provider = useMemo(
+  //   () => new Web3.providers.HttpProvider(safeAppsRpc, web3HttpProviderOptions),
+  //   [safeAppsRpc],
+  // )
 
   const { safeAddress } = useSafeAddress()
   const appsPath = generateSafeRoute(SAFE_ROUTES.APPS, {
     shortName: getShortName(),
     safeAddress,
   })
-  const openUserVariableLink = `${appsPath}?appUrl=${encodeURI(safeVariable.url)}`
+  const openUserVariableLink = `${appsPath}?appUrl=${encodeURI(userVariable.url)}`
 
+  /*  const shareUserVariableBrahma = async () => {
+    const provider = new ethers.providers.Web3Provider(safeAppWeb3Provider)
+    const chainIdString = parseInt(chainId).toString()
+    const nftContractAddress = networkMapping[chainIdString].HealthDataNFT[0]
+    const signer = await provider.getSigner()
+    const healthDataNFTContract = new ethers.Contract(nftContractAddress, healthDataABI, signer)
+    const key = process.env.REACT_APP_NFT_STORAGE_KEY
+    if (!key) {
+      throw new Error('Please set REACT_APP_NFTPORT_API_KEY to create NFTs')
+    }
+    const nftStorage = new NFTStorage({ token: key })
+    const imageUrl =
+      userVariable.imageUrl ||
+      'https://user-images.githubusercontent.com/2808553/180306571-ac9cc741-6f34-4059-a814-6f8a72ed8322.png'
+    const imageResponse = await axios.get(imageUrl)
+    const imageData = imageResponse.data
+
+    const response = await nftStorage.store({
+      name: userVariable.name,
+      description: userVariable.description || 'No description on this variable: ' + userVariable.name,
+      image: imageData,
+      attributes: userVariable,
+    })
+    const tx = await healthDataNFTContract.mintNft(
+      safeAddress,
+      response.url,
+      // {gasLimit: '100000',}
+    )
+    await tx.wait(1)
+    const tokenId = await healthDataNFTContract.getTokenCounter()
+    console.log('onClickCreateNft complete', { tokenId, nftStorage: response.data })
+  }*/
   const shareUserVariable = () => {
-    const shareUserVariableUrl = getShareUserVariableUrl(safeVariable.url, chainId)
+    const form = new FormData()
+    form.append('file', '')
+    const data = JSON.parse(JSON.stringify(userVariable))
+    data.image = userVariable.imageUrl
+    debugger
+    const key = process.env.REACT_APP_NFTPORT_API_KEY
+    if (!key) {
+      throw new Error('Please set REACT_APP_NFTPORT_API_KEY to create NFTs')
+    }
+
+    const options = {
+      method: 'POST',
+      url: 'https://api.nftport.xyz/v0/mints/easy/urls',
+      params: {
+        chain: 'polygon',
+        description: 'A JSON file containing ' + userVariable.name + ' Data',
+        mint_to_address: safeAddress,
+        name: userVariable.name + ' Data',
+        file_url: 'https://app.quantimo.do/api/v3/variables?accessToken=' + getAccessToken(),
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: key,
+      },
+      data: form,
+    }
+
+    axios
+      .request(options)
+      .then(function (response) {
+        debugger
+        console.log(response.data)
+      })
+      .catch(function (error) {
+        debugger
+        console.error(error)
+      })
+    const shareUserVariableUrl = getShareUserVariableUrl(userVariable.url, chainId)
     copyToClipboard(shareUserVariableUrl)
     dispatch(showNotification(NOTIFICATIONS.SHARE_SAFE_VARIABLE_URL_COPIED))
   }
 
-  const isUserVariableLoading = safeVariable.fetchStatus === FETCH_STATUS.LOADING
+  const isUserVariableLoading = userVariable.fetchStatus === FETCH_STATUS.LOADING
 
   if (isUserVariableLoading) {
     return (
@@ -75,23 +159,23 @@ const UserVariableCard = ({
 
   return (
     <UserVariableContainer size={size}>
-      <StyledLink to={openUserVariableLink} aria-label={`open ${safeVariable.name} Safe UserVariable`}>
+      <StyledLink to={openUserVariableLink} aria-label={`open ${userVariable.name} Safe User Variable`}>
         <StyledVariableCard size={size}>
           {/* Safe UserVariable Logo */}
           <LogoContainer size={size}>
             <UserVariableLogo
               size={size}
-              src={safeVariable.imageUrl}
-              alt={`${safeVariable.name || 'Safe UserVariable'} Logo`}
+              src={userVariable.imageUrl}
+              alt={`${userVariable.name || 'Safe UserVariable'} Logo`}
               onError={setUserVariableLogoFallback}
             />
           </LogoContainer>
 
           {/* Safe UserVariable Description */}
           <DescriptionContainer size={size}>
-            <UserVariableTitle size="xs">{safeVariable.name}</UserVariableTitle>
+            <UserVariableTitle size="xs">{userVariable.name}</UserVariableTitle>
             <UserVariableDescription size="lg" color="inputFilled">
-              {safeVariable.name + ' Data and Relationships with Other Variables'}
+              {userVariable.name + ' Data and Relationships with Other Variables'}
             </UserVariableDescription>
           </DescriptionContainer>
 
@@ -100,7 +184,7 @@ const UserVariableCard = ({
             {/* Share Safe UserVariable button */}
             <IconBtn
               onClick={shareUserVariable}
-              aria-label={`copy ${safeVariable.name} Safe UserVariable share link to clipboard`}
+              aria-label={`copy ${userVariable.name} Safe UserVariable share link to clipboard`}
             >
               <Icon size="md" type="share" tooltip="Copy share link" />
             </IconBtn>
@@ -108,8 +192,8 @@ const UserVariableCard = ({
             {/* Pin & Unpin Safe UserVariable button */}
             {!isCustomUserVariable && (
               <IconBtn
-                onClick={() => togglePin(safeVariable)}
-                aria-label={`${isPinned ? 'Unpin' : 'Pin'} ${safeVariable.name} Safe UserVariable`}
+                onClick={() => togglePin(userVariable)}
+                aria-label={`${isPinned ? 'Unpin' : 'Pin'} ${userVariable.name} Safe UserVariable`}
               >
                 {isPinned ? (
                   <PinnedIcon size="md" type="bookmarkFilled" color="primary" tooltip="Unpin from the Safe Variables" />
@@ -122,8 +206,8 @@ const UserVariableCard = ({
             {/* Remove custom Safe UserVariable button */}
             {isCustomUserVariable && (
               <IconBtn
-                onClick={() => onRemove?.(safeVariable)}
-                aria-label={`Remove ${safeVariable.name} custom Safe UserVariable`}
+                onClick={() => onRemove?.(userVariable)}
+                aria-label={`Remove ${userVariable.name} custom Safe UserVariable`}
               >
                 <Icon size="md" type="delete" color="error" tooltip="Remove Custom Safe UserVariable" />
               </IconBtn>
