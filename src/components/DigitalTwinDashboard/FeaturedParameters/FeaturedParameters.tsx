@@ -56,7 +56,7 @@ export const FeaturedParameters = (): ReactElement | null => {
                       </Grid>
                       <Grid item xs={12} md={9}>
                         <Box mb={1.01}>
-                          <Text size="xl">{variable.description}</Text>
+                          <Text size="xl">{variable.displayName}</Text>
                         </Box>
                         <Text color="primary" size="lg" strong>
                           Import {variable.displayName}

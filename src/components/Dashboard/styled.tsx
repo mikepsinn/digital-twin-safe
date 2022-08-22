@@ -33,12 +33,14 @@ export const WidgetBody = styled.div`
 export const Card = styled.div`
   background: ${({ theme }) => theme.colors.white};
   padding: ${lg};
-  border-radius: 8px;
+  border-radius: 0px;
   flex-grow: 1;
   position: relative;
   box-sizing: border-box;
   height: 100%;
-
+  border-color: rgb(0 0 0 / var(--tw-border-opacity));
+  border-style: solid;
+  border-width: 2px;
   & h2 {
     margin-top: 0;
   }

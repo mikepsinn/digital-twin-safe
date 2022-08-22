@@ -148,6 +148,7 @@ const BellIconButton = styled(IconButton)`
   width: 44px;
   height: 100%;
   border-radius: 0;
+  border: 1px solid ${border};
   &:hover {
     background: none;
   }

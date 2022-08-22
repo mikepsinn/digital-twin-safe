@@ -26,7 +26,7 @@ const backgroundColor = '#f14019'
 const styles = () => ({
   root: {
     // backgroundColor: 'white',
-    backgroundColor: backgroundColor,
+    backgroundColor: '#73ee71',
     borderRadius: sm,
     boxShadow: 'rgb(40 54 61 / 18%) 1px 2px 10px 0px',
     marginTop: '11px',
@@ -36,7 +36,11 @@ const styles = () => ({
   summary: {
     alignItems: 'center',
     // backgroundColor: 'white',
-    backgroundColor: backgroundColor,
+    //backgroundColor: backgroundColor,
+    backgroundColor: '#73ee71',
+    borderColor: 'rgb(0 0 0/var(--tw-border-opacity))',
+    borderStyle: 'solid',
+    borderWidth: '2px',
     flexWrap: 'nowrap',
     height: headerHeight,
     position: 'fixed',
@@ -119,10 +123,10 @@ const Layout = ({ classes, providerDetails, providerInfo }) => {
         </div>
       )}
 
-      <Divider />
+      {/*<Divider />*/}
       <Notifications open={openNotifications} toggle={toggleNotifications} clickAway={clickAwayNotifications} />
 
-      <Divider />
+      {/*<Divider />*/}
       <Provider
         info={providerInfo}
         open={openWallet}

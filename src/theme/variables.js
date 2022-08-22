@@ -1,4 +1,4 @@
-const border = '#e8e7e6'
+const border = '#001428'
 const connectedColor = '#4d008c'
 //const disabled = '#5D6D74'
 const disabled = 'white'

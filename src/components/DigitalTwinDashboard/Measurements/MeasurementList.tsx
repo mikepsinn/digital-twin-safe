@@ -40,7 +40,7 @@ export const MeasurementList = (): ReactElement | null => {
   return (
     <Grid item xs={12} md>
       <WidgetContainer id="featured-safe-apps">
-        <WidgetTitle>My Parameters</WidgetTitle>
+        <WidgetTitle>Recent Measurements</WidgetTitle>
         <WidgetBody>
           <StyledGrid container>
             {measurements.map((measurement) => (
