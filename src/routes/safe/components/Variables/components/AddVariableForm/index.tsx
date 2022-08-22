@@ -89,7 +89,7 @@ const AddVariable = ({ variableList, closeModal, onAddVariable }: AddVariablePro
     onAddVariable(variableInfo)
     history.push({
       pathname: generateSafeRoute(SAFE_ROUTES.APPS, extractPrefixedSafeAddress()),
-      search: `?variableUrl=${encodeURIComponent(variableInfo.url)}`,
+      search: `?appUrl=${encodeURIComponent(variableInfo.url)}`,
     })
   }, [history, variableInfo, onAddVariable])
 

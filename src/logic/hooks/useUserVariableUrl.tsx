@@ -12,11 +12,11 @@ export const useUserVariableUrl = (): VariableUrlReturnType => {
   const getVariableUrl = useCallback(() => {
     const query = new URLSearchParams(search)
     try {
-      const url = query.get('variableUrl')
+      const url = query.get('appUrl')
 
       return sanitizeUrl(url)
     } catch {
-      throw new Error('Detected javascript injection in the URL. Check the variableUrl parameter')
+      throw new Error('Detected javascript injection in the URL. Check the appUrl parameter')
     }
   }, [search])
 
