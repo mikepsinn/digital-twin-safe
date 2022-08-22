@@ -4,16 +4,16 @@ import { useLocation, matchPath, useRouteMatch } from 'react-router-dom'
 
 import { ListItemType } from 'src/components/List'
 
-import Header from './Header'
 import Footer from './Footer'
 import Sidebar from './Sidebar'
-import { MobileNotSupported } from './MobileNotSupported'
 import { SAFE_APP_LANDING_PAGE_ROUTE, SAFE_ROUTES, WELCOME_ROUTE } from 'src/routes/routes'
 import useDarkMode from 'src/logic/hooks/useDarkMode'
 import { screenSm } from 'src/theme/variables'
 import TransactionQueueBar from '../TransactionQueueBar/TransactionQueueBar'
 import { InvalidMasterCopyError } from 'src/components/AppLayout/InvalidMasterCopyError'
 import { theme } from '@gnosis.pm/safe-react-components'
+import Header from '../AppLayout/Header'
+import { MobileNotSupported } from '../AppLayout/MobileNotSupported'
 
 theme.colors.background = '#b84bb1'
 
