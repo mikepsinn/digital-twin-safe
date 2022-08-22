@@ -14,7 +14,6 @@ import { openCookieBanner } from 'src/logic/cookies/store/actions/openCookieBann
 import { loadFromCookie } from 'src/logic/cookies/utils'
 import { COOKIES_KEY, BannerCookiesType, COOKIE_IDS } from 'src/logic/cookies/model/cookie'
 import { background, primaryLite } from 'src/theme/variables'
-import DataHeader from './DataHeader'
 
 const StyledDivider = styled(Divider)`
   margin: 16px -8px 0;
@@ -107,7 +106,6 @@ const Sidebar = ({
 
   return (
     <>
-      <DataHeader />
       <SafeHeader
         address={safeAddress}
         safeName={safeName}

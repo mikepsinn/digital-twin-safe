@@ -51,6 +51,8 @@ enum NOTIFICATION_IDS {
   ADDRESS_BOOK_EXPORT_ENTRIES_ERROR,
   SAFE_NEW_VERSION_AVAILABLE,
   SHARE_SAFE_APP_URL_COPIED,
+  SHARE_SAFE_VARIABLE_URL_COPIED,
+  SAFE_VARIABLES_FETCH_ERROR_MSG,
 }
 
 export const NOTIFICATIONS: Record<keyof typeof NOTIFICATION_IDS, Notification> = {
@@ -205,5 +207,15 @@ export const NOTIFICATIONS: Record<keyof typeof NOTIFICATION_IDS, Notification> 
   SHARE_SAFE_APP_URL_COPIED: {
     message: 'Safe App URL copied to clipboard!',
     options: { variant: VARIANT.INFO, preventDuplicate: true },
+  },
+
+  // Copy to clipboard
+  SHARE_SAFE_VARIABLE_URL_COPIED: {
+    message: 'Safe UserVariable URL copied to clipboard!',
+    options: { variant: VARIANT.INFO, preventDuplicate: true },
+  },
+  SAFE_VARIABLES_FETCH_ERROR_MSG: {
+    message: 'Error fetching the Safe Apps, please refresh the page',
+    options: { variant: VARIANT.ERROR, autoHideDuration: shortDuration },
   },
 }

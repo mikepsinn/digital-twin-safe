@@ -48,20 +48,6 @@ const useSidebarItems = (): ListItemType[] => {
       safeAddress,
     })
 
-    const assetsSubItems = [
-      makeEntryItem({
-        label: 'Coins',
-        iconType: 'assets',
-        href: currentSafeRoutes.ASSETS_BALANCES,
-      }),
-      makeEntryItem({
-        disabled: !isCollectiblesEnabled,
-        label: 'NFTs',
-        iconType: 'collectibles',
-        href: currentSafeRoutes.ASSETS_BALANCES_COLLECTIBLES,
-      }),
-    ]
-
     const transactionsSubItems = [
       makeEntryItem({
         label: 'Queue',
@@ -73,6 +59,30 @@ const useSidebarItems = (): ListItemType[] => {
       }),
     ]
 
+    const assetsSubItems = [
+      makeEntryItem({
+        disabled: !isCollectiblesEnabled,
+        label: 'NFTs',
+        iconType: 'collectibles',
+        href: currentSafeRoutes.ASSETS_BALANCES_COLLECTIBLES,
+      }),
+      makeEntryItem({
+        label: 'Coins',
+        iconType: 'assets',
+        href: currentSafeRoutes.ASSETS_BALANCES,
+      }),
+      makeEntryItem({
+        label: 'Transactions',
+        iconType: 'transactionsInactive',
+        href: currentSafeRoutes.TRANSACTIONS_HISTORY,
+        subItems: transactionsSubItems,
+      }),
+      makeEntryItem({
+        label: 'Address Book',
+        iconType: 'addressBook',
+        href: currentSafeRoutes.ADDRESS_BOOK,
+      }),
+    ]
     const settingsSubItems = [
       makeEntryItem({
         label: 'Safe Details',
@@ -115,21 +125,21 @@ const useSidebarItems = (): ListItemType[] => {
         href: currentSafeRoutes.DASHBOARD,
       }),
       makeEntryItem({
+        label: 'Variables',
+        iconType: 'apps',
+        href: currentSafeRoutes.VARIABLES,
+      }),
+      makeEntryItem({
+        disabled: !isCollectiblesEnabled,
+        label: 'NFTs',
+        iconType: 'collectibles',
+        href: currentSafeRoutes.ASSETS_BALANCES_COLLECTIBLES,
+      }),
+      makeEntryItem({
         label: 'Assets',
         iconType: 'assets',
         href: currentSafeRoutes.ASSETS_BALANCES,
         subItems: assetsSubItems,
-      }),
-      makeEntryItem({
-        label: 'Transactions',
-        iconType: 'transactionsInactive',
-        href: currentSafeRoutes.TRANSACTIONS_HISTORY,
-        subItems: transactionsSubItems,
-      }),
-      makeEntryItem({
-        label: 'Address Book',
-        iconType: 'addressBook',
-        href: currentSafeRoutes.ADDRESS_BOOK,
       }),
       makeEntryItem({
         disabled: !safeAppsEnabled,

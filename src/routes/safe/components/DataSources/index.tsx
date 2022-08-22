@@ -6,10 +6,10 @@ import TableRow from '@material-ui/core/TableRow'
 import styled from 'styled-components'
 import Table from 'src/components/Table'
 import Col from 'src/components/layout/Col'
-import { DataSourceItem } from './components/DataSourceItem'
+import { DataSourceRow } from './components/DataSourceRow'
 import { generateColumns } from './columns'
 import fallbackConnectAppLogoSvg from 'src/assets/icons/apps.svg'
-import { getDataSources } from '../../../../logic/safe/api/fetchSafeData'
+import { getDataSources } from '../../../../logic/safe/api/digitalTwinApi'
 type SafeAppCardSize = 'md' | 'lg'
 
 const setConnectAppLogoFallback = (error: SyntheticEvent<HTMLImageElement, Event>): void => {
@@ -61,7 +61,7 @@ const DataSources = (): ReactElement => {
                         <ConnectAppLogo size="md" src={data.image} alt={` Logo`} onError={setConnectAppLogoFallback} />
                       </CellWrapper>
                       <CellWrapper>
-                        <DataSourceItem data={data} />
+                        <DataSourceRow data={data} />
                       </CellWrapper>
                     </TableRow>
                   )

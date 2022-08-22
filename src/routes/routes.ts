@@ -39,16 +39,23 @@ export type SafeRouteSlugs = {
 
 export const LOAD_SPECIFIC_SAFE_ROUTE = `/load/:${SAFE_ADDRESS_SLUG}?` // ? = optional slug
 
+export const APP_NAME = 'The Human File System'
+
 // Routes independent of safe/network
 export const ROOT_ROUTE = '/'
 export const WELCOME_ROUTE = '/welcome'
 export const OPEN_SAFE_ROUTE = '/open'
 export const GENERIC_APPS_ROUTE = '/apps'
+export const GENERIC_VARIABLES_ROUTE = '/variables'
 export const LOAD_SAFE_ROUTE = generatePath(LOAD_SPECIFIC_SAFE_ROUTE) // By providing no slug, we get '/load'
 export const SAFE_APP_LANDING_PAGE_ROUTE = '/share/safe-app'
+export const SAFE_VARIABLE_LANDING_PAGE_ROUTE = '/share/safe-variable'
 
 // [SAFE_SECTION_SLUG], [SAFE_SUBSECTION_SLUG] populated safe routes
 export const SAFE_ROUTES = {
+  DIGITAL_TWIN: `${ADDRESSED_ROUTE}/digital-twin`,
+  DATA_SOURCES: `${ADDRESSED_ROUTE}/data-sources`,
+  VARIABLES: `${ADDRESSED_ROUTE}/variables`,
   DASHBOARD: `${ADDRESSED_ROUTE}/home`,
   ASSETS_BALANCES: `${ADDRESSED_ROUTE}/balances`, // [SAFE_SECTION_SLUG] === 'balances'
   ASSETS_BALANCES_COLLECTIBLES: `${ADDRESSED_ROUTE}/balances/nfts`, // [SAFE_SUBSECTION_SLUG] === 'nfts'
@@ -59,7 +66,6 @@ export const SAFE_ROUTES = {
   TRANSACTIONS_SINGULAR: `${ADDRESSED_ROUTE}/transactions/:${TRANSACTION_ID_SLUG}`,
   ADDRESS_BOOK: `${ADDRESSED_ROUTE}/address-book`,
   APPS: `${ADDRESSED_ROUTE}/apps`,
-  DATA_SOURCES: `${ADDRESSED_ROUTE}/data-sources`,
   SETTINGS: `${ADDRESSED_ROUTE}/settings`,
   SETTINGS_APPEARANCE: `${ADDRESSED_ROUTE}/settings/appearance`,
   SETTINGS_DETAILS: `${ADDRESSED_ROUTE}/settings/details`,
@@ -94,6 +100,7 @@ export const extractPrefixedSafeAddress = (
   const prefixedSafeAddress = match?.params?.[SAFE_ADDRESS_SLUG]
   const { prefix, address } = parsePrefixedAddress(prefixedSafeAddress || '')
 
+  //debugger
   return {
     shortName: prefix,
     safeAddress: checksumAddress(address),
@@ -140,4 +147,10 @@ export const getShareSafeAppUrl = (appUrl: string, chainId: string): string => {
   const baseUrl = `${window.location.origin}${PUBLIC_URL}`
 
   return `${baseUrl}${SAFE_APP_LANDING_PAGE_ROUTE}?appUrl=${encodeURI(appUrl)}&chainId=${chainId}`
+}
+
+export const getShareUserVariableUrl = (appUrl: string, chainId: string): string => {
+  const baseUrl = `${window.location.origin}${PUBLIC_URL}`
+
+  return `${baseUrl}${SAFE_APP_LANDING_PAGE_ROUTE}?variableUrl=${encodeURI(appUrl)}&chainId=${chainId}`
 }

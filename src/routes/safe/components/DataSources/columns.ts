@@ -32,7 +32,7 @@ export const generateColumns = (): List<DataSourcesColumn> => {
     id: DETAILS_ID,
     order: false,
     disablePadding: false,
-    label: '',
+    label: 'Data Sources',
     custom: false,
   }
 

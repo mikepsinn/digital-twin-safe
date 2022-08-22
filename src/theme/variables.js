@@ -1,6 +1,7 @@
-const border = '#e8e7e6'
-const connectedColor = '#008C73'
-const disabled = '#5D6D74'
+const border = '#001428'
+const connectedColor = '#4d008c'
+//const disabled = '#5D6D74'
+const disabled = 'white'
 const errorColor = '#f02525'
 const fancyColor = '#f02525'
 const fontColor = '#001428'
@@ -10,12 +11,12 @@ const marginButtonImg = '12px'
 const md = '16px'
 const primary = '#001428'
 const primaryLite = '#EFFAF8'
-const primaryActive = '#008C73'
-const secondary = '#008C73'
+const primaryActive = '#8c0080'
+const secondary = '#8c008a'
 const secondaryTextOrSvg = '#B2B5B2'
 const secondaryBackground = '#f0efee'
 const sm = '8px'
-const warningColor = '#ffc05f'
+const warningColor = '#f40202'
 const alertWarningColor = '#FBE5C5'
 const infoColor = '#ECF5F4'
 const xl = '32px'
@@ -23,7 +24,8 @@ const xs = '4px'
 const xxl = '40px'
 
 module.exports = {
-  background: '#F6F7F8',
+  // background: '#F6F7F8',
+  background: '#f14019',
   black300: '#B2BBC0',
   black400: '#566976',
   black500: '#162D45',
@@ -62,7 +64,7 @@ module.exports = {
   primaryLite,
   primaryActive,
   primary200: primaryLite,
-  primary300: '#92C9BE',
+  primary300: '#c492c9',
   primary400: primaryActive,
   infoColor,
   regularFont: 400,

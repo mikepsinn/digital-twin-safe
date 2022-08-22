@@ -1,8 +1,20 @@
-// noinspection JSUnusedGlobalSymbols,TypeScriptRedundantGenericType
-import axios from 'axios'
 import type { AxiosInstance, AxiosRequestConfig } from 'axios'
-
+// noinspection JSUnusedGlobalSymbols,TypeScriptRedundantGenericType
+// noinspection TypeScriptRedundantGenericType
+import axios from 'axios'
 import { mean } from 'mathjs'
+import {
+  MutationFunction,
+  QueryClient,
+  useMutation,
+  UseMutationOptions,
+  UseMutationResult,
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+  UseQueryResult,
+} from 'react-query'
+import { storage } from '../../../utils/storage'
 
 export function getAccessToken(): string | null {
   const queryParams = new URLSearchParams(window.location.search)
@@ -13,6 +25,15 @@ export function getAccessToken(): string | null {
     accessToken = storage.getItem('accessToken') || null
   }
   return accessToken && accessToken.length > 0 ? accessToken : null
+}
+
+export function updateDataSourceButtonLink(button: Button): string {
+  const link = button.link
+  const url = new URL(link)
+  url.searchParams.set('clientId', 'quantimodo')
+  url.searchParams.set('final_callback_url', window.location.href)
+  button.link = url.href
+  return url.href
 }
 
 function getUrl(path: string, params?: any) {
@@ -46,19 +67,6 @@ export const getRequest = async (path: string, params?: any) => {
 export const getDataSources = async (): Promise<any> => {
   return getRequest('/api/v3/connectors/list', { final_callback_url: window.location.href })
 }
-
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  UseMutationOptions,
-  UseQueryOptions,
-  MutationFunction,
-  UseMutationResult,
-  UseQueryResult,
-} from 'react-query'
-import { storage } from '../../../utils/storage'
 
 export type AppSettings = {
   additionalSettings?: Record<string, unknown>
@@ -603,7 +611,7 @@ export type ParticipantInstruction = {
   instructionsForEffectVariable?: string
 }
 export type PostMeasurementsDataResponse = {
-  userVariables?: Variable[]
+  userVariables?: UserVariable[]
   description?: string
   summary?: string
   errors?: ErrorResponse[]
@@ -649,7 +657,7 @@ export type PostStudyCreateResponse = {
 export type PostTrackingRemindersDataResponse = {
   trackingReminderNotifications?: TrackingReminderNotification[]
   trackingReminders?: TrackingReminder[]
-  userVariables?: Variable[]
+  userVariables?: UserVariable[]
   description?: string
   summary?: string
   errors?: ErrorResponse[]
@@ -705,10 +713,10 @@ export type Study = {
   type: string
   userId?: number
   id?: string
-  causeVariable?: Variable
+  causeVariable?: UserVariable
   causeVariableName?: string
   studyCharts?: StudyCharts
-  effectVariable?: Variable
+  effectVariable?: UserVariable
   effectVariableName?: string
   participantInstructions?: ParticipantInstruction
   statistics?: Correlation
@@ -1167,7 +1175,8 @@ export type UserTag = {
   taggedVariableId: number
   tagVariableId: number
 }
-export type Variable = {
+export type UserVariable = {
+  fetchStatus?: string
   actionArray?: TrackingReminderNotificationAction[]
   alias?: string
   availableUnits?: Unit[]
@@ -1189,13 +1198,13 @@ export type Variable = {
   chartsLinkGoogle?: string
   chartsLinkStatic?: string
   chartsLinkTwitter?: string
-  childCommonTagVariables?: Variable[]
-  childUserTagVariables?: Variable[]
+  childCommonTagVariables?: UserVariable[]
+  childUserTagVariables?: UserVariable[]
   clientId?: string
   combinationOperation?: 'MEAN' | 'SUM'
   commonAlias?: string
-  commonTaggedVariables?: Variable[]
-  commonTagVariables?: Variable[]
+  commonTaggedVariables?: UserVariable[]
+  commonTagVariables?: UserVariable[]
   createdAt?: string
   dataSourceNames?: string
   dataSources?: DataSource[]
@@ -1215,14 +1224,14 @@ export type Variable = {
   id: number
   imageUrl?: string
   informationalUrl?: string
-  ingredientOfCommonTagVariables?: Variable[]
-  ingredientCommonTagVariables?: Variable[]
-  ingredientOfUserTagVariables?: Variable[]
-  ingredientUserTagVariables?: Variable[]
+  ingredientOfCommonTagVariables?: UserVariable[]
+  ingredientCommonTagVariables?: UserVariable[]
+  ingredientOfUserTagVariables?: UserVariable[]
+  ingredientUserTagVariables?: UserVariable[]
   inputType?: string
   ionIcon?: string
-  joinedCommonTagVariables?: Variable[]
-  joinedUserTagVariables?: Variable[]
+  joinedCommonTagVariables?: UserVariable[]
+  joinedUserTagVariables?: UserVariable[]
   joinWith?: number
   kurtosis?: number
   lastProcessedDailyValue?: number
@@ -1270,8 +1279,8 @@ export type Variable = {
   onsetDelayInHours?: number
   outcome?: boolean
   outcomeOfInterest?: boolean
-  parentCommonTagVariables?: Variable[]
-  parentUserTagVariables?: Variable[]
+  parentCommonTagVariables?: UserVariable[]
+  parentUserTagVariables?: UserVariable[]
   pngPath?: string
   pngUrl?: string
   predictorOfInterest?: number
@@ -1289,6 +1298,7 @@ export type Variable = {
   status?: string
   subtitle?: string
   svgUrl?: string
+  tags?: string[]
   thirdMostCommonValue?: number
   thirdToLastValue?: number
   trackingInstructions?: string
@@ -1303,16 +1313,17 @@ export type Variable = {
   updated?: number
   updatedAt?: string
   updatedTime?: string
+  url: string
   userId: number
-  userTaggedVariables?: Variable[]
-  userTagVariables?: Variable[]
+  userTaggedVariables?: UserVariable[]
+  userTagVariables?: UserVariable[]
   userVariableUnitAbbreviatedName?: string
   userVariableUnitCategoryId?: number
   userVariableUnitCategoryName?: string
   userVariableUnitId?: number
   userVariableUnitName?: string
   variableCategory?: VariableCategory
-  joinedVariables?: Variable[]
+  joinedVariables?: UserVariable[]
   valence?: string
   variableCategoryId?: number
   variableCategoryName?:
@@ -1470,7 +1481,7 @@ function nullIfUndefined<T>(value: T): T | null {
 function makeQueryIds() {
   return {
     getUnits: () => ['getUnits'] as const,
-    getVariables: (
+    getUserVariables: (
       name?: string,
       id?: number,
       upc?: string,
@@ -1484,7 +1495,7 @@ function makeQueryIds() {
       refresh?: boolean,
     ) =>
       [
-        'getVariables',
+        'getUserVariables',
         nullIfUndefined(name),
         nullIfUndefined(id),
         nullIfUndefined(upc),
@@ -1533,7 +1544,7 @@ function makeRequests(axios: AxiosInstance, config?: AxiosConfig) {
           url: `/v3/units`,
         })
         .then((res) => res.data),
-    getVariables: (
+    getUserVariables: (
       name?: string,
       id?: number,
       upc?: string,
@@ -1547,7 +1558,7 @@ function makeRequests(axios: AxiosInstance, config?: AxiosConfig) {
       refresh?: boolean,
     ) =>
       axios
-        .request<Variable[]>({
+        .request<UserVariable[]>({
           method: 'get',
           url: `/v3/variables`,
           params: {
@@ -1566,7 +1577,7 @@ function makeRequests(axios: AxiosInstance, config?: AxiosConfig) {
           paramsSerializer: config?.paramsSerializer,
         })
         .then((res) => res.data),
-    postUserVariables: (payload: Variable[]) =>
+    postUserVariables: (payload: UserVariable[]) =>
       axios
         .request<CommonResponse>({
           method: 'post',
@@ -1962,16 +1973,16 @@ function makeQueries(requests: ReturnType<typeof makeRequests>, queryIds: Return
       refresh?: boolean,
       options?: Omit<
         UseQueryOptions<
-          Awaited<ReturnType<typeof requests.getVariables>>,
+          Awaited<ReturnType<typeof requests.getUserVariables>>,
           unknown,
-          Awaited<ReturnType<typeof requests.getVariables>>,
-          ReturnType<typeof queryIds['getVariables']>
+          Awaited<ReturnType<typeof requests.getUserVariables>>,
+          ReturnType<typeof queryIds['getUserVariables']>
         >,
         'queryKey' | 'queryFn'
       >,
-    ): UseQueryResult<Awaited<ReturnType<typeof requests.getVariables>>, unknown> =>
+    ): UseQueryResult<Awaited<ReturnType<typeof requests.getUserVariables>>, unknown> =>
       useQuery(
-        queryIds.getVariables(
+        queryIds.getUserVariables(
           name,
           id,
           upc,
@@ -1985,7 +1996,7 @@ function makeQueries(requests: ReturnType<typeof makeRequests>, queryIds: Return
           refresh,
         ),
         () =>
-          requests.getVariables(
+          requests.getUserVariables(
             name,
             id,
             upc,
@@ -2901,14 +2912,14 @@ export async function getUser(): Promise<User | null> {
 const SLEEP_EFFICIENCY = 'Sleep Efficiency'
 const DAILY_STEP_COUNT = 'Daily Step Count'
 
-export async function getVariable(variableName: string): Promise<Variable | null> {
+export async function getVariable(variableName: string): Promise<UserVariable | null> {
   const { requests } = getRapini()
-  // let variable: Variable
+  // let variable: UserVariable
   // let cached = storage.getItem(variableName)
   // if (cached) {
   //   return variable
   // }
-  const variables = await requests.getVariables(variableName)
+  const variables = await requests.getUserVariables(variableName)
   const variable = variables[0] || null
   if (variable) {
     storage.setItem(variableName, variable)
@@ -2931,3 +2942,80 @@ export async function getLifeForceScore(): Promise<number> {
   }
   return mean(scores)
 }
+
+export async function getUserVariables(): Promise<UserVariable[]> {
+  const { requests } = getRapini()
+  return requests.getUserVariables()
+}
+
+// import { useSelector } from 'react-redux'
+// import { getShortName } from 'src/config'
+// import { currentSafe } from 'src/logic/safe/store/selectors'
+// import { currentSession } from '../../currentSession/store/selectors'
+//
+// const useSafeAddress = (): { shortName: string; safeAddress: string } => {
+//   const safe = useSelector(currentSafe)
+//   const { currentShortName, currentSafeAddress } = useSelector(currentSession)
+//
+//   return {
+//     shortName: currentShortName || getShortName(),
+//     safeAddress: currentSafeAddress || safe.address,
+//   }
+// }
+// export async function createNftForVariable(variableName: string, recipientAddress: string): Promise<string> {
+//   const meta = await getVariable(variableName)
+//   if (!meta) {
+//     throw new Error('Could not get variable: ' + variableName + ' to create NFT')
+//   }
+//   const image = meta.imageUrl
+//   // TODO const nftURL = createNft(recipientAddress, variable, image)
+//
+//   return storeNFT(meta.imageUrl, meta.displayName, meta.description, meta, recipientAddress)
+//   mintHealthDataNFT(
+//     '../images/mental1.png',
+//     'Health NFT',
+//     'Health Vital Sign',
+//     '{"Blood Pressure": "60/120"}',
+//     safeAddress,
+//   )
+//     .then(() => process.exit(0))
+//     .catch((error) => {
+//       console.error(error)
+//       process.exit(1)
+//     })
+// }
+//
+// //fullImagesPath points to filepath with filename
+// // Attributes is JSON object {"property":"value"}
+// async function storeNFT(imagePath: string, name: string, description: string, properties: any) {
+//   console.log('Storing NFT...........................')
+//   const fullImagePath = path.resolve(imagePath)
+//   const content = await fs.promises.readFile(fullImagePath)
+//   if (!NFT_STORAGE_KEY) {
+//     throw new Error('NFT_STORAGE_KEY is not set')
+//   }
+//   const nftStorage = new NFTStorage({ token: NFT_STORAGE_KEY })
+//   console.log('Call NFTStorage.store with await')
+//   const metadata = await nftStorage.store({
+//     name: name,
+//     description: description,
+//     image: new File([content], path.basename(fullImagePath), { type: mime.getType(fullImagePath) }),
+//     properties: properties,
+//   })
+//   console.log('IPFS URL for the metadata:', metadata.url)
+//   console.log('metadata.json contents:\n', metadata.data)
+//   console.log('metadata.json with IPFS gateway URLs:\n', metadata.embed())
+//   return metadata
+// }
+//
+// async function mintHealthDataNFT(imagePath, name, description, attributes, signer) {
+//   const tokenURI = await storeNFT(imagePath, name, description, attributes)
+//   const healthDataNFT = await ethers.getContract('HealthDataNFT')
+//   console.log(`START Minting data NFT... for ${signer.address}`)
+//   const mintTx = await healthDataNFT.mintNft(signer.address, tokenURI)
+//   const mintTxReceipt = await mintTx.wait(4)
+//   console.log(
+//     `Minted tokenId ${mintTxReceipt.events[0].args.tokenId.toString()} from contract: ${healthDataNFT.address}`,
+//   )
+//   return healthDataNFT
+// }

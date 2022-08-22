@@ -7,7 +7,6 @@ import SafeApps from './SafeApps'
 import { FeaturedApps } from './FeaturedApps/FeaturedApps'
 import MobileAppBanner from './MobileAppBanner'
 import { DashboardTitle } from './styled'
-import { FeaturedDataSources } from './FeaturedDataSources/FeaturedDataSources'
 
 const Dashboard = (): ReactElement => {
   return (
@@ -23,8 +22,6 @@ const Dashboard = (): ReactElement => {
       <Grid item xs={12} md={6}>
         <PendingTxsList size={4} />
       </Grid>
-
-      <FeaturedDataSources />
 
       <FeaturedApps />
 

@@ -10,6 +10,8 @@ import { useState } from 'react'
 
 const CLI_LINK = 'https://github.com/5afe/safe-cli'
 
+const alertDisabled = true
+
 export const InvalidMasterCopyError = (): React.ReactElement | null => {
   const chainInfo = getChainInfo()
   const { implementation } = useSelector(currentSafe)
@@ -30,7 +32,7 @@ export const InvalidMasterCopyError = (): React.ReactElement | null => {
     return null
   }
 
-  if (typeof validMasterCopy === 'undefined' || validMasterCopy) {
+  if (typeof validMasterCopy === 'undefined' || validMasterCopy || alertDisabled) {
     return null
   }
 

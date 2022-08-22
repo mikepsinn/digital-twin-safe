@@ -13,7 +13,7 @@ import Row from 'src/components/layout/Row'
 import { headerHeight, md, screenSm, sm } from 'src/theme/variables'
 import { useStateHandler } from 'src/logic/hooks/useStateHandler'
 import SafeLogo from '../assets/gnosis-safe-multisig-logo.svg'
-import { ROOT_ROUTE } from 'src/routes/routes'
+import { APP_NAME, ROOT_ROUTE } from 'src/routes/routes'
 import WalletSwitch from 'src/components/WalletSwitch'
 import Divider from 'src/components/layout/Divider'
 import { shouldSwitchWalletChain } from 'src/logic/wallets/store/selectors'
@@ -22,9 +22,11 @@ import { OVERVIEW_EVENTS } from 'src/utils/events/overview'
 import Track from 'src/components/Track'
 import Notifications from 'src/components/AppLayout/Header/components/Notifications'
 
+const backgroundColor = '#f14019'
 const styles = () => ({
   root: {
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
+    backgroundColor: '#73ee71',
     borderRadius: sm,
     boxShadow: 'rgb(40 54 61 / 18%) 1px 2px 10px 0px',
     marginTop: '11px',
@@ -33,12 +35,20 @@ const styles = () => ({
   },
   summary: {
     alignItems: 'center',
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
+    //backgroundColor: backgroundColor,
+    backgroundColor: '#73ee71',
+    borderColor: 'rgb(0 0 0/var(--tw-border-opacity))',
+    borderStyle: 'solid',
+    borderWidth: '2px',
     flexWrap: 'nowrap',
     height: headerHeight,
     position: 'fixed',
-    width: '100%',
+    width: '101%',
     zIndex: 1301,
+    right: '-4px',
+    top: '-4px',
+    left: '-4px',
   },
   logo: {
     flexBasis: '140px',
@@ -60,7 +70,8 @@ const styles = () => ({
     zIndex: 1301,
   },
   network: {
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
+    backgroundColor: backgroundColor,
     borderRadius: sm,
     boxShadow: '0 0 10px 0 rgba(33, 48, 77, 0.1)',
     marginTop: '11px',
@@ -101,7 +112,7 @@ const Layout = ({ classes, providerDetails, providerInfo }) => {
       <Col className={classes.logo} middle="xs" start="xs">
         <Track {...OVERVIEW_EVENTS.HOME}>
           <Link to={ROOT_ROUTE}>
-            <Img alt="Gnosis Safe" height={36} src={SafeLogo} testId="heading-gnosis-logo" id="safe-logo" />
+            <Img alt={APP_NAME} height={36} src={SafeLogo} testId="heading-gnosis-logo" id="safe-logo" />
           </Link>
         </Track>
       </Col>
@@ -115,10 +126,10 @@ const Layout = ({ classes, providerDetails, providerInfo }) => {
         </div>
       )}
 
-      <Divider />
+      {/*<Divider />*/}
       <Notifications open={openNotifications} toggle={toggleNotifications} clickAway={clickAwayNotifications} />
 
-      <Divider />
+      {/*<Divider />*/}
       <Provider
         info={providerInfo}
         open={openWallet}
