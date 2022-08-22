@@ -46,7 +46,7 @@ const UserVariableCard = ({
     shortName: getShortName(),
     safeAddress,
   })
-  const openUserVariableLink = `${appsPath}?variableUrl=${encodeURI(safeVariable.url)}`
+  const openUserVariableLink = `${appsPath}?appUrl=${encodeURI(safeVariable.url)}`
 
   const shareUserVariable = () => {
     const shareUserVariableUrl = getShareUserVariableUrl(safeVariable.url, chainId)
@@ -91,7 +91,7 @@ const UserVariableCard = ({
           <DescriptionContainer size={size}>
             <UserVariableTitle size="xs">{safeVariable.name}</UserVariableTitle>
             <UserVariableDescription size="lg" color="inputFilled">
-              {safeVariable.description}
+              {safeVariable.name + ' Data and Relationships with Other Variables'}
             </UserVariableDescription>
           </DescriptionContainer>
 
