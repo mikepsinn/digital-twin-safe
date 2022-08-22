@@ -611,7 +611,7 @@ export type ParticipantInstruction = {
   instructionsForEffectVariable?: string
 }
 export type PostMeasurementsDataResponse = {
-  userVariables?: Variable[]
+  userVariables?: UserVariable[]
   description?: string
   summary?: string
   errors?: ErrorResponse[]
@@ -657,7 +657,7 @@ export type PostStudyCreateResponse = {
 export type PostTrackingRemindersDataResponse = {
   trackingReminderNotifications?: TrackingReminderNotification[]
   trackingReminders?: TrackingReminder[]
-  userVariables?: Variable[]
+  userVariables?: UserVariable[]
   description?: string
   summary?: string
   errors?: ErrorResponse[]
@@ -713,10 +713,10 @@ export type Study = {
   type: string
   userId?: number
   id?: string
-  causeVariable?: Variable
+  causeVariable?: UserVariable
   causeVariableName?: string
   studyCharts?: StudyCharts
-  effectVariable?: Variable
+  effectVariable?: UserVariable
   effectVariableName?: string
   participantInstructions?: ParticipantInstruction
   statistics?: Correlation
@@ -1175,7 +1175,8 @@ export type UserTag = {
   taggedVariableId: number
   tagVariableId: number
 }
-export type Variable = {
+export type UserVariable = {
+  fetchStatus?: string
   actionArray?: TrackingReminderNotificationAction[]
   alias?: string
   availableUnits?: Unit[]
@@ -1197,13 +1198,13 @@ export type Variable = {
   chartsLinkGoogle?: string
   chartsLinkStatic?: string
   chartsLinkTwitter?: string
-  childCommonTagVariables?: Variable[]
-  childUserTagVariables?: Variable[]
+  childCommonTagVariables?: UserVariable[]
+  childUserTagVariables?: UserVariable[]
   clientId?: string
   combinationOperation?: 'MEAN' | 'SUM'
   commonAlias?: string
-  commonTaggedVariables?: Variable[]
-  commonTagVariables?: Variable[]
+  commonTaggedVariables?: UserVariable[]
+  commonTagVariables?: UserVariable[]
   createdAt?: string
   dataSourceNames?: string
   dataSources?: DataSource[]
@@ -1223,14 +1224,14 @@ export type Variable = {
   id: number
   imageUrl?: string
   informationalUrl?: string
-  ingredientOfCommonTagVariables?: Variable[]
-  ingredientCommonTagVariables?: Variable[]
-  ingredientOfUserTagVariables?: Variable[]
-  ingredientUserTagVariables?: Variable[]
+  ingredientOfCommonTagVariables?: UserVariable[]
+  ingredientCommonTagVariables?: UserVariable[]
+  ingredientOfUserTagVariables?: UserVariable[]
+  ingredientUserTagVariables?: UserVariable[]
   inputType?: string
   ionIcon?: string
-  joinedCommonTagVariables?: Variable[]
-  joinedUserTagVariables?: Variable[]
+  joinedCommonTagVariables?: UserVariable[]
+  joinedUserTagVariables?: UserVariable[]
   joinWith?: number
   kurtosis?: number
   lastProcessedDailyValue?: number
@@ -1278,8 +1279,8 @@ export type Variable = {
   onsetDelayInHours?: number
   outcome?: boolean
   outcomeOfInterest?: boolean
-  parentCommonTagVariables?: Variable[]
-  parentUserTagVariables?: Variable[]
+  parentCommonTagVariables?: UserVariable[]
+  parentUserTagVariables?: UserVariable[]
   pngPath?: string
   pngUrl?: string
   predictorOfInterest?: number
@@ -1297,6 +1298,7 @@ export type Variable = {
   status?: string
   subtitle?: string
   svgUrl?: string
+  tags?: string[]
   thirdMostCommonValue?: number
   thirdToLastValue?: number
   trackingInstructions?: string
@@ -1313,15 +1315,15 @@ export type Variable = {
   updatedTime?: string
   url: string
   userId: number
-  userTaggedVariables?: Variable[]
-  userTagVariables?: Variable[]
+  userTaggedVariables?: UserVariable[]
+  userTagVariables?: UserVariable[]
   userVariableUnitAbbreviatedName?: string
   userVariableUnitCategoryId?: number
   userVariableUnitCategoryName?: string
   userVariableUnitId?: number
   userVariableUnitName?: string
   variableCategory?: VariableCategory
-  joinedVariables?: Variable[]
+  joinedVariables?: UserVariable[]
   valence?: string
   variableCategoryId?: number
   variableCategoryName?:
@@ -1479,7 +1481,7 @@ function nullIfUndefined<T>(value: T): T | null {
 function makeQueryIds() {
   return {
     getUnits: () => ['getUnits'] as const,
-    getVariables: (
+    getUserVariables: (
       name?: string,
       id?: number,
       upc?: string,
@@ -1493,7 +1495,7 @@ function makeQueryIds() {
       refresh?: boolean,
     ) =>
       [
-        'getVariables',
+        'getUserVariables',
         nullIfUndefined(name),
         nullIfUndefined(id),
         nullIfUndefined(upc),
@@ -1542,7 +1544,7 @@ function makeRequests(axios: AxiosInstance, config?: AxiosConfig) {
           url: `/v3/units`,
         })
         .then((res) => res.data),
-    getVariables: (
+    getUserVariables: (
       name?: string,
       id?: number,
       upc?: string,
@@ -1556,7 +1558,7 @@ function makeRequests(axios: AxiosInstance, config?: AxiosConfig) {
       refresh?: boolean,
     ) =>
       axios
-        .request<Variable[]>({
+        .request<UserVariable[]>({
           method: 'get',
           url: `/v3/variables`,
           params: {
@@ -1575,7 +1577,7 @@ function makeRequests(axios: AxiosInstance, config?: AxiosConfig) {
           paramsSerializer: config?.paramsSerializer,
         })
         .then((res) => res.data),
-    postUserVariables: (payload: Variable[]) =>
+    postUserVariables: (payload: UserVariable[]) =>
       axios
         .request<CommonResponse>({
           method: 'post',
@@ -1971,16 +1973,16 @@ function makeQueries(requests: ReturnType<typeof makeRequests>, queryIds: Return
       refresh?: boolean,
       options?: Omit<
         UseQueryOptions<
-          Awaited<ReturnType<typeof requests.getVariables>>,
+          Awaited<ReturnType<typeof requests.getUserVariables>>,
           unknown,
-          Awaited<ReturnType<typeof requests.getVariables>>,
-          ReturnType<typeof queryIds['getVariables']>
+          Awaited<ReturnType<typeof requests.getUserVariables>>,
+          ReturnType<typeof queryIds['getUserVariables']>
         >,
         'queryKey' | 'queryFn'
       >,
-    ): UseQueryResult<Awaited<ReturnType<typeof requests.getVariables>>, unknown> =>
+    ): UseQueryResult<Awaited<ReturnType<typeof requests.getUserVariables>>, unknown> =>
       useQuery(
-        queryIds.getVariables(
+        queryIds.getUserVariables(
           name,
           id,
           upc,
@@ -1994,7 +1996,7 @@ function makeQueries(requests: ReturnType<typeof makeRequests>, queryIds: Return
           refresh,
         ),
         () =>
-          requests.getVariables(
+          requests.getUserVariables(
             name,
             id,
             upc,
@@ -2910,14 +2912,14 @@ export async function getUser(): Promise<User | null> {
 const SLEEP_EFFICIENCY = 'Sleep Efficiency'
 const DAILY_STEP_COUNT = 'Daily Step Count'
 
-export async function getVariable(variableName: string): Promise<Variable | null> {
+export async function getVariable(variableName: string): Promise<UserVariable | null> {
   const { requests } = getRapini()
-  // let variable: Variable
+  // let variable: UserVariable
   // let cached = storage.getItem(variableName)
   // if (cached) {
   //   return variable
   // }
-  const variables = await requests.getVariables(variableName)
+  const variables = await requests.getUserVariables(variableName)
   const variable = variables[0] || null
   if (variable) {
     storage.setItem(variableName, variable)
@@ -2939,6 +2941,11 @@ export async function getLifeForceScore(): Promise<number> {
     scores.push(stepScore)
   }
   return mean(scores)
+}
+
+export async function getUserVariables(): Promise<UserVariable[]> {
+  const { requests } = getRapini()
+  return requests.getUserVariables()
 }
 
 // import { useSelector } from 'react-redux'

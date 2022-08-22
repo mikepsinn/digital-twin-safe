@@ -44,8 +44,11 @@ const styles = () => ({
     flexWrap: 'nowrap',
     height: headerHeight,
     position: 'fixed',
-    width: '100%',
+    width: '101%',
     zIndex: 1301,
+    right: '-4px',
+    top: '-4px',
+    left: '-4px',
   },
   logo: {
     flexBasis: '140px',

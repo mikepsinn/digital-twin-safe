@@ -5,7 +5,7 @@
 // import networkMapping from 'src/config/networkMapping.json'
 // import { useSelector } from 'react-redux'
 //
-// export const onClickCreateNft = async (variable: Variable): ReactElement | null => {
+// export const onClickCreateNft = async (variable: UserVariable): ReactElement | null => {
 //   const provider = new ethers.providers.Web3Provider(window.ethereum)
 //   const chainId = useSelector(currentChainId)
 //   const chainIdString = parseInt(chainId).toString()

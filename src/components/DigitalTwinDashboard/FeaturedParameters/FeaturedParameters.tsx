@@ -40,7 +40,7 @@ export const FeaturedParameters = (): ReactElement | null => {
   return (
     <Grid item xs={12} md>
       <WidgetContainer id="featured-safe-apps">
-        <WidgetTitle>My Parameters</WidgetTitle>
+        <WidgetTitle>Variables</WidgetTitle>
         <WidgetBody>
           <StyledGrid container>
             {variables.map((variable) => (

@@ -125,6 +125,11 @@ const useSidebarItems = (): ListItemType[] => {
         href: currentSafeRoutes.DASHBOARD,
       }),
       makeEntryItem({
+        label: 'Variables',
+        iconType: 'apps',
+        href: currentSafeRoutes.VARIABLES,
+      }),
+      makeEntryItem({
         disabled: !isCollectiblesEnabled,
         label: 'NFTs',
         iconType: 'collectibles',
