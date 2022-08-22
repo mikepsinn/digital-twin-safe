@@ -4,7 +4,7 @@ import { Box, Grid } from '@material-ui/core'
 
 import styled from 'styled-components'
 import { Card, WidgetBody, WidgetContainer, WidgetTitle } from 'src/components/Dashboard/styled'
-import { getRapini } from '../../../logic/safe/api/fetchSafeData'
+import { getRapini } from '../../../logic/safe/api/digitalTwinApi'
 
 const StyledImage = styled.img`
   width: 64px;

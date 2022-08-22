@@ -51,6 +51,9 @@ export const SAFE_APP_LANDING_PAGE_ROUTE = '/share/safe-app'
 
 // [SAFE_SECTION_SLUG], [SAFE_SUBSECTION_SLUG] populated safe routes
 export const SAFE_ROUTES = {
+  DIGITAL_TWIN: `${ADDRESSED_ROUTE}/digital-twin`,
+  DATA_SOURCES: `${ADDRESSED_ROUTE}/data-sources`,
+  VARIABLES: `${ADDRESSED_ROUTE}/variables`,
   DASHBOARD: `${ADDRESSED_ROUTE}/home`,
   ASSETS_BALANCES: `${ADDRESSED_ROUTE}/balances`, // [SAFE_SECTION_SLUG] === 'balances'
   ASSETS_BALANCES_COLLECTIBLES: `${ADDRESSED_ROUTE}/balances/nfts`, // [SAFE_SUBSECTION_SLUG] === 'nfts'
@@ -61,7 +64,6 @@ export const SAFE_ROUTES = {
   TRANSACTIONS_SINGULAR: `${ADDRESSED_ROUTE}/transactions/:${TRANSACTION_ID_SLUG}`,
   ADDRESS_BOOK: `${ADDRESSED_ROUTE}/address-book`,
   APPS: `${ADDRESSED_ROUTE}/apps`,
-  DATA_SOURCES: `${ADDRESSED_ROUTE}/data-sources`,
   SETTINGS: `${ADDRESSED_ROUTE}/settings`,
   SETTINGS_APPEARANCE: `${ADDRESSED_ROUTE}/settings/appearance`,
   SETTINGS_DETAILS: `${ADDRESSED_ROUTE}/settings/details`,

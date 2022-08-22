@@ -1,34 +1,40 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Text } from '@gnosis.pm/safe-react-components'
+import { updateDataSourceButtonLink } from '../../../../../logic/safe/api/digitalTwinApi'
 
 type Props = {
   data: any
 }
 
-const DataSourceItem = ({ data }: Props): React.ReactElement => (
+class DataSourceButton extends React.Component<{ buttons: any; prop1: (item, index) => any }> {
+  render() {
+    return <ButtonWrapper>{this.props.buttons.map(this.props.prop1)}</ButtonWrapper>
+  }
+}
+
+const DataSourceRow = ({ data }: Props): React.ReactElement => (
   <ContentWrapper>
     <Title size="lg">{data.displayName}</Title>
     <Content size="md">{data.longDescription}</Content>
     <LeftContent>
-      <ButtonWrapper>
-        {data.buttons.map(
-          (item, index) => (
-            (item.link += '?clientId=quantimodo&final_callback_url=' + encodeURIComponent(window.location.href)),
-            (
-              <GreenButton key={index} bgColor={item.color} href={item.link}>
-                <ButtonIcon src={item.image} />
-                {item.text}
-              </GreenButton>
-            )
-          ),
+      <DataSourceButton
+        buttons={data.buttons}
+        prop1={(item, index) => (
+          updateDataSourceButtonLink(item),
+          (
+            <GreenButton key={index} bgColor={item.color} href={item.link}>
+              <ButtonIcon src={item.image} />
+              {item.text}
+            </GreenButton>
+          )
         )}
-      </ButtonWrapper>
+      />
     </LeftContent>
   </ContentWrapper>
 )
 
-export { DataSourceItem }
+export { DataSourceRow }
 
 const ContentWrapper = styled.div`
   display: flex;

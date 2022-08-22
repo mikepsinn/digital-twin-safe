@@ -4,7 +4,6 @@ import { Divider } from '@gnosis.pm/safe-react-components'
 import { useDispatch } from 'react-redux'
 
 import List, { ListItemType, StyledListItem, StyledListItemText } from 'src/components/List'
-import SafeHeader from './SafeHeader'
 import { IS_PRODUCTION, BEAMER_ID } from 'src/utils/constants'
 import { wrapInSuspense } from 'src/utils/wrapInSuspense'
 import Track from 'src/components/Track'
@@ -14,6 +13,7 @@ import { openCookieBanner } from 'src/logic/cookies/store/actions/openCookieBann
 import { loadFromCookie } from 'src/logic/cookies/utils'
 import { COOKIES_KEY, BannerCookiesType, COOKIE_IDS } from 'src/logic/cookies/model/cookie'
 import { background, primaryLite } from 'src/theme/variables'
+import DigitalTwinHeader from './DigitalTwinHeader'
 
 const StyledDivider = styled(Divider)`
   margin: 16px -8px 0;
@@ -106,7 +106,7 @@ const Sidebar = ({
 
   return (
     <>
-      <SafeHeader
+      <DigitalTwinHeader
         address={safeAddress}
         safeName={safeName}
         granted={granted}

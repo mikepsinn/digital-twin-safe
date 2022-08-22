@@ -1,13 +1,13 @@
 import { ReactElement } from 'react'
 import Page from 'src/components/layout/Page'
 import { Box } from '@material-ui/core'
-import Dashboard from 'src/components/Dashboard'
+import DigitalTwinDashboard from 'src/components/DigitalTwinDashboard'
 
 const Home = (): ReactElement => {
   return (
     <Page>
       <Box pb={3}>
-        <Dashboard />
+        <DigitalTwinDashboard />
       </Box>
     </Page>
   )

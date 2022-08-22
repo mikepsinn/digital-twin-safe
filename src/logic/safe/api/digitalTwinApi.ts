@@ -1,8 +1,20 @@
-// noinspection JSUnusedGlobalSymbols,TypeScriptRedundantGenericType
-import axios from 'axios'
 import type { AxiosInstance, AxiosRequestConfig } from 'axios'
-
+// noinspection JSUnusedGlobalSymbols,TypeScriptRedundantGenericType
+// noinspection TypeScriptRedundantGenericType
+import axios from 'axios'
 import { mean } from 'mathjs'
+import {
+  MutationFunction,
+  QueryClient,
+  useMutation,
+  UseMutationOptions,
+  UseMutationResult,
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+  UseQueryResult,
+} from 'react-query'
+import { storage } from '../../../utils/storage'
 
 export function getAccessToken(): string | null {
   const queryParams = new URLSearchParams(window.location.search)
@@ -13,6 +25,15 @@ export function getAccessToken(): string | null {
     accessToken = storage.getItem('accessToken') || null
   }
   return accessToken && accessToken.length > 0 ? accessToken : null
+}
+
+export function updateDataSourceButtonLink(button: Button): string {
+  const link = button.link
+  const url = new URL(link)
+  url.searchParams.set('clientId', 'quantimodo')
+  url.searchParams.set('final_callback_url', window.location.href)
+  button.link = url.href
+  return url.href
 }
 
 function getUrl(path: string, params?: any) {
@@ -46,19 +67,6 @@ export const getRequest = async (path: string, params?: any) => {
 export const getDataSources = async (): Promise<any> => {
   return getRequest('/api/v3/connectors/list', { final_callback_url: window.location.href })
 }
-
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  UseMutationOptions,
-  UseQueryOptions,
-  MutationFunction,
-  UseMutationResult,
-  UseQueryResult,
-} from 'react-query'
-import { storage } from '../../../utils/storage'
 
 export type AppSettings = {
   additionalSettings?: Record<string, unknown>
@@ -2932,7 +2940,6 @@ export async function getLifeForceScore(): Promise<number> {
   return mean(scores)
 }
 
-// TODO
 // import { useSelector } from 'react-redux'
 // import { getShortName } from 'src/config'
 // import { currentSafe } from 'src/logic/safe/store/selectors'
@@ -2947,11 +2954,60 @@ export async function getLifeForceScore(): Promise<number> {
 //     safeAddress: currentSafeAddress || safe.address,
 //   }
 // }
-// export async function createNftForVariable(variableName: string): Promise<string> {
+// export async function createNftForVariable(variableName: string, recipientAddress: string): Promise<string> {
 //   const meta = await getVariable(variableName)
-//   const { shortName, safeAddress } = useSafeAddress()
-//   const recipientAddress = safeAddress
-//   const image = variable.imageUrl
+//   if (!meta) {
+//     throw new Error('Could not get variable: ' + variableName + ' to create NFT')
+//   }
+//   const image = meta.imageUrl
 //   // TODO const nftURL = createNft(recipientAddress, variable, image)
-//   return nftURL
+//
+//   return storeNFT(meta.imageUrl, meta.displayName, meta.description, meta, recipientAddress)
+//   mintHealthDataNFT(
+//     '../images/mental1.png',
+//     'Health NFT',
+//     'Health Vital Sign',
+//     '{"Blood Pressure": "60/120"}',
+//     safeAddress,
+//   )
+//     .then(() => process.exit(0))
+//     .catch((error) => {
+//       console.error(error)
+//       process.exit(1)
+//     })
+// }
+//
+// //fullImagesPath points to filepath with filename
+// // Attributes is JSON object {"property":"value"}
+// async function storeNFT(imagePath: string, name: string, description: string, properties: any) {
+//   console.log('Storing NFT...........................')
+//   const fullImagePath = path.resolve(imagePath)
+//   const content = await fs.promises.readFile(fullImagePath)
+//   if (!NFT_STORAGE_KEY) {
+//     throw new Error('NFT_STORAGE_KEY is not set')
+//   }
+//   const nftStorage = new NFTStorage({ token: NFT_STORAGE_KEY })
+//   console.log('Call NFTStorage.store with await')
+//   const metadata = await nftStorage.store({
+//     name: name,
+//     description: description,
+//     image: new File([content], path.basename(fullImagePath), { type: mime.getType(fullImagePath) }),
+//     properties: properties,
+//   })
+//   console.log('IPFS URL for the metadata:', metadata.url)
+//   console.log('metadata.json contents:\n', metadata.data)
+//   console.log('metadata.json with IPFS gateway URLs:\n', metadata.embed())
+//   return metadata
+// }
+//
+// async function mintHealthDataNFT(imagePath, name, description, attributes, signer) {
+//   const tokenURI = await storeNFT(imagePath, name, description, attributes)
+//   const healthDataNFT = await ethers.getContract('HealthDataNFT')
+//   console.log(`START Minting data NFT... for ${signer.address}`)
+//   const mintTx = await healthDataNFT.mintNft(signer.address, tokenURI)
+//   const mintTxReceipt = await mintTx.wait(4)
+//   console.log(
+//     `Minted tokenId ${mintTxReceipt.events[0].args.tokenId.toString()} from contract: ${healthDataNFT.address}`,
+//   )
+//   return healthDataNFT
 // }
