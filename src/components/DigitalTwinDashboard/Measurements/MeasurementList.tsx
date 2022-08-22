@@ -1,111 +1,78 @@
-import { ReactElement, useMemo } from 'react'
-import styled from 'styled-components'
-import Skeleton from '@material-ui/lab/Skeleton/Skeleton'
+import { ReactElement } from 'react'
 import { Text } from '@gnosis.pm/safe-react-components'
-import { Box } from '@material-ui/core'
-import { Card, WidgetBody, WidgetContainer, WidgetTitle, ViewAllLink } from 'src/components/Dashboard/styled'
-import NoTransactionsImage from 'src/routes/safe/components/Transactions/TxList/assets/no-transactions.svg'
-import Img from 'src/components/layout/Img'
-import { getAccessToken, getRapini, Measurement } from '../../../logic/safe/api/digitalTwinApi'
-import MeasurementListItem from './MeasurementListItem'
+import { Box, Grid } from '@material-ui/core'
 
-const SkeletonWrapper = styled.div`
-  border-radius: 8px;
-  overflow: hidden;
+import styled from 'styled-components'
+import { Card, WidgetBody, WidgetContainer, WidgetTitle } from 'src/components/Dashboard/styled'
+import { getAccessToken, getRapini } from '../../../logic/safe/api/digitalTwinApi'
+import { GENERIC_APPS_ROUTE } from 'src/routes/routes'
+import { Link } from 'react-router-dom'
+
+const StyledImage = styled.img`
+  width: 64px;
+  height: 64px;
 `
 
-const StyledList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  width: 100%;
+const StyledGrid = styled(Grid)`
+  gap: 24px;
 `
 
-const StyledWidgetTitle = styled.div`
-  display: flex;
-  justify-content: space-between;
+const StyledGridItem = styled(Grid)`
+  min-width: 300px;
+`
+const StyledLink = styled(Link)`
+  text-decoration: none;
 `
 
-const EmptyState = (
-  <Card>
-    <Box display="flex" alignItems="center" justifyContent="center" flexDirection="column" height={1} gridGap="16px">
-      <Img alt="No Transactions yet" src={NoTransactionsImage} />
-      <Text size="xl">This Safe has no queued transactions</Text>
-    </Box>
-  </Card>
-)
-let measurements: Measurement[] = []
-const MeasurementList = ({ size = 5 }: { size?: number }): ReactElement | null => {
+export const MeasurementList = (): ReactElement | null => {
   const { queries } = getRapini()
 
   const { data, isLoading, isLoadingError } = queries.useGetMeasurements()
-  if (data) {
-    measurements = data
-  }
 
-  const LoadingState = useMemo(
-    () => (
-      <StyledList>
-        {Array.from(Array(size).keys()).map((key) => (
-          <SkeletonWrapper key={key}>
-            <Skeleton variant="rect" height={52} />
-          </SkeletonWrapper>
-        ))}
-      </StyledList>
-    ),
-    [size],
-  )
-  if (typeof measurements === 'undefined') {
-    measurements = []
-  }
+  if (!data || isLoadingError) return null
 
-  const ResultState = useMemo(
-    () => (
-      <StyledList>
-        {measurements.map((measurement) => (
-          <MeasurementListItem
-            url={measurement.url}
-            key={measurement.id}
-            sourceName={measurement.sourceName}
-            startTimeString={measurement.startTimeString}
-            unitAbbreviatedName={measurement.unitAbbreviatedName}
-            value={measurement.value}
-            variableName={measurement.variableName}
-          />
-        ))}
-      </StyledList>
-    ),
-    [],
-  )
+  const measurements = data
 
-  const getWidgetBody = () => {
-    if (!isLoading) return LoadingState
-    if (!measurements.length) return EmptyState
-    return ResultState
-  }
+  if (!measurements) return null
 
-  if (isLoadingError) {
-    console.error(isLoadingError)
-    return (
-      <WidgetContainer>
-        <StyledWidgetTitle>
-          <WidgetTitle>Measurements Could Not Be Loaded!</WidgetTitle>
-          <ViewAllLink url={'https://app.curedao.org/#/app/history?accessToken=' + getAccessToken()} />
-        </StyledWidgetTitle>
-        <WidgetBody>{getWidgetBody()}</WidgetBody>
-      </WidgetContainer>
-    )
-  }
+  if (!measurements.length && !isLoading) return null
 
   return (
-    <WidgetContainer>
-      <StyledWidgetTitle>
-        <WidgetTitle>Measurements</WidgetTitle>
-        <ViewAllLink url={'https://app.curedao.org/#/app/history?accessToken=' + getAccessToken()} />
-      </StyledWidgetTitle>
-      <WidgetBody>{getWidgetBody()}</WidgetBody>
-    </WidgetContainer>
+    <Grid item xs={12} md>
+      <WidgetContainer id="featured-safe-apps">
+        <WidgetTitle>My Parameters</WidgetTitle>
+        <WidgetBody>
+          <StyledGrid container>
+            {measurements.map((measurement) => (
+              <StyledGridItem item xs md key={measurement.id}>
+                <StyledLink
+                  to={GENERIC_APPS_ROUTE + '?appUrl=' + measurement.url + '&accessToken=' + getAccessToken()}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <Card>
+                    <Grid container alignItems="center" spacing={3}>
+                      <Grid item xs={12} md={3}>
+                        <StyledImage src={measurement.pngPath} alt={measurement.displayValueAndUnitString} />
+                      </Grid>
+                      <Grid item xs={12} md={9}>
+                        <Box mb={1.01}>
+                          <Text size="xl">
+                            {measurement.displayValueAndUnitString + ' ' + measurement.variableName}
+                          </Text>
+                        </Box>
+                        <Text color="primary" size="lg" strong>
+                          Edit Measurement
+                        </Text>
+                      </Grid>
+                    </Grid>
+                  </Card>
+                </StyledLink>
+              </StyledGridItem>
+            ))}
+          </StyledGrid>
+        </WidgetBody>
+      </WidgetContainer>
+    </Grid>
   )
 }
-
 export default MeasurementList

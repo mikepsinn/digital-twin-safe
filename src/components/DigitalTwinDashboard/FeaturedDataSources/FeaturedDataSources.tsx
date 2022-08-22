@@ -43,7 +43,7 @@ export const FeaturedDataSources = (): ReactElement | null => {
 
   return (
     <Grid item xs={12} md>
-      <WidgetContainer id="featured-safe-apps">
+      <WidgetContainer id="featured-data-sources">
         <WidgetTitle>Import Your Data</WidgetTitle>
         <WidgetBody>
           <StyledGrid container>

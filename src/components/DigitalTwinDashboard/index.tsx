@@ -7,6 +7,7 @@ import MeasurementList from './Measurements/MeasurementList'
 import { getAccessToken } from '../../logic/safe/api/digitalTwinApi'
 import { DashboardTitle } from '../Dashboard/styled'
 import DigitalTwinOverview from './DataOverview/DigitalTwinOverview'
+import { FeaturedParameters } from './FeaturedParameters/FeaturedParameters'
 
 const DigitalTwinDashboard = (): ReactElement => {
   return (
@@ -18,12 +19,8 @@ const DigitalTwinDashboard = (): ReactElement => {
       </Grid>
 
       <MobileAppBanner />
-
-      {getAccessToken() && (
-        <Grid item xs={12} md={6}>
-          <MeasurementList size={4} />
-        </Grid>
-      )}
+      <FeaturedParameters />
+      {getAccessToken() && <MeasurementList />}
 
       <FeaturedDataSources />
     </Grid>
