@@ -48,7 +48,7 @@ const useSidebarItems = (): ListItemType[] => {
       safeAddress,
     })
 
-    const transactionsSubItems = [
+    /*    const transactionsSubItems = [
       makeEntryItem({
         label: 'Queue',
         href: currentSafeRoutes.TRANSACTIONS_QUEUE,
@@ -57,9 +57,9 @@ const useSidebarItems = (): ListItemType[] => {
         label: 'History',
         href: currentSafeRoutes.TRANSACTIONS_HISTORY,
       }),
-    ]
+    ]*/
 
-    const assetsSubItems = [
+    /*    const assetsSubItems = [
       makeEntryItem({
         disabled: !isCollectiblesEnabled,
         label: 'NFTs',
@@ -82,7 +82,7 @@ const useSidebarItems = (): ListItemType[] => {
         iconType: 'addressBook',
         href: currentSafeRoutes.ADDRESS_BOOK,
       }),
-    ]
+    ]*/
     const settingsSubItems = [
       makeEntryItem({
         label: 'Safe Details',
@@ -125,22 +125,22 @@ const useSidebarItems = (): ListItemType[] => {
         href: currentSafeRoutes.DASHBOARD,
       }),
       makeEntryItem({
-        label: 'Variables',
+        label: 'You Data',
         iconType: 'apps',
         href: currentSafeRoutes.VARIABLES,
       }),
       makeEntryItem({
         disabled: !isCollectiblesEnabled,
-        label: 'NFTs',
+        label: 'Health NFTs',
         iconType: 'collectibles',
         href: currentSafeRoutes.ASSETS_BALANCES_COLLECTIBLES,
       }),
-      makeEntryItem({
+      /*      makeEntryItem({
         label: 'Assets',
         iconType: 'assets',
         href: currentSafeRoutes.ASSETS_BALANCES,
         subItems: assetsSubItems,
-      }),
+      }),*/
       makeEntryItem({
         disabled: !safeAppsEnabled,
         label: 'Apps',

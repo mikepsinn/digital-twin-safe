@@ -198,7 +198,7 @@ const CollectiblesPage = (): React.ReactElement => {
         </>
       )}
 
-      <h3>NFTs</h3>
+      <h3>Health Data NFTs</h3>
     </Collectibles>
   )
 }
