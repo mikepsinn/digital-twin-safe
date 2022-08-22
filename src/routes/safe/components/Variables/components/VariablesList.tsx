@@ -106,7 +106,7 @@ const VariablesList = (): React.ReactElement => {
                 {pinnedUserVariables.map((pinnedUserVariable) => (
                   <UserVariableCard
                     key={pinnedUserVariable.id}
-                    safeVariable={pinnedUserVariable}
+                    userVariable={pinnedUserVariable}
                     togglePin={togglePin}
                     size="md"
                     isPinned
@@ -128,7 +128,7 @@ const VariablesList = (): React.ReactElement => {
             {variables.map((safeVariable) => (
               <UserVariableCard
                 key={safeVariable.id}
-                safeVariable={safeVariable}
+                userVariable={safeVariable}
                 togglePin={togglePin}
                 isPinned={pinnedUserVariables.some((pinnedUserVariable) => pinnedUserVariable.id === safeVariable.id)}
                 size="md"

@@ -17,7 +17,7 @@ export const FormButtons = ({ variableInfo, onCancel }: Props): ReactElement => 
 
   const isSubmitDisabled = useMemo(() => {
     // if non visited, fields were not evaluated yet. Then, the default value is considered invalid
-    const fieldsVisited = visited?.agreementAccepted && visited?.variableUrl
+    const fieldsVisited = visited?.agreementAccepted && visited?.appUrl
 
     // @ts-expect-error adding this because isVariableManifestValid only checks name and description which are both present in the UserVariable type
     return validating || !valid || !fieldsVisited || !isVariableManifestValid(variableInfo)
