@@ -15,10 +15,12 @@ function Welcome(): ReactElement {
     <Page align="center">
       <Block>
         <Title size="md" strong>
-          Welcome to Gnosis Safe.
+          Welcome to Your Digital Twin Safe.
         </Title>
         <Title size="xs">
-          Gnosis Safe is the most trusted platform to manage digital assets. <br /> Here is how to get started:
+          A safe little house for your digital twin. <br />
+          Based on the Gnosis Safe, the most trusted platform to manage assets. <br />
+          Here is how to get started:
         </Title>
         <CardsContainer>
           <StyledCard>

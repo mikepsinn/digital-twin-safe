@@ -44,7 +44,7 @@ body {
 
 body > div:first-child {
   display: flex;
-  min-height: 100%;
+  // min-height: 100%; // This creates a white screen on chrome for some reason
 }
 
 html[class="darkMode"],
