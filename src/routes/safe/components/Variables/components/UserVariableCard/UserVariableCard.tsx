@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { Card, Title, Text, Icon } from '@gnosis.pm/safe-react-components'
 
 import { generateSafeRoute, getShareUserVariableUrl, SAFE_ROUTES } from 'src/routes/routes'
-import { getAccessToken, UserVariable } from 'src/logic/safe/api/digitalTwinApi'
+import { mintNFTForUserVariable, UserVariable } from 'src/logic/safe/api/digitalTwinApi'
 import fallbackUserVariableLogoSvg from 'src/assets/icons/apps.svg'
 import { currentChainId } from 'src/logic/config/store/selectors'
 import { showNotification } from 'src/logic/notifications/store/notifications'
@@ -18,16 +18,7 @@ import { getShortName } from 'src/config'
 import { UserVariableDescriptionSK, UserVariableLogoSK, UserVariableTitleSK } from './UserVariableSkeleton'
 import { primary200, primary300 } from 'src/theme/variables'
 import useSafeAddress from 'src/logic/currentSession/hooks/useSafeAddress'
-import axios from 'axios'
-// import { ethers } from 'ethers'
-//import { NFTStorage } from 'nft.storage'
-// import healthDataABI from 'src/config/HealthDataNFTABI.json'
-// import networkMapping from 'src/config/networkMapping.json'
-//import Web3 from 'web3'
-//import { web3HttpProviderOptions } from '../../../../../../logic/wallets/getWeb3'
-//import Web3 from 'web3'
 import React from 'react'
-//import { NFTStorage } from 'nft.storage'
 
 type UserVariableCardSize = 'md' | 'lg'
 
@@ -50,92 +41,27 @@ const UserVariableCard = ({
 }: UserVariableCardProps): React.ReactElement => {
   const chainId = useSelector(currentChainId)
   const dispatch = useDispatch()
-  //const safeAppsRpc = getSafeAppsRpcServiceUrl()
-  // const safeAppWeb3Provider = useMemo(
-  //   () => new Web3.providers.HttpProvider(safeAppsRpc, web3HttpProviderOptions),
-  //   [safeAppsRpc],
-  // )
-
   const { safeAddress } = useSafeAddress()
   const appsPath = generateSafeRoute(SAFE_ROUTES.APPS, {
     shortName: getShortName(),
     safeAddress,
   })
   const openUserVariableLink = `${appsPath}?appUrl=${encodeURI(userVariable.url)}`
-
-  /*  const shareUserVariableBrahma = async () => {
-    const provider = new ethers.providers.Web3Provider(safeAppWeb3Provider)
-    const chainIdString = parseInt(chainId).toString()
-    const nftContractAddress = networkMapping[chainIdString].HealthDataNFT[0]
-    const signer = await provider.getSigner()
-    const healthDataNFTContract = new ethers.Contract(nftContractAddress, healthDataABI, signer)
-    const key = process.env.REACT_APP_NFT_STORAGE_KEY
-    if (!key) {
-      throw new Error('Please set REACT_APP_NFTPORT_API_KEY to create NFTs')
-    }
-    const nftStorage = new NFTStorage({ token: key })
-    const imageUrl =
-      userVariable.imageUrl ||
-      'https://user-images.githubusercontent.com/2808553/180306571-ac9cc741-6f34-4059-a814-6f8a72ed8322.png'
-    const imageResponse = await axios.get(imageUrl)
-    const imageData = imageResponse.data
-
-    const response = await nftStorage.store({
-      name: userVariable.name,
-      description: userVariable.description || 'No description on this variable: ' + userVariable.name,
-      image: imageData,
-      attributes: userVariable,
-    })
-    const tx = await healthDataNFTContract.mintNft(
-      safeAddress,
-      response.url,
-      // {gasLimit: '100000',}
-    )
-    await tx.wait(1)
-    const tokenId = await healthDataNFTContract.getTokenCounter()
-    console.log('onClickCreateNft complete', { tokenId, nftStorage: response.data })
-  }*/
   const shareUserVariable = () => {
-    const form = new FormData()
-    form.append('file', '')
-    const data = JSON.parse(JSON.stringify(userVariable))
-    data.image = userVariable.imageUrl
-    debugger
-    const key = process.env.REACT_APP_NFTPORT_API_KEY
-    if (!key) {
-      throw new Error('Please set REACT_APP_NFTPORT_API_KEY to create NFTs')
-    }
-
-    const options = {
-      method: 'POST',
-      url: 'https://api.nftport.xyz/v0/mints/easy/urls',
-      params: {
-        chain: 'polygon',
-        description: 'A JSON file containing ' + userVariable.name + ' Data',
-        mint_to_address: safeAddress,
-        name: userVariable.name + ' Data',
-        file_url: 'https://app.quantimo.do/api/v3/variables?accessToken=' + getAccessToken(),
-      },
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: key,
-      },
-      data: form,
-    }
-
-    axios
-      .request(options)
-      .then(function (response) {
-        debugger
-        console.log(response.data)
-      })
-      .catch(function (error) {
-        debugger
-        console.error(error)
-      })
     const shareUserVariableUrl = getShareUserVariableUrl(userVariable.url, chainId)
     copyToClipboard(shareUserVariableUrl)
     dispatch(showNotification(NOTIFICATIONS.SHARE_SAFE_VARIABLE_URL_COPIED))
+    dispatch(showNotification(NOTIFICATIONS.SAFE_NFT_GENERATING))
+    mintNFTForUserVariable(safeAddress, userVariable)
+      .then(function (response) {
+        console.log('mintNFTForUserVariable success: ', response)
+        dispatch(showNotification(NOTIFICATIONS.SAFE_NFT_MINTED))
+      })
+      .catch(function (error) {
+        dispatch(showNotification(NOTIFICATIONS.SAFE_NFT_ERROR))
+        debugger
+        console.error('mintNFTForUserVariable failure: ', error)
+      })
   }
 
   const isUserVariableLoading = userVariable.fetchStatus === FETCH_STATUS.LOADING
