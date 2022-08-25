@@ -1,4 +1,6 @@
 // noinspection TypeScriptRedundantGenericType,JSUnusedGlobalSymbols
+// noinspection JSUnusedGlobalSymbols
+
 import type { AxiosInstance, AxiosRequestConfig } from 'axios'
 // noinspection JSUnusedGlobalSymbols,TypeScriptRedundantGenericType
 // noinspection TypeScriptRedundantGenericType
@@ -16,6 +18,7 @@ import {
   UseQueryResult,
 } from 'react-query'
 import { storage } from '../../../utils/storage'
+import { Canvas, createCanvas, loadImage } from 'canvas'
 
 export function getAccessToken(): string | null {
   const queryParams = new URLSearchParams(window.location.search)
@@ -2934,18 +2937,36 @@ export async function getVariable(variableName: string): Promise<UserVariable | 
   return variable
 }
 
-export async function getLifeForceScore(): Promise<number> {
-  const sleep = await getVariable(SLEEP_EFFICIENCY)
-  const scores = [50]
-  if (sleep && sleep.lastValue) {
-    scores.push(sleep.lastValue)
+export async function findVariableCategory(nameOrId: string): Promise<VariableCategory> {
+  const { requests } = getRapini()
+  const cats = await requests.getVariableCategories()
+  return cats.find(function (cat) {
+    return cat.id === nameOrId || cat.name === nameOrId || cat.synonyms.indexOf(nameOrId) > -1
+  })
+}
+
+export function calculateVariableScore(uv: UserVariable): number | null {
+  if (uv.unitName === 'Percent') {
+    return uv.lastValue || null
   }
-  const steps = await getVariable(DAILY_STEP_COUNT)
-  if (steps && steps.lastValue && steps.maximumRecordedValue) {
-    const min = steps.minimumRecordedValue || 0
-    const max = steps.maximumRecordedValue || 10000
-    const stepScore = ((steps.lastValue - min) / (max - min)) * 100
-    scores.push(stepScore)
+  if (!uv.lastValue || !uv.minimumRecordedValue || !uv.maximumRecordedValue) {
+    return null
+  }
+  return ((uv.lastValue - uv.minimumRecordedValue) / (uv.maximumRecordedValue - uv.minimumRecordedValue)) * 100
+}
+
+export async function getLifeForceScore(): Promise<number> {
+  const scores = [50]
+  const variableNames = [DAILY_STEP_COUNT, SLEEP_EFFICIENCY]
+  for (const variableName of variableNames) {
+    const variable = await getVariable(variableName)
+    if (!variable) {
+      continue
+    }
+    const score = calculateVariableScore(variable)
+    if (score !== null) {
+      scores.push(score)
+    }
   }
   return mean(scores)
 }
@@ -2959,7 +2980,8 @@ export async function mintNFTForUserVariable(recipientAddress: string, userVaria
   const form = new FormData()
   form.append('file', '')
   const data = JSON.parse(JSON.stringify(userVariable))
-  data.image = userVariable.imageUrl
+
+  data.image = generateVariableNftImage(userVariable.name)
   debugger
   const key = process.env.REACT_APP_NFTPORT_API_KEY
   if (!key) {
@@ -2984,4 +3006,80 @@ export async function mintNFTForUserVariable(recipientAddress: string, userVaria
   }
 
   return axios.request(options)
+}
+
+const width = 1264
+const height = 1264
+const titleFont = '50pt Comic Sans MS'
+const scoreFont = '30pt Comic Sans MS'
+
+export const slugify = (string: string): string => {
+  return string
+    .toLowerCase()
+    .replace(/ /g, '-')
+    .replace(/[^\w-]+/g, '')
+}
+
+function addEnergyBars(context, numberOfRectangles) {
+  // Add Energy Bar
+  context.fillStyle = '#58378C'
+  context.fillRect(441.55, 1041.95, (651 / 100) * numberOfRectangles, 68)
+}
+
+function addTitleText(context, variableName) {
+  // Add Title Text
+  context.font = titleFont
+  context.textBaseline = 'top'
+  context.fillStyle = 'black'
+  context.fillText(variableName, 61, 28)
+}
+
+function addScoreText(context, variableName) {
+  // Add Score Text
+  context.font = scoreFont
+  context.fillText(variableName, 400, 948)
+}
+
+async function addScoreImage(url: string, context: any) {
+  const smallImageData = await loadImage(url)
+  context.drawImage(smallImageData, 113.01, 922.06, 220.7, 220.7)
+}
+
+async function addBackgroundImage(canvas: Canvas, backgroundImg?: string) {
+  if (!backgroundImg) {
+    backgroundImg = 'https://static.quantimo.do/humanfs/human-fs-nft-background.png'
+  }
+  const backgroundImage = await loadImage(backgroundImg)
+  const context = canvas.getContext('2d')
+  context.drawImage(backgroundImage, 0, 0, width, height)
+  return context
+}
+
+async function generateVariableNftImage(
+  variableName: string,
+  score?: number | undefined | null,
+  backgroundImg?: string | undefined,
+): Promise<string> {
+  const canvas = createCanvas(width, height)
+  const variable = await getVariable(variableName)
+  if (!variable) {
+    throw new Error('Could not find variable named ' + variableName)
+  }
+  if (!score) {
+    score = calculateVariableScore(variable)
+  }
+  const context = await addBackgroundImage(canvas, backgroundImg)
+  await addScoreImage(variable.url, context)
+  addEnergyBars(context, score)
+  addTitleText(context, variableName)
+  addScoreText(context, variableName)
+  return canvas.toDataURL('image/png')
+}
+export async function generateLifeForceNftImage(backgroundImg: string | undefined): Promise<string> {
+  const canvas = createCanvas(width, height)
+  const context = await addBackgroundImage(canvas, backgroundImg)
+  addEnergyBars(context, getLifeForceScore())
+  addTitleText(context, 'Life Force')
+  addScoreText(context, 'Life Force')
+  return canvas.toDataURL('image/png')
 }
