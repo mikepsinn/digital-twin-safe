@@ -101,7 +101,7 @@ const UserVariableCard = ({
           <DescriptionContainer size={size}>
             <UserVariableTitle size="xs">{userVariable.name}</UserVariableTitle>
             <UserVariableDescription size="lg" color="inputFilled">
-              {userVariable.name + ' Data and Relationships with Other Variables'}
+              {userVariable.name + ' Data and Relationships'}
             </UserVariableDescription>
           </DescriptionContainer>
 
@@ -110,7 +110,7 @@ const UserVariableCard = ({
             {/* Share Safe UserVariable button */}
             <IconBtn
               onClick={shareUserVariable}
-              aria-label={`copy ${userVariable.name} Safe UserVariable share link to clipboard`}
+              aria-label={`copy ${userVariable.name} Safe User Variable share link to clipboard`}
             >
               <Icon size="md" type="share" tooltip="Copy share link" />
             </IconBtn>
@@ -122,9 +122,14 @@ const UserVariableCard = ({
                 aria-label={`${isPinned ? 'Unpin' : 'Pin'} ${userVariable.name} Safe UserVariable`}
               >
                 {isPinned ? (
-                  <PinnedIcon size="md" type="bookmarkFilled" color="primary" tooltip="Unpin from the Safe Variables" />
+                  <PinnedIcon
+                    size="md"
+                    type="bookmarkFilled"
+                    color="primary"
+                    tooltip="Unpin from the Favorite Variables"
+                  />
                 ) : (
-                  <PinnedIcon size="md" type="bookmark" tooltip="Pin from the Safe Variables" />
+                  <PinnedIcon size="md" type="bookmark" tooltip="Pin to Favorite Variables" />
                 )}
               </IconBtn>
             )}
@@ -135,7 +140,7 @@ const UserVariableCard = ({
                 onClick={() => onRemove?.(userVariable)}
                 aria-label={`Remove ${userVariable.name} custom Safe UserVariable`}
               >
-                <Icon size="md" type="delete" color="error" tooltip="Remove Custom Safe UserVariable" />
+                <Icon size="md" type="delete" color="error" tooltip="Remove Custom Safe User Variable" />
               </IconBtn>
             )}
           </ActionsContainer>
