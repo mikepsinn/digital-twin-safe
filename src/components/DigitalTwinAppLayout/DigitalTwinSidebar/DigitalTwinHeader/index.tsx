@@ -204,7 +204,7 @@ const SafeHeader = ({
   const { shortName } = useSafeAddress()
   const hasSafeOpen = useRouteMatch(ADDRESSED_ROUTE)
 
-  const handleNewTransactionClick = () => {
+  const handleNewMeasurementClick = () => {
     trackEvent({ ...OVERVIEW_EVENTS.NEW_TRANSACTION })
     onNewTransactionClick()
   }
@@ -272,7 +272,7 @@ const SafeHeader = ({
           disabled={!granted}
           color="primary"
           variant="contained"
-          onClick={handleNewTransactionClick}
+          onClick={handleNewMeasurementClick}
         >
           <Text size="xl" color="white">
             {granted ? 'New Measurement' : 'Read Only'}

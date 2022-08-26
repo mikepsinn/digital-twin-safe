@@ -7,7 +7,7 @@ type Props = {
   data: any
 }
 
-class DataSourceButton extends React.Component<{ buttons: any; prop1: (item, index) => any }> {
+class DataSourceButtonsContainer extends React.Component<{ buttons: any; prop1: (item, index) => any }> {
   render() {
     return <ButtonWrapper>{this.props.buttons.map(this.props.prop1)}</ButtonWrapper>
   }
@@ -18,15 +18,15 @@ const DataSourceRow = ({ data }: Props): React.ReactElement => (
     <Title size="lg">{data.displayName}</Title>
     <Content size="md">{data.longDescription}</Content>
     <LeftContent>
-      <DataSourceButton
+      <DataSourceButtonsContainer
         buttons={data.buttons}
         prop1={(item, index) => (
           updateDataSourceButtonLink(item),
           (
-            <GreenButton key={index} bgColor={item.color} href={item.link}>
+            <DataSourceButton key={index} bgColor={item.color} href={item.link}>
               <ButtonIcon src={item.image} />
               {item.text}
-            </GreenButton>
+            </DataSourceButton>
           )
         )}
       />
@@ -60,13 +60,13 @@ const ButtonWrapper = styled.div`
   margin: ${({ theme }) => `${theme.margin.xxl} 0 0 0`};
   width: 600px;
 `
-const GreenButton = styled.a<{ bgColor: string }>`
+const DataSourceButton = styled.a<{ bgColor: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: ${(props) => props.bgColor || '#2ace67'};
   color: #fff;
-  border-radius: 20px;
+  border-radius: 0px;
   padding: 6px 12px;
   margin-right: 10px;
   text-decoration: none;

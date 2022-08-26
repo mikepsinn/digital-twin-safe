@@ -31,14 +31,7 @@ type UserVariableCardProps = {
   onRemove?: (app: UserVariable) => void
 }
 
-const UserVariableCard = ({
-  userVariable,
-  size,
-  togglePin,
-  isPinned,
-  isCustomUserVariable,
-  onRemove,
-}: UserVariableCardProps): React.ReactElement => {
+const UserVariableCard = ({ userVariable, size, togglePin, isPinned }: UserVariableCardProps): React.ReactElement => {
   const chainId = useSelector(currentChainId)
   const dispatch = useDispatch()
   const { safeAddress } = useSafeAddress()
@@ -116,7 +109,7 @@ const UserVariableCard = ({
             </IconBtn>
 
             {/* Pin & Unpin Safe UserVariable button */}
-            {!isCustomUserVariable && (
+            {
               <IconBtn
                 onClick={() => togglePin(userVariable)}
                 aria-label={`${isPinned ? 'Unpin' : 'Pin'} ${userVariable.name} Safe UserVariable`}
@@ -132,17 +125,7 @@ const UserVariableCard = ({
                   <PinnedIcon size="md" type="bookmark" tooltip="Pin to Favorite Variables" />
                 )}
               </IconBtn>
-            )}
-
-            {/* Remove custom Safe UserVariable button */}
-            {isCustomUserVariable && (
-              <IconBtn
-                onClick={() => onRemove?.(userVariable)}
-                aria-label={`Remove ${userVariable.name} custom Safe UserVariable`}
-              >
-                <Icon size="md" type="delete" color="error" tooltip="Remove Custom Safe User Variable" />
-              </IconBtn>
-            )}
+            }
           </ActionsContainer>
         </StyledVariableCard>
       </StyledLink>

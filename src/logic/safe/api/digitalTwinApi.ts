@@ -31,14 +31,15 @@ export function getAccessToken(): string | null {
   return accessToken && accessToken.length > 0 ? accessToken : null
 }
 
-export function updateDataSourceButtonLink(button: Button): string {
-  const link = button.link
+export function updateDataSourceButtonLink(button: Button): void {
+  if (!button.link) {
+    return
+  }
   try {
-    const url = new URL(link)
+    const url = new URL(button.link)
     url.searchParams.set('clientId', 'quantimodo')
     url.searchParams.set('final_callback_url', window.location.href)
     button.link = url.href
-    return url.href
   } catch (error) {
     debugger
     console.error(error)
@@ -2902,16 +2903,16 @@ export const getAxios = (): AxiosInstance => {
 }
 
 export const getQueries = (): any => {
-  const config = getRapini()
+  const config = digitalTwinApi()
   return config.queries
 }
 
-export const getRapini = (): any => {
+export const digitalTwinApi = (): { requests: any; queries: any } => {
   return initialize(getAxios())
 }
 
 export async function getUser(): Promise<User | null> {
-  const { requests } = getRapini()
+  const { requests } = digitalTwinApi()
   const user = await requests.getUser()
   if (user) {
     storage.setItem('user', JSON.stringify(user))
@@ -2923,7 +2924,7 @@ const SLEEP_EFFICIENCY = 'Sleep Efficiency'
 const DAILY_STEP_COUNT = 'Daily Step Count'
 
 export async function getVariable(variableName: string): Promise<UserVariable | null> {
-  const { requests } = getRapini()
+  const { requests } = digitalTwinApi()
   // let variable: UserVariable
   // let cached = storage.getItem(variableName)
   // if (cached) {
@@ -2938,7 +2939,7 @@ export async function getVariable(variableName: string): Promise<UserVariable | 
 }
 
 export async function findVariableCategory(nameOrId: string): Promise<VariableCategory> {
-  const { requests } = getRapini()
+  const { requests } = digitalTwinApi()
   const cats = await requests.getVariableCategories()
   return cats.find(function (cat) {
     return cat.id === nameOrId || cat.name === nameOrId || cat.synonyms.indexOf(nameOrId) > -1
@@ -2972,7 +2973,7 @@ export async function getLifeForceScore(): Promise<number> {
 }
 
 export async function getUserVariables(): Promise<UserVariable[]> {
-  const { requests } = getRapini()
+  const { requests } = digitalTwinApi()
   return requests.getUserVariables()
 }
 

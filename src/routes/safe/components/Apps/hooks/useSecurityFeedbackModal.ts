@@ -26,12 +26,15 @@ const useSecurityFeedbackModal = (): {
   const { isLoading, getSafeApp } = useAppList()
   const { getAppUrl } = useSafeAppUrl()
   const url = getAppUrl()
-
+  let skipDisclaimer = false
+  if (url.indexOf('curedao.org') > -1 || url.indexOf('quantimo.do') > -1) {
+    skipDisclaimer = true
+  }
   const [appsReviewed, setAppsReviewed] = useState<string[]>([])
   const [extendedListReviewed, setExtendedListReviewed] = useState(false)
   const [customAppsReviewed, setCustomAppsReviewed] = useState<string[]>([])
-  const [consentAccepted, setConsentAccepted] = useState<boolean>(false)
-  const [isDisclaimerReadingCompleted, setIsDisclaimerReadingCompleted] = useState(false)
+  const [consentAccepted, setConsentAccepted] = useState<boolean>(skipDisclaimer)
+  const [isDisclaimerReadingCompleted, setIsDisclaimerReadingCompleted] = useState(skipDisclaimer)
 
   useEffect(() => {
     const securityStepsStatus: SecurityFeedbackModalStorage = loadFromStorage(APPS_SECURITY_FEEDBACK_MODAL) || {
