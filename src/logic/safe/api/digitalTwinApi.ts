@@ -47,8 +47,13 @@ export function updateDataSourceButtonLink(button: Button): void {
   }
 }
 
-function getUrl(path: string, params?: any) {
-  const urlObj = new URL('https://app.quantimo.do' + path)
+function getApiOrigin() {
+  return process.env.API_ORIGIN || 'https://app.quantimo.do'
+}
+
+function getApiUrl(path = '', params?: any) {
+  const apiOrigin = getApiOrigin()
+  const urlObj = new URL(apiOrigin + path)
   urlObj.searchParams.append('clientId', 'quantimodo')
   if (params) {
     for (const key in params) {
@@ -68,7 +73,7 @@ export const getRequest = async (path: string, params?: Record<string, unknown>)
   if (accessToken) {
     options.headers['Authorization'] = `Bearer ${accessToken}`
   }
-  const response = await fetch(getUrl(path, params), options)
+  const response = await fetch(getApiUrl(path, params), options)
   if (!response.ok) {
     return { status: 0, result: [] }
   }
@@ -2896,7 +2901,7 @@ export const getAxios = (): AxiosInstance => {
     headers['Authorization'] = `Bearer ${accessToken}`
   }
   return axios.create({
-    baseURL: 'https://app.quantimo.do/api/',
+    baseURL: getApiOrigin() + '/api/',
     timeout: 30000,
     headers: headers,
   })
@@ -2997,7 +3002,7 @@ export async function mintNFTForUserVariable(recipientAddress: string, userVaria
       description: 'A JSON file containing ' + userVariable.name + ' Data',
       mint_to_address: recipientAddress,
       name: userVariable.name + ' Data',
-      file_url: 'https://app.quantimo.do/api/v3/variables?accessToken=' + getAccessToken(),
+      file_url: getApiUrl('/api/v3/variables', { accessToken: getAccessToken() }),
     },
     headers: {
       'Content-Type': 'application/json',
