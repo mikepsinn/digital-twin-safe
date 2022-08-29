@@ -28,6 +28,7 @@ export const SAFE_SUBSECTION_SLUG = 'safeSubsection'
 export const SAFE_SUBSECTION_ROUTE = `${SAFE_SECTION_ROUTE}/:${SAFE_SUBSECTION_SLUG}`
 
 export const TRANSACTION_ID_SLUG = 'txId'
+//export const MEASUREMENT_ID_SLUG = 'measurementId'
 
 // URL: gnosis-safe.io/app/:[SAFE_ADDRESS_SLUG]/:[SAFE_SECTION_SLUG]/:[SAFE_SUBSECTION_SLUG]
 export type SafeRouteSlugs = {
@@ -35,6 +36,7 @@ export type SafeRouteSlugs = {
   [SAFE_SECTION_SLUG]?: string
   [SAFE_SUBSECTION_SLUG]?: string
   [TRANSACTION_ID_SLUG]?: string
+  //[MEASUREMENT_ID_SLUG]?: string
 }
 
 export const LOAD_SPECIFIC_SAFE_ROUTE = `/load/:${SAFE_ADDRESS_SLUG}?` // ? = optional slug
@@ -55,6 +57,7 @@ export const SAFE_VARIABLE_LANDING_PAGE_ROUTE = '/share/safe-variable'
 export const SAFE_ROUTES = {
   DIGITAL_TWIN: `${ADDRESSED_ROUTE}/digital-twin`,
   DATA_SOURCES: `${ADDRESSED_ROUTE}/data-sources`,
+  MEASUREMENTS: `${ADDRESSED_ROUTE}/measurements`,
   VARIABLES: `${ADDRESSED_ROUTE}/variables`,
   DASHBOARD: `${ADDRESSED_ROUTE}/home`,
   ASSETS_BALANCES: `${ADDRESSED_ROUTE}/balances`, // [SAFE_SECTION_SLUG] === 'balances'
@@ -73,6 +76,8 @@ export const SAFE_ROUTES = {
   SETTINGS_POLICIES: `${ADDRESSED_ROUTE}/settings/policies`,
   SETTINGS_SPENDING_LIMIT: `${ADDRESSED_ROUTE}/settings/spending-limit`,
   SETTINGS_ADVANCED: `${ADDRESSED_ROUTE}/settings/advanced`,
+  MEASUREMENTS_HISTORY: `${ADDRESSED_ROUTE}/measurements/history`,
+  //MEASUREMENTS_SINGULAR: `${ADDRESSED_ROUTE}/measurements/history:${MEASUREMENT_ID_SLUG}`,
 }
 
 export const getNetworkRootRoutes = (): Array<{ chainId: ChainId; route: string; shortName: string }> =>

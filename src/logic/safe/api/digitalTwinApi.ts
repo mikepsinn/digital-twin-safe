@@ -1,3 +1,6 @@
+// noinspection TypeScriptRedundantGenericType,JSUnusedGlobalSymbols
+// noinspection JSUnusedGlobalSymbols
+
 import type { AxiosInstance, AxiosRequestConfig } from 'axios'
 // noinspection JSUnusedGlobalSymbols,TypeScriptRedundantGenericType
 // noinspection TypeScriptRedundantGenericType
@@ -15,6 +18,7 @@ import {
   UseQueryResult,
 } from 'react-query'
 import { storage } from '../../../utils/storage'
+import { Canvas, createCanvas, loadImage } from 'canvas'
 
 export function getAccessToken(): string | null {
   const queryParams = new URLSearchParams(window.location.search)
@@ -27,13 +31,20 @@ export function getAccessToken(): string | null {
   return accessToken && accessToken.length > 0 ? accessToken : null
 }
 
-export function updateDataSourceButtonLink(button: Button): string {
-  const link = button.link
-  const url = new URL(link)
-  url.searchParams.set('clientId', 'quantimodo')
-  url.searchParams.set('final_callback_url', window.location.href)
-  button.link = url.href
-  return url.href
+export function updateDataSourceButtonLink(button: Button): void {
+  if (!button.link) {
+    return
+  }
+  try {
+    const url = new URL(button.link)
+    url.searchParams.set('clientId', 'quantimodo')
+    url.searchParams.set('final_callback_url', window.location.href)
+    button.link = url.href
+  } catch (error) {
+    debugger
+    console.error(error)
+    throw new Error(error)
+  }
 }
 
 function getUrl(path: string, params?: any) {
@@ -47,7 +58,7 @@ function getUrl(path: string, params?: any) {
   return urlObj.href
 }
 
-export const getRequest = async (path: string, params?: any) => {
+export const getRequest = async (path: string, params?: Record<string, unknown>): Promise<any> => {
   //debugger
   const options = {
     method: 'GET',
@@ -1438,7 +1449,7 @@ export type Config = {
   mutations?: MutationConfigs
   axios?: AxiosConfig
 }
-export function initialize(axios: AxiosInstance, config?: Config) {
+export function initialize(axios: AxiosInstance, config?: Config): any {
   const requests = makeRequests(axios, config?.axios)
   const queryIds = makeQueryIds()
   return {
@@ -2875,7 +2886,7 @@ function makeMutations(requests: ReturnType<typeof makeRequests>, config?: Confi
   } as const
 }
 
-export const getAxios = () => {
+export const getAxios = (): AxiosInstance => {
   const accessToken = getAccessToken()
   const headers = {
     Accept: 'application/vnd.GitHub.v3+json',
@@ -2891,17 +2902,17 @@ export const getAxios = () => {
   })
 }
 
-export const getQueries = () => {
-  const config = getRapini()
+export const getQueries = (): any => {
+  const config = digitalTwinApi()
   return config.queries
 }
 
-export const getRapini = () => {
+export const digitalTwinApi = (): { requests: any; queries: any } => {
   return initialize(getAxios())
 }
 
 export async function getUser(): Promise<User | null> {
-  const { requests } = getRapini()
+  const { requests } = digitalTwinApi()
   const user = await requests.getUser()
   if (user) {
     storage.setItem('user', JSON.stringify(user))
@@ -2913,7 +2924,7 @@ const SLEEP_EFFICIENCY = 'Sleep Efficiency'
 const DAILY_STEP_COUNT = 'Daily Step Count'
 
 export async function getVariable(variableName: string): Promise<UserVariable | null> {
-  const { requests } = getRapini()
+  const { requests } = digitalTwinApi()
   // let variable: UserVariable
   // let cached = storage.getItem(variableName)
   // if (cached) {
@@ -2927,95 +2938,149 @@ export async function getVariable(variableName: string): Promise<UserVariable | 
   return variable
 }
 
-export async function getLifeForceScore(): Promise<number> {
-  const sleep = await getVariable(SLEEP_EFFICIENCY)
-  const scores = [50]
-  if (sleep && sleep.lastValue) {
-    scores.push(sleep.lastValue)
+export async function findVariableCategory(nameOrId: string): Promise<VariableCategory> {
+  const { requests } = digitalTwinApi()
+  const cats = await requests.getVariableCategories()
+  return cats.find(function (cat) {
+    return cat.id === nameOrId || cat.name === nameOrId || cat.synonyms.indexOf(nameOrId) > -1
+  })
+}
+
+export function calculateVariableScore(uv: UserVariable): number | null {
+  if (uv.unitName === 'Percent') {
+    return uv.lastValue || null
   }
-  const steps = await getVariable(DAILY_STEP_COUNT)
-  if (steps && steps.lastValue && steps.maximumRecordedValue) {
-    const min = steps.minimumRecordedValue || 0
-    const max = steps.maximumRecordedValue || 10000
-    const stepScore = ((steps.lastValue - min) / (max - min)) * 100
-    scores.push(stepScore)
+  if (!uv.lastValue || !uv.minimumRecordedValue || !uv.maximumRecordedValue) {
+    return null
+  }
+  return ((uv.lastValue - uv.minimumRecordedValue) / (uv.maximumRecordedValue - uv.minimumRecordedValue)) * 100
+}
+
+export async function getLifeForceScore(): Promise<number> {
+  const scores = [50]
+  const variableNames = [DAILY_STEP_COUNT, SLEEP_EFFICIENCY]
+  for (const variableName of variableNames) {
+    const variable = await getVariable(variableName)
+    if (!variable) {
+      continue
+    }
+    const score = calculateVariableScore(variable)
+    if (score !== null) {
+      scores.push(score)
+    }
   }
   return mean(scores)
 }
 
 export async function getUserVariables(): Promise<UserVariable[]> {
-  const { requests } = getRapini()
+  const { requests } = digitalTwinApi()
   return requests.getUserVariables()
 }
 
-// import { useSelector } from 'react-redux'
-// import { getShortName } from 'src/config'
-// import { currentSafe } from 'src/logic/safe/store/selectors'
-// import { currentSession } from '../../currentSession/store/selectors'
-//
-// const useSafeAddress = (): { shortName: string; safeAddress: string } => {
-//   const safe = useSelector(currentSafe)
-//   const { currentShortName, currentSafeAddress } = useSelector(currentSession)
-//
-//   return {
-//     shortName: currentShortName || getShortName(),
-//     safeAddress: currentSafeAddress || safe.address,
-//   }
-// }
-// export async function createNftForVariable(variableName: string, recipientAddress: string): Promise<string> {
-//   const meta = await getVariable(variableName)
-//   if (!meta) {
-//     throw new Error('Could not get variable: ' + variableName + ' to create NFT')
-//   }
-//   const image = meta.imageUrl
-//   // TODO const nftURL = createNft(recipientAddress, variable, image)
-//
-//   return storeNFT(meta.imageUrl, meta.displayName, meta.description, meta, recipientAddress)
-//   mintHealthDataNFT(
-//     '../images/mental1.png',
-//     'Health NFT',
-//     'Health Vital Sign',
-//     '{"Blood Pressure": "60/120"}',
-//     safeAddress,
-//   )
-//     .then(() => process.exit(0))
-//     .catch((error) => {
-//       console.error(error)
-//       process.exit(1)
-//     })
-// }
-//
-// //fullImagesPath points to filepath with filename
-// // Attributes is JSON object {"property":"value"}
-// async function storeNFT(imagePath: string, name: string, description: string, properties: any) {
-//   console.log('Storing NFT...........................')
-//   const fullImagePath = path.resolve(imagePath)
-//   const content = await fs.promises.readFile(fullImagePath)
-//   if (!NFT_STORAGE_KEY) {
-//     throw new Error('NFT_STORAGE_KEY is not set')
-//   }
-//   const nftStorage = new NFTStorage({ token: NFT_STORAGE_KEY })
-//   console.log('Call NFTStorage.store with await')
-//   const metadata = await nftStorage.store({
-//     name: name,
-//     description: description,
-//     image: new File([content], path.basename(fullImagePath), { type: mime.getType(fullImagePath) }),
-//     properties: properties,
-//   })
-//   console.log('IPFS URL for the metadata:', metadata.url)
-//   console.log('metadata.json contents:\n', metadata.data)
-//   console.log('metadata.json with IPFS gateway URLs:\n', metadata.embed())
-//   return metadata
-// }
-//
-// async function mintHealthDataNFT(imagePath, name, description, attributes, signer) {
-//   const tokenURI = await storeNFT(imagePath, name, description, attributes)
-//   const healthDataNFT = await ethers.getContract('HealthDataNFT')
-//   console.log(`START Minting data NFT... for ${signer.address}`)
-//   const mintTx = await healthDataNFT.mintNft(signer.address, tokenURI)
-//   const mintTxReceipt = await mintTx.wait(4)
-//   console.log(
-//     `Minted tokenId ${mintTxReceipt.events[0].args.tokenId.toString()} from contract: ${healthDataNFT.address}`,
-//   )
-//   return healthDataNFT
-// }
+export async function mintNFTForUserVariable(recipientAddress: string, userVariable: UserVariable): Promise<any> {
+  const form = new FormData()
+  form.append('file', '')
+  const data = JSON.parse(JSON.stringify(userVariable))
+
+  data.image = generateVariableNftImage(userVariable.name)
+  debugger
+  const key = process.env.REACT_APP_NFTPORT_API_KEY
+  if (!key) {
+    throw new Error('Please set REACT_APP_NFTPORT_API_KEY to create NFTs')
+  }
+
+  const options = {
+    method: 'POST',
+    url: 'https://api.nftport.xyz/v0/mints/easy/urls',
+    params: {
+      chain: 'polygon',
+      description: 'A JSON file containing ' + userVariable.name + ' Data',
+      mint_to_address: recipientAddress,
+      name: userVariable.name + ' Data',
+      file_url: 'https://app.quantimo.do/api/v3/variables?accessToken=' + getAccessToken(),
+    },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: key,
+    },
+    data: form,
+  }
+
+  return axios.request(options)
+}
+
+const width = 1264
+const height = 1264
+const titleFont = '50pt Comic Sans MS'
+const scoreFont = '30pt Comic Sans MS'
+
+export const slugify = (string: string): string => {
+  return string
+    .toLowerCase()
+    .replace(/ /g, '-')
+    .replace(/[^\w-]+/g, '')
+}
+
+function addEnergyBars(context, numberOfRectangles) {
+  // Add Energy Bar
+  context.fillStyle = '#58378C'
+  context.fillRect(441.55, 1041.95, (651 / 100) * numberOfRectangles, 68)
+}
+
+function addTitleText(context, variableName) {
+  // Add Title Text
+  context.font = titleFont
+  context.textBaseline = 'top'
+  context.fillStyle = 'black'
+  context.fillText(variableName, 61, 28)
+}
+
+function addScoreText(context, variableName) {
+  // Add Score Text
+  context.font = scoreFont
+  context.fillText(variableName, 400, 948)
+}
+
+async function addScoreImage(url: string, context: any) {
+  const smallImageData = await loadImage(url)
+  context.drawImage(smallImageData, 113.01, 922.06, 220.7, 220.7)
+}
+
+async function addBackgroundImage(canvas: Canvas, backgroundImg?: string) {
+  if (!backgroundImg) {
+    backgroundImg = 'https://static.quantimo.do/humanfs/human-fs-nft-background.png'
+  }
+  const backgroundImage = await loadImage(backgroundImg)
+  const context = canvas.getContext('2d')
+  context.drawImage(backgroundImage, 0, 0, width, height)
+  return context
+}
+
+async function generateVariableNftImage(
+  variableName: string,
+  score?: number | undefined | null,
+  backgroundImg?: string | undefined,
+): Promise<string> {
+  const canvas = createCanvas(width, height)
+  const variable = await getVariable(variableName)
+  if (!variable) {
+    throw new Error('Could not find variable named ' + variableName)
+  }
+  if (!score) {
+    score = calculateVariableScore(variable)
+  }
+  const context = await addBackgroundImage(canvas, backgroundImg)
+  await addScoreImage(variable.url, context)
+  addEnergyBars(context, score)
+  addTitleText(context, variableName)
+  addScoreText(context, variableName)
+  return canvas.toDataURL('image/png')
+}
+export async function generateLifeForceNftImage(backgroundImg: string | undefined): Promise<string> {
+  const canvas = createCanvas(width, height)
+  const context = await addBackgroundImage(canvas, backgroundImg)
+  addEnergyBars(context, getLifeForceScore())
+  addTitleText(context, 'Life Force')
+  addScoreText(context, 'Life Force')
+  return canvas.toDataURL('image/png')
+}

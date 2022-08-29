@@ -1,6 +1,6 @@
 import VariablesList, { PINNED_VARIABLES_LIST_TEST_ID, ALL_VARIABLES_LIST_TEST_ID } from './VariablesList'
 import { render, screen, fireEvent, within, act, waitFor } from 'src/utils/test-utils'
-import * as appUtils from 'src/routes/safe/components/Variables/utils'
+import * as userVariableUtils from 'src/routes/safe/components/Variables/utils'
 import { loadFromStorage, saveToStorage } from 'src/utils/storage'
 import * as clipboard from 'src/utils/clipboard'
 import { getShareUserVariableUrl } from 'src/routes/routes'
@@ -14,12 +14,12 @@ const mockStore = {
 }
 
 beforeEach(() => {
-  // Includes an id that doesn't exist in the remote apps to check that there's no error
-  saveToStorage(appUtils.PINNED_SAFE_VARIABLE_IDS, ['14', '24', '228'])
+  // Includes an id that doesn't exist in the remote userVariables to check that there's no error
+  saveToStorage(userVariableUtils.PINNED_SAFE_VARIABLE_IDS, ['14', '24', '228'])
 })
 
 describe('Safe Variables -> VariablesList', () => {
-  it('Shows apps from the Remote app list', async () => {
+  it('Shows userVariables from the Remote user variable list', async () => {
     render(<VariablesList />, mockStore)
 
     await waitFor(() => {
@@ -28,7 +28,7 @@ describe('Safe Variables -> VariablesList', () => {
     })
   })
 
-  it('Shows apps from the Custom app list', async () => {
+  it('Shows userVariables from the Custom user variable list', async () => {
     render(<VariablesList />, mockStore)
 
     await waitFor(() => {
@@ -36,7 +36,7 @@ describe('Safe Variables -> VariablesList', () => {
     })
   })
 
-  it('Shows different app sections', async () => {
+  it('Shows different user variable sections', async () => {
     render(<VariablesList />, mockStore)
 
     await waitFor(() => {
@@ -48,7 +48,7 @@ describe('Safe Variables -> VariablesList', () => {
 })
 
 describe('Safe Variables -> VariablesList -> Search', () => {
-  it('Shows apps matching the search query', async () => {
+  it('Shows userVariables matching the search query', async () => {
     render(<VariablesList />, mockStore)
 
     const searchInput = await waitFor(() => screen.getByPlaceholderText('e.g. Compound'))
@@ -59,7 +59,7 @@ describe('Safe Variables -> VariablesList -> Search', () => {
     expect(screen.queryByText('ENS UserVariable')).not.toBeInTheDocument()
   })
 
-  it('Shows app matching the name first for a query that matches in name and description of multiple apps', async () => {
+  it('Shows user variable matching the name first for a query that matches in name and description of multiple userVariables', async () => {
     render(<VariablesList />, mockStore)
 
     const searchInput = await waitFor(() => screen.getByPlaceholderText('e.g. Compound'))
@@ -77,15 +77,15 @@ describe('Safe Variables -> VariablesList -> Search', () => {
     expect(results[1]).toBe(synthetix)
   })
 
-  it('Shows "no apps found" message when not able to find apps matching the query and a button to search for the WalletConnect Safe app', async () => {
+  it('Shows "no userVariables found" message when not able to find userVariables matching the query and a button to search for the WalletConnect Safe userVariable', async () => {
     render(<VariablesList />, mockStore)
 
-    const query = 'not-a-real-app'
+    const query = 'not-a-real-userVariable'
     const searchInput = await waitFor(() => screen.getByPlaceholderText('e.g. Compound'))
 
     fireEvent.input(searchInput, { target: { value: query } })
 
-    expect(screen.getByText(/No apps found matching/)).toBeInTheDocument()
+    expect(screen.getByText(/No userVariables found matching/)).toBeInTheDocument()
 
     const button = screen.getByText('Search WalletConnect')
     fireEvent.click(button)
@@ -93,7 +93,7 @@ describe('Safe Variables -> VariablesList -> Search', () => {
     expect((searchInput as HTMLInputElement).value).toBe('WalletConnect')
   })
 
-  it('Clears the search result when you press on clear button and shows all apps again', async () => {
+  it('Clears the search result when you press on clear button and shows all userVariables again', async () => {
     render(<VariablesList />, mockStore)
 
     const searchInput = await waitFor(() => screen.getByPlaceholderText('e.g. Compound'))
@@ -105,7 +105,7 @@ describe('Safe Variables -> VariablesList -> Search', () => {
     expect((searchInput as HTMLInputElement).value).toBe('')
   })
 
-  it("Doesn't display custom/pinned apps irrelevant to the search (= hides pinned/custom sections)", async () => {
+  it("Doesn't display custom/pinned userVariables irrelevant to the search (= hides pinned/custom sections)", async () => {
     render(<VariablesList />, mockStore)
 
     const searchInput = await waitFor(() => screen.getByPlaceholderText('e.g. Compound'))
@@ -128,26 +128,26 @@ describe('Safe Variables -> VariablesList -> Search', () => {
   })
 })
 
-describe('Safe Variables -> VariablesList -> Pinning apps', () => {
-  it('Shows a tutorial message when there are no pinned apps', async () => {
-    saveToStorage(appUtils.PINNED_SAFE_VARIABLE_IDS, [])
+describe('Safe Variables -> VariablesList -> Pinning userVariables', () => {
+  it('Shows a tutorial message when there are no pinned userVariables', async () => {
+    saveToStorage(userVariableUtils.PINNED_SAFE_VARIABLE_IDS, [])
 
     render(<VariablesList />, mockStore)
 
     const tut = await waitFor(() =>
       screen.getByText(
         (content) =>
-          content.startsWith('Simply hover over an app and click on the') &&
-          content.endsWith('to bookmark the app here for convenient access'),
+          content.startsWith('Simply hover over an user variable and click on the') &&
+          content.endsWith('to bookmark the user variable here for convenient access'),
       ),
     )
     expect(tut).toBeInTheDocument()
   })
 
-  it('allows to pin and unpin an app', async () => {
+  it('allows to pin and unpin an userVariable', async () => {
     render(<VariablesList />, mockStore)
 
-    // check the app is not pinned
+    // check the user variable is not pinned
     await waitFor(() => {
       expect(within(screen.getByTestId(PINNED_VARIABLES_LIST_TEST_ID)).queryByText('Compound')).not.toBeInTheDocument()
     })
@@ -179,7 +179,7 @@ describe('Safe Variables -> VariablesList -> Pinning apps', () => {
 
   // see #2847 for more info
   it('Removes pinned Safe Variables from localStorage when they are not included in the remote list', async () => {
-    const defaultPinnedVariablesInLocalStorage = loadFromStorage<string[]>(appUtils.PINNED_SAFE_VARIABLE_IDS)
+    const defaultPinnedVariablesInLocalStorage = loadFromStorage<string[]>(userVariableUtils.PINNED_SAFE_VARIABLE_IDS)
     expect(defaultPinnedVariablesInLocalStorage).toContain('14')
     expect(defaultPinnedVariablesInLocalStorage).toContain('24')
     expect(defaultPinnedVariablesInLocalStorage).toContain('228')
@@ -192,7 +192,7 @@ describe('Safe Variables -> VariablesList -> Pinning apps', () => {
     })
 
     // after that the localStorage should be updated
-    const updatedPinnedVariablesInLocalStorage = loadFromStorage<string[]>(appUtils.PINNED_SAFE_VARIABLE_IDS)
+    const updatedPinnedVariablesInLocalStorage = loadFromStorage<string[]>(userVariableUtils.PINNED_SAFE_VARIABLE_IDS)
 
     // '228' UserVariable id should be removed from pinnedVariables ['14', '24', '228'] because is not included in the remote list
     expect(updatedPinnedVariablesInLocalStorage).toContain('14')
@@ -202,7 +202,7 @@ describe('Safe Variables -> VariablesList -> Pinning apps', () => {
 })
 
 describe('Safe Variables -> VariablesList -> Share Safe Variables', () => {
-  it('Shows Share Safe app button in the Safe UserVariable Card', async () => {
+  it('Shows Share Safe user variable button in the Safe UserVariable Card', async () => {
     render(<VariablesList />, mockStore)
 
     await waitFor(() => {
@@ -215,7 +215,7 @@ describe('Safe Variables -> VariablesList -> Share Safe Variables', () => {
     })
   })
 
-  it('Copies the Safe app URL to the clipboard and shows a snackbar', async () => {
+  it('Copies the Safe user variable URL to the clipboard and shows a snackbar', async () => {
     const copyToClipboardSpy = jest.spyOn(clipboard, 'copyToClipboard')
 
     copyToClipboardSpy.mockImplementation(() => jest.fn())
@@ -237,7 +237,7 @@ describe('Safe Variables -> VariablesList -> Share Safe Variables', () => {
       const compoundUrl = 'https://cloudflare-ipfs.com/ipfs/QmX31xCdhFDmJzoVG33Y6kJtJ5Ujw8r5EJJBrsp8Fbjm7k'
       const shareUserVariableUrl = getShareUserVariableUrl(compoundUrl, CHAIN_ID.RINKEBY)
 
-      // share Safe app url is copied in the clipboard
+      // share Safe user variable url is copied in the clipboard
       expect(copyToClipboardSpy).toHaveBeenCalledWith(shareUserVariableUrl)
 
       // we show a snackbar
@@ -245,7 +245,7 @@ describe('Safe Variables -> VariablesList -> Share Safe Variables', () => {
     })
   })
 
-  it('Calls onRemoveVariable when a custom app is removed', async () => {
+  it('Calls onRemoveVariable when a custom user variable is removed', async () => {
     const onRemoveVariableMock = jest.fn()
 
     render(<VariablesList />, mockStore)

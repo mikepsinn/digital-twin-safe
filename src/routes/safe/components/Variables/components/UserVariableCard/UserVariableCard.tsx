@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { Card, Title, Text, Icon } from '@gnosis.pm/safe-react-components'
 
 import { generateSafeRoute, getShareUserVariableUrl, SAFE_ROUTES } from 'src/routes/routes'
-import { UserVariable } from 'src/logic/safe/api/digitalTwinApi'
+import { mintNFTForUserVariable, UserVariable } from 'src/logic/safe/api/digitalTwinApi'
 import fallbackUserVariableLogoSvg from 'src/assets/icons/apps.svg'
 import { currentChainId } from 'src/logic/config/store/selectors'
 import { showNotification } from 'src/logic/notifications/store/notifications'
@@ -18,11 +18,12 @@ import { getShortName } from 'src/config'
 import { UserVariableDescriptionSK, UserVariableLogoSK, UserVariableTitleSK } from './UserVariableSkeleton'
 import { primary200, primary300 } from 'src/theme/variables'
 import useSafeAddress from 'src/logic/currentSession/hooks/useSafeAddress'
+import React from 'react'
 
 type UserVariableCardSize = 'md' | 'lg'
 
 type UserVariableCardProps = {
-  safeVariable: UserVariable
+  userVariable: UserVariable
   size: UserVariableCardSize
   togglePin: (app: UserVariable) => void
   isPinned?: boolean
@@ -30,31 +31,33 @@ type UserVariableCardProps = {
   onRemove?: (app: UserVariable) => void
 }
 
-const UserVariableCard = ({
-  safeVariable,
-  size,
-  togglePin,
-  isPinned,
-  isCustomUserVariable,
-  onRemove,
-}: UserVariableCardProps): React.ReactElement => {
+const UserVariableCard = ({ userVariable, size, togglePin, isPinned }: UserVariableCardProps): React.ReactElement => {
   const chainId = useSelector(currentChainId)
   const dispatch = useDispatch()
-
   const { safeAddress } = useSafeAddress()
   const appsPath = generateSafeRoute(SAFE_ROUTES.APPS, {
     shortName: getShortName(),
     safeAddress,
   })
-  const openUserVariableLink = `${appsPath}?appUrl=${encodeURI(safeVariable.url)}`
-
+  const openUserVariableLink = `${appsPath}?appUrl=${encodeURI(userVariable.url)}`
   const shareUserVariable = () => {
-    const shareUserVariableUrl = getShareUserVariableUrl(safeVariable.url, chainId)
+    const shareUserVariableUrl = getShareUserVariableUrl(userVariable.url, chainId)
     copyToClipboard(shareUserVariableUrl)
     dispatch(showNotification(NOTIFICATIONS.SHARE_SAFE_VARIABLE_URL_COPIED))
+    dispatch(showNotification(NOTIFICATIONS.SAFE_NFT_GENERATING))
+    mintNFTForUserVariable(safeAddress, userVariable)
+      .then(function (response) {
+        console.log('mintNFTForUserVariable success: ', response)
+        dispatch(showNotification(NOTIFICATIONS.SAFE_NFT_MINTED))
+      })
+      .catch(function (error) {
+        dispatch(showNotification(NOTIFICATIONS.SAFE_NFT_ERROR))
+        debugger
+        console.error('mintNFTForUserVariable failure: ', error)
+      })
   }
 
-  const isUserVariableLoading = safeVariable.fetchStatus === FETCH_STATUS.LOADING
+  const isUserVariableLoading = userVariable.fetchStatus === FETCH_STATUS.LOADING
 
   if (isUserVariableLoading) {
     return (
@@ -75,23 +78,23 @@ const UserVariableCard = ({
 
   return (
     <UserVariableContainer size={size}>
-      <StyledLink to={openUserVariableLink} aria-label={`open ${safeVariable.name} Safe UserVariable`}>
+      <StyledLink to={openUserVariableLink} aria-label={`open ${userVariable.name} Safe User Variable`}>
         <StyledVariableCard size={size}>
           {/* Safe UserVariable Logo */}
           <LogoContainer size={size}>
             <UserVariableLogo
               size={size}
-              src={safeVariable.imageUrl}
-              alt={`${safeVariable.name || 'Safe UserVariable'} Logo`}
+              src={userVariable.imageUrl}
+              alt={`${userVariable.name || 'Safe UserVariable'} Logo`}
               onError={setUserVariableLogoFallback}
             />
           </LogoContainer>
 
           {/* Safe UserVariable Description */}
           <DescriptionContainer size={size}>
-            <UserVariableTitle size="xs">{safeVariable.name}</UserVariableTitle>
+            <UserVariableTitle size="xs">{userVariable.name}</UserVariableTitle>
             <UserVariableDescription size="lg" color="inputFilled">
-              {safeVariable.name + ' Data and Relationships with Other Variables'}
+              {userVariable.name + ' Data and Relationships'}
             </UserVariableDescription>
           </DescriptionContainer>
 
@@ -100,34 +103,29 @@ const UserVariableCard = ({
             {/* Share Safe UserVariable button */}
             <IconBtn
               onClick={shareUserVariable}
-              aria-label={`copy ${safeVariable.name} Safe UserVariable share link to clipboard`}
+              aria-label={`copy ${userVariable.name} Safe User Variable share link to clipboard`}
             >
               <Icon size="md" type="share" tooltip="Copy share link" />
             </IconBtn>
 
             {/* Pin & Unpin Safe UserVariable button */}
-            {!isCustomUserVariable && (
+            {
               <IconBtn
-                onClick={() => togglePin(safeVariable)}
-                aria-label={`${isPinned ? 'Unpin' : 'Pin'} ${safeVariable.name} Safe UserVariable`}
+                onClick={() => togglePin(userVariable)}
+                aria-label={`${isPinned ? 'Unpin' : 'Pin'} ${userVariable.name} Safe UserVariable`}
               >
                 {isPinned ? (
-                  <PinnedIcon size="md" type="bookmarkFilled" color="primary" tooltip="Unpin from the Safe Variables" />
+                  <PinnedIcon
+                    size="md"
+                    type="bookmarkFilled"
+                    color="primary"
+                    tooltip="Unpin from the Favorite Variables"
+                  />
                 ) : (
-                  <PinnedIcon size="md" type="bookmark" tooltip="Pin from the Safe Variables" />
+                  <PinnedIcon size="md" type="bookmark" tooltip="Pin to Favorite Variables" />
                 )}
               </IconBtn>
-            )}
-
-            {/* Remove custom Safe UserVariable button */}
-            {isCustomUserVariable && (
-              <IconBtn
-                onClick={() => onRemove?.(safeVariable)}
-                aria-label={`Remove ${safeVariable.name} custom Safe UserVariable`}
-              >
-                <Icon size="md" type="delete" color="error" tooltip="Remove Custom Safe UserVariable" />
-              </IconBtn>
-            )}
+            }
           </ActionsContainer>
         </StyledVariableCard>
       </StyledLink>

@@ -28,8 +28,9 @@ const Settings = lazy(() => import('src/routes/safe/components/Settings'))
 const Balances = lazy(() => import('src/routes/safe/components/Balances'))
 const TxList = lazy(() => import('src/routes/safe/components/Transactions/TxList'))
 const AddressBookTable = lazy(() => import('src/routes/safe/components/AddressBook'))
-const DataSources = lazy(() => import('src/routes/safe/components/DataSources'))
+const DataSources = lazy(() => import('src/routes/safe/components/DataSourcesTable'))
 const Variables = lazy(() => import('src/routes/safe/components/Variables'))
+// const Measurements = lazy(() => import('src/routes/safe/components/Measurements'))
 
 const Container = (): React.ReactElement => {
   const featuresEnabled = useSelector(currentSafeFeaturesEnabled)
@@ -121,6 +122,7 @@ const Container = (): React.ReactElement => {
         <Route exact path={SAFE_ROUTES.ADDRESS_BOOK} render={() => wrapInSuspense(<AddressBookTable />)} />
         <Route exact path={SAFE_ROUTES.DATA_SOURCES} render={() => wrapInSuspense(<DataSources />)} />
         <Route exact path={SAFE_ROUTES.VARIABLES} render={() => wrapInSuspense(<Variables />)} />
+        {/*<Route exact path={SAFE_ROUTES.MEASUREMENTS} render={() => wrapInSuspense(<Measurements />)} />*/}
         <Route
           exact
           path={SAFE_ROUTES.APPS}

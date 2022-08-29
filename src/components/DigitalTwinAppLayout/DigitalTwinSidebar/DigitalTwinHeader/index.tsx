@@ -5,7 +5,6 @@ import {
   FixedIcon,
   Text,
   Title,
-  Identicon,
   Button,
   CopyToClipboardBtn,
   ExplorerButton,
@@ -25,16 +24,15 @@ import {
   black400,
 } from 'src/theme/variables'
 import { ChainInfo } from '@gnosis.pm/safe-react-gateway-sdk'
-import PrefixedEthHashInfo from 'src/components/PrefixedEthHashInfo'
 import { copyShortNameSelector } from 'src/logic/appearance/selectors'
 import { ADDRESSED_ROUTE } from 'src/routes/routes'
 import Track from 'src/components/Track'
 import { OVERVIEW_EVENTS } from 'src/utils/events/overview'
-import Threshold from 'src/components/AppLayout/Sidebar/Threshold'
+//import Threshold from 'src/components/AppLayout/Sidebar/Threshold'
 import { trackEvent } from 'src/utils/googleTagManager'
 import useSafeAddress from 'src/logic/currentSession/hooks/useSafeAddress'
-import { Box } from '@material-ui/core'
-import { currentSafe } from 'src/logic/safe/store/selectors'
+import { Avatar, Box } from '@material-ui/core'
+//import { currentSafe } from 'src/logic/safe/store/selectors'
 
 export const TOGGLE_SIDEBAR_BTN_TESTID = 'TOGGLE_SIDEBAR_BTN'
 
@@ -145,7 +143,7 @@ type StyledTextLabelProps = {
 const StyledTextLabel = styled(Text)`
   margin: -8px 0 0 -8px;
   padding: 4px 8px;
-  width: 100%;
+  width: 75%;
   text-align: center;
   color: ${(props: StyledTextLabelProps) => props.chainInfo?.theme?.textColor ?? fontColor};
   background-color: ${(props: StyledTextLabelProps) => props.chainInfo?.theme?.backgroundColor ?? border};
@@ -155,14 +153,6 @@ const StyledTextSafeName = styled(Text)`
   width: 90%;
   overflow: hidden;
   text-overflow: ellipsis;
-`
-
-const StyledPrefixedEthHashInfo = styled(PrefixedEthHashInfo)`
-  p {
-    color: ${({ theme }) => theme.colors.placeHolder};
-    font-size: 14px;
-    line-height: 20px;
-  }
 `
 
 const StyledText = styled(Title)`
@@ -204,19 +194,17 @@ type Props = {
 const SafeHeader = ({
   address,
   safeName,
-  balance,
   granted,
   onToggleSafeList,
   onReceiveClick,
   onNewTransactionClick,
 }: Props): React.ReactElement => {
-  const { owners, threshold } = useSelector(currentSafe)
+  //const { owners, threshold } = useSelector(currentSafe)
   const copyChainPrefix = useSelector(copyShortNameSelector)
   const { shortName } = useSafeAddress()
-
   const hasSafeOpen = useRouteMatch(ADDRESSED_ROUTE)
 
-  const handleNewTransactionClick = () => {
+  const handleNewMeasurementClick = () => {
     trackEvent({ ...OVERVIEW_EVENTS.NEW_TRANSACTION })
     onNewTransactionClick()
   }
@@ -240,15 +228,16 @@ const SafeHeader = ({
     <>
       {/* Network */}
       <StyledTextLabel size="sm" chainInfo={chainInfo}>
-        {chainInfo.chainName}
+        Life Force
       </StyledTextLabel>
 
       <Container>
         {/* Identicon */}
         <IdenticonContainer>
           <Box position="relative">
-            <Threshold threshold={threshold} owners={owners.length} />
-            <Identicon address={address} size="lg" />
+            {/*            <Threshold threshold={threshold} owners={owners.length} />
+            <Identicon address={address} size="lg" />*/}
+            <Avatar src={'https://static.quantimo.do/img/emoticon-set/png/happy-1.png'} />
           </Box>
           <ToggleSafeListButton onClick={onToggleSafeList} data-testid={TOGGLE_SIDEBAR_BTN_TESTID}>
             <StyledIcon size="md" type="circleDropdown" />
@@ -259,7 +248,7 @@ const SafeHeader = ({
         <StyledTextSafeName size="xl" center>
           {safeName}
         </StyledTextSafeName>
-        <StyledPrefixedEthHashInfo hash={address} shortenHash={4} textSize="sm" />
+        {/*        <StyledPrefixedEthHashInfo hash={address} shortenHash={4} textSize="sm" />*/}
         <IconContainer>
           <Track {...OVERVIEW_EVENTS.SHOW_QR}>
             <StyledQRCodeButton onClick={onReceiveClick}>
@@ -275,18 +264,18 @@ const SafeHeader = ({
         </IconContainer>
 
         <Paragraph color="black400" noMargin size="md">
-          Total Balance
+          Life Force Score
         </Paragraph>
-        <StyledText size="xs">{balance}</StyledText>
+        <StyledText size="xs">60%</StyledText>
         <StyledButton
           size="md"
           disabled={!granted}
           color="primary"
           variant="contained"
-          onClick={handleNewTransactionClick}
+          onClick={handleNewMeasurementClick}
         >
           <Text size="xl" color="white">
-            {granted ? 'New Transaction' : 'Read Only'}
+            {granted ? 'New Measurement' : 'Read Only'}
           </Text>
         </StyledButton>
       </Container>

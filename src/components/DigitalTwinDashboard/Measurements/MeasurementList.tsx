@@ -4,7 +4,7 @@ import { Box, Grid } from '@material-ui/core'
 
 import styled from 'styled-components'
 import { Card, WidgetBody, WidgetContainer, WidgetTitle } from 'src/components/Dashboard/styled'
-import { getAccessToken, getRapini } from '../../../logic/safe/api/digitalTwinApi'
+import { getAccessToken, digitalTwinApi } from '../../../logic/safe/api/digitalTwinApi'
 import { GENERIC_APPS_ROUTE } from 'src/routes/routes'
 import { Link } from 'react-router-dom'
 
@@ -25,7 +25,7 @@ const StyledLink = styled(Link)`
 `
 
 export const MeasurementList = (): ReactElement | null => {
-  const { queries } = getRapini()
+  const { queries } = digitalTwinApi()
 
   const { data, isLoading, isLoadingError } = queries.useGetMeasurements()
 

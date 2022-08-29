@@ -54,6 +54,8 @@ enum NOTIFICATION_IDS {
   SHARE_SAFE_VARIABLE_URL_COPIED,
   SAFE_VARIABLES_FETCH_ERROR_MSG,
   SAFE_NFT_MINTED,
+  SAFE_NFT_GENERATING,
+  SAFE_NFT_ERROR,
 }
 
 export const NOTIFICATIONS: Record<keyof typeof NOTIFICATION_IDS, Notification> = {
@@ -222,5 +224,13 @@ export const NOTIFICATIONS: Record<keyof typeof NOTIFICATION_IDS, Notification> 
   SAFE_NFT_MINTED: {
     message: 'Created an NFT for your variable. Check it out on the NFTs page',
     options: { variant: VARIANT.INFO, autoHideDuration: longDuration },
+  },
+  SAFE_NFT_GENERATING: {
+    message: 'Creating an NFT for your variable...',
+    options: { variant: VARIANT.INFO, autoHideDuration: longDuration },
+  },
+  SAFE_NFT_ERROR: {
+    message: 'Error creating an NFT for your variable...',
+    options: { variant: VARIANT.ERROR, autoHideDuration: longDuration },
   },
 }
