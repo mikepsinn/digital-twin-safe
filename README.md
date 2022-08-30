@@ -8,13 +8,11 @@ Import data from all your apps and wearables so you can centrally own, control, 
 
 Try it out at [humanfs.io](https://humanfs.io)!  
 
-Please [create an issue](https://github.com/HumanFS/digital-twin-safe/issues) if you have any problems or suggestons.
+For support requests, please open up a [bug issue](https://github.com/HumanFS/digital-twin-safe/issues/new?template=bug-report.md) or reach out via [Discord](https://curedao.org/discord).
 
 Based on the awesome [Gnosis Safe](https://gnosis-safe.io/), the most trusted platform to store digital assets on Ethereum.
 
-For technical information please refer to the [Developer Portal](https://docs.gnosis.io/safe/).
-
-For support requests, please open up a [bug issue](https://github.com/HumanFS/digital-twin-safe/issues/new?template=bug-report.md) or reach out via [Discord](https://chat.gnosis-safe.io).
+For technical information please refer to the [Gnosis Safe Developer Portal](https://docs.gnosis.io/safe/).
 
 ## Transactions
 
