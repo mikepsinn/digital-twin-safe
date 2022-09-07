@@ -20,3 +20,4 @@ jest.results.json
 cypress/videos
 cypress/screenshots
 cypress/downloads
+/public/bit/
