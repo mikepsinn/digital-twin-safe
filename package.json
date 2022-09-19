@@ -75,6 +75,7 @@
     ]
   },
   "dependencies": {
+    "@ethersproject/contracts": "^5.7.0",
     "@ethersproject/hash": "^5.5.0",
     "@glazed/did-datastore": "^0.3.2",
     "@gnosis.pm/safe-apps-sdk": "7.3.0",
@@ -114,6 +115,7 @@
     "history": "4.10.1",
     "immutable": "4.0.0-rc.12",
     "js-cookie": "^3.0.0",
+    "lit-js-sdk": "^1.1.218",
     "lodash": "^4.17.21",
     "mathjs": "^11.0.1",
     "nft.storage": "^7.0.0",

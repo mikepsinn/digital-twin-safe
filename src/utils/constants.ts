@@ -23,6 +23,9 @@ export const ETHGASSTATION_API_KEY = process.env.REACT_APP_ETHGASSTATION_API_KEY
 export const IPFS_GATEWAY = process.env.REACT_APP_IPFS_GATEWAY
 export const WC_BRIDGE = process.env.REACT_APP_WC_BRIDGE || 'https://safe-walletconnect.gnosis.io/'
 
+export const PINATA_API_KEY = process.env.REACT_APP_PINATA_API_KEY || ''
+export const PINATA_JWT = process.env.REACT_APP_PINATA_JWT || ''
+
 export const DEMO_SAFE_MAINNET = '0xfF501B324DC6d78dC9F983f140B9211c3EdB4dc7'
 
 // Google Tag Manager
