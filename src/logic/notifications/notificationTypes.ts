@@ -53,6 +53,7 @@ enum NOTIFICATION_IDS {
   SHARE_SAFE_APP_URL_COPIED,
   SHARE_SAFE_VARIABLE_URL_COPIED,
   SAFE_VARIABLES_FETCH_ERROR_MSG,
+  SAFE_DATA_GEMS_FETCH_ERROR_MSG,
   SAFE_NFT_MINTED,
   SAFE_NFT_GENERATING,
   SAFE_NFT_ERROR,
@@ -218,7 +219,11 @@ export const NOTIFICATIONS: Record<keyof typeof NOTIFICATION_IDS, Notification> 
     options: { variant: VARIANT.INFO, preventDuplicate: true },
   },
   SAFE_VARIABLES_FETCH_ERROR_MSG: {
-    message: 'Error fetching the Safe Apps, please refresh the page',
+    message: 'Error fetching the Variables, please refresh the page',
+    options: { variant: VARIANT.ERROR, autoHideDuration: shortDuration },
+  },
+  SAFE_DATA_GEMS_FETCH_ERROR_MSG: {
+    message: 'Error fetching the Data Gems, please refresh the page',
     options: { variant: VARIANT.ERROR, autoHideDuration: shortDuration },
   },
   SAFE_NFT_MINTED: {

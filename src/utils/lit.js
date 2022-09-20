@@ -196,3 +196,59 @@ export function fileToDataUrl(file) {
     reader.readAsDataURL(file)
   })
 }
+
+/**
+ * Finds the tokens that the current user owns from the predeployed LIT contracts
+ * @param {Object} params
+ * @param {string} params.chain The chain that was minted on. "ethereum" and "polygon" are currently supported.
+ * @param {number} params.accountAddress The account address to check
+ * @returns {Promise} The token ids owned by the accountAddress
+ */
+export async function findLITs() {
+  log('findLITs')
+
+  try {
+    const { web3, account } = await connectWeb3()
+    const { chainId } = await web3.getNetwork()
+    const chainHexId = '0x' + chainId.toString(16)
+    // const chainHexId = await web3.request({ method: 'eth_chainId', params: [] })
+    const chain = chainHexIdToChainName(chainHexId)
+    const tokenAddress = LIT_CHAINS[chain].contractAddress
+    const contract = new Contract(tokenAddress, LitJson.abi, web3.getSigner())
+    log('getting maxTokenId for chain', chain)
+    const maxTokenId = await contract.tokenIds()
+    const accounts = []
+    const tokenIds = []
+    for (let i = 0; i <= maxTokenId; i++) {
+      accounts.push(account)
+      tokenIds.push(i)
+    }
+    log('getting balanceOfBatch for ', accounts, tokenIds)
+    const balances = await contract.balanceOfBatch(accounts, tokenIds)
+    log('balances', balances)
+    const tokenIdsWithNonzeroBalances = balances
+      .map((b, i) => (b.toNumber() === 0 ? null : i))
+      .filter((b) => b !== null)
+    return { tokenIds: tokenIdsWithNonzeroBalances, chain }
+  } catch (error) {
+    log(error)
+    if (error.code === 4001) {
+      // EIP-1193 userRejectedRequest error
+      log('User rejected request')
+      return { errorCode: 'user_rejected_request' }
+    } else {
+      console.error(error)
+    }
+    return { errorCode: 'unknown_error' }
+  }
+}
+
+function chainHexIdToChainName(chainHexId) {
+  for (let i = 0; i < Object.keys(LIT_CHAINS).length; i++) {
+    const chainName = Object.keys(LIT_CHAINS)[i]
+    const litChainHexId = '0x' + LIT_CHAINS[chainName].chainId.toString('16')
+    if (litChainHexId === chainHexId) {
+      return chainName
+    }
+  }
+}

@@ -92,6 +92,7 @@ const Overview = (): ReactElement => {
 
   const assetsLink = generateSafeRoute(SAFE_ROUTES.ASSETS_BALANCES, { safeAddress: address, shortName })
   const nftsLink = generateSafeRoute(SAFE_ROUTES.ASSETS_BALANCES_COLLECTIBLES, { safeAddress: address, shortName })
+  const dataGemsLink = generateSafeRoute(SAFE_ROUTES.ASSETS_BALANCES_DATA_GEMS, { safeAddress: address, shortName })
 
   // Native token is always returned even when its balance is 0
   const tokenCount = useMemo(() => balances.filter((token) => token.tokenBalance !== '0').length, [balances])
@@ -135,6 +136,15 @@ const Overview = (): ReactElement => {
 
               <Grid item xs={3}>
                 <StyledLink to={nftsLink}>
+                  <Text color="inputDefault" size="lg">
+                    NFTs
+                  </Text>
+                  {nftTokens && <StyledText size="xl">{nftLoaded ? nftTokens.length : ValueSkeleton}</StyledText>}
+                </StyledLink>
+              </Grid>
+
+              <Grid item xs={3}>
+                <StyledLink to={dataGemsLink}>
                   <Text color="inputDefault" size="lg">
                     NFTs
                   </Text>

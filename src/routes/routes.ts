@@ -62,6 +62,7 @@ export const SAFE_ROUTES = {
   DASHBOARD: `${ADDRESSED_ROUTE}/home`,
   ASSETS_BALANCES: `${ADDRESSED_ROUTE}/balances`, // [SAFE_SECTION_SLUG] === 'balances'
   ASSETS_BALANCES_COLLECTIBLES: `${ADDRESSED_ROUTE}/balances/nfts`, // [SAFE_SUBSECTION_SLUG] === 'nfts'
+  ASSETS_BALANCES_DATA_GEMS: `${ADDRESSED_ROUTE}/balances/data-gems`, // [SAFE_SUBSECTION_SLUG] === 'nfts'
   LEGACY_COLLECTIBLES: `${ADDRESSED_ROUTE}/balances/collectibles`,
   TRANSACTIONS: `${ADDRESSED_ROUTE}/transactions`,
   TRANSACTIONS_HISTORY: `${ADDRESSED_ROUTE}/transactions/history`,

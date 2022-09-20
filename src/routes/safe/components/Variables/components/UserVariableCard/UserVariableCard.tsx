@@ -279,7 +279,7 @@ const UserVariableCard = ({ userVariable, size, togglePin, isPinned }: UserVaria
     if (res.errorCode) {
       handleErrorResponse(res.errorCode)
     } else {
-      const nftsLink = generateSafeRoute(SAFE_ROUTES.ASSETS_BALANCES_COLLECTIBLES, { safeAddress, shortName })
+      const nftsLink = generateSafeRoute(SAFE_ROUTES.ASSETS_BALANCES_DATA_GEMS, { safeAddress, shortName })
       dispatch(
         showNotification({
           message: 'Sent to safe',
