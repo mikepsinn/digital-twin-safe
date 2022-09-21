@@ -2982,6 +2982,36 @@ export async function getUserVariables(): Promise<UserVariable[]> {
   return requests.getUserVariables()
 }
 
+export const CHAIN_POLYGON = 'polygon'
+export async function deployContract() {
+  const options = {
+    method: 'POST',
+    url: 'https://api.nftport.xyz/v0/contracts',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: '48f25836-8309-42ca-bf4f-ed86d9c1e31d',
+    },
+    data: {
+      chain: CHAIN_POLYGON,
+      name: 'DeSciExchangeDataGem',
+      symbol: 'DGEM',
+      owner_address: '',
+      metadata_updatable: true,
+      type: 'erc721',
+      roles: [{ role: 'mint', addresses: ['0xMockAddress1', '0xMockAddress2'], freeze: false }],
+    },
+  }
+
+  return axios
+    .request(options)
+    .then(function (response) {
+      console.log(response.data)
+    })
+    .catch(function (error) {
+      console.error(error)
+    })
+}
+
 export async function mintNFTForUserVariable(recipientAddress: string, userVariable: UserVariable): Promise<any> {
   const form = new FormData()
   form.append('file', '')
@@ -2998,7 +3028,7 @@ export async function mintNFTForUserVariable(recipientAddress: string, userVaria
     method: 'POST',
     url: 'https://api.nftport.xyz/v0/mints/easy/urls',
     params: {
-      chain: 'polygon',
+      chain: CHAIN_POLYGON,
       description: 'A JSON file containing ' + userVariable.name + ' Data',
       mint_to_address: recipientAddress,
       name: userVariable.name + ' Data',
