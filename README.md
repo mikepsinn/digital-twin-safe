@@ -52,17 +52,19 @@ Diet-Tracking App B:
 
 ## 🌈 Get Involved
 
-Are you or your team working on some aspect of this?
-Then join us on [Discord](https://discord.gg/TCrQDsRF) so we can coordinate and avoid duplication of effort.
+Join us on [Discord](https://curedao.org/discord)!
 
-👨‍🏫 You can also contribute to a task on [DeWork](https://app.dework.xyz/hackfs-dhealth-colle)
+## Overview
 
-## 👩‍💻 Useful resources
+![digital-twin-safe-screenshot-home](https://user-images.githubusercontent.com/2808553/200402565-72bc85a3-deb2-4f1a-a9b1-bde108e63d87.png)
 
-- 🤚 [Aragon DAO and Multisig](https://client.aragon.org/?#/humanfs/)
-- 💬 [Community on Discord](https://discord.gg/TCrQDsRF)
-- 🌎 [EthGlobal HackFS Project](https://ethglobal.com/showcase/human-file-system-mq03o)
-- 👨‍🏫 [Tasks on DeWork](https://app.dework.xyz/hackfs-dhealth-colle)
+## Variables
+
+![digital-twin-safe-screenshot-variables](https://user-images.githubusercontent.com/2808553/200402422-41213d62-324d-44db-a725-fc0eab619e45.png)
+
+### Data Sources
+
+![digital-twin-safe-screenshot-data-sources](https://user-images.githubusercontent.com/2808553/200402625-8c4ab0b1-829c-4128-8b12-509c2f885b96.png)
 
 # 📚 Libraries Used
 
@@ -79,22 +81,6 @@ Then join us on [Discord](https://discord.gg/TCrQDsRF) so we can coordinate and 
 
 For technical information please refer to the [Gnosis Safe Developer Portal](https://docs.gnosis.io/safe/).
 
-## Transactions
-
-Please see the [transaction](docs/transactions.md) notes for more information about transaction details.
-
-## Related repos
-
-- [safe-react-e2e-tests](https://github.com/gnosis/safe-react-e2e-tests)
-- [safe-react-gateway-sdk](https://github.com/gnosis/safe-react-gateway-sdk)
-- [safe-react-components](https://github.com/gnosis/safe-react-components)
-
-## Deployed environments
-
-- Production: https://gnosis-safe.io/app/
-- Staging: https://safe-team.staging.gnosisdev.com/app/
-- Dev: https://safe-team.dev.gnosisdev.com/app/
-- PRs: `https://pr<PR_NUMBER>--safereact.review-safe.gnosisdev.com/app/`
 
 ## Getting Started
 
