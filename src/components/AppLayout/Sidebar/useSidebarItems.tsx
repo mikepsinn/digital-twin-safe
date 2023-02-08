@@ -48,7 +48,21 @@ const useSidebarItems = (): ListItemType[] => {
       safeAddress,
     })
 
-    /*    const transactionsSubItems = [
+    const assetsSubItems = [
+      makeEntryItem({
+        label: 'Coins',
+        iconType: 'assets',
+        href: currentSafeRoutes.ASSETS_BALANCES,
+      }),
+      makeEntryItem({
+        disabled: !isCollectiblesEnabled,
+        label: 'NFTs',
+        iconType: 'collectibles',
+        href: currentSafeRoutes.ASSETS_BALANCES_COLLECTIBLES,
+      }),
+    ]
+
+    const transactionsSubItems = [
       makeEntryItem({
         label: 'Queue',
         href: currentSafeRoutes.TRANSACTIONS_QUEUE,
@@ -57,32 +71,8 @@ const useSidebarItems = (): ListItemType[] => {
         label: 'History',
         href: currentSafeRoutes.TRANSACTIONS_HISTORY,
       }),
-    ]*/
+    ]
 
-    /*    const assetsSubItems = [
-      makeEntryItem({
-        disabled: !isCollectiblesEnabled,
-        label: 'NFTs',
-        iconType: 'collectibles',
-        href: currentSafeRoutes.ASSETS_BALANCES_COLLECTIBLES,
-      }),
-      makeEntryItem({
-        label: 'Coins',
-        iconType: 'assets',
-        href: currentSafeRoutes.ASSETS_BALANCES,
-      }),
-      makeEntryItem({
-        label: 'Transactions',
-        iconType: 'transactionsInactive',
-        href: currentSafeRoutes.TRANSACTIONS_HISTORY,
-        subItems: transactionsSubItems,
-      }),
-      makeEntryItem({
-        label: 'Address Book',
-        iconType: 'addressBook',
-        href: currentSafeRoutes.ADDRESS_BOOK,
-      }),
-    ]*/
     const settingsSubItems = [
       makeEntryItem({
         label: 'Safe Details',
@@ -116,6 +106,11 @@ const useSidebarItems = (): ListItemType[] => {
         iconType: 'settingsTool',
         href: currentSafeRoutes.SETTINGS_ADVANCED,
       }),
+      makeEntryItem({
+        label: 'Safe Apps Permissions',
+        iconType: 'info',
+        href: currentSafeRoutes.SETTINGS_SAFE_APPS_PERMISSIONS,
+      }),
     ].filter(Boolean)
 
     return [
@@ -125,22 +120,34 @@ const useSidebarItems = (): ListItemType[] => {
         href: currentSafeRoutes.DASHBOARD,
       }),
       makeEntryItem({
-        label: 'You Data',
+        label: 'Your Data',
         iconType: 'apps',
         href: currentSafeRoutes.VARIABLES,
       }),
       makeEntryItem({
         disabled: !isCollectiblesEnabled,
-        label: 'Health NFTs',
+        label: 'Data Gems',
         iconType: 'collectibles',
+        //href: currentSafeRoutes.ASSETS_BALANCES_DATA_GEMS,
         href: currentSafeRoutes.ASSETS_BALANCES_COLLECTIBLES,
       }),
-      /*      makeEntryItem({
+      makeEntryItem({
         label: 'Assets',
         iconType: 'assets',
         href: currentSafeRoutes.ASSETS_BALANCES,
         subItems: assetsSubItems,
-      }),*/
+      }),
+      makeEntryItem({
+        label: 'Transactions',
+        iconType: 'transactionsInactive',
+        href: currentSafeRoutes.TRANSACTIONS_HISTORY,
+        subItems: transactionsSubItems,
+      }),
+      makeEntryItem({
+        label: 'Address Book',
+        iconType: 'addressBook',
+        href: currentSafeRoutes.ADDRESS_BOOK,
+      }),
       makeEntryItem({
         disabled: !safeAppsEnabled,
         label: 'Apps',

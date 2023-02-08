@@ -1,0 +1,11 @@
+{
+  "name": "Data Gem 1",
+  "description": "An empty Data Gem waiting to be filled with data.",
+  "image": "https://ipfs.io/ipfs/bafkreihqubrfvvp3vzc7tmqamfbodvcevhmnpep6wg6hc3cyrdixkrn25e",
+  "attributes": [
+    {
+      "trait_type": "Lamp Type",
+      "value": "Classic"
+    }
+  ]
+}

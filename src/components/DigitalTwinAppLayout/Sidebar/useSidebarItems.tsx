@@ -67,6 +67,13 @@ const useSidebarItems = (): ListItemType[] => {
         href: currentSafeRoutes.ASSETS_BALANCES_COLLECTIBLES,
       }),
       makeEntryItem({
+        disabled: !isCollectiblesEnabled,
+        label: 'Data Gems',
+        iconType: 'collectibles',
+        //href: currentSafeRoutes.ASSETS_BALANCES_DATA_GEMS,
+        href: currentSafeRoutes.ASSETS_BALANCES_COLLECTIBLES,
+      }),
+      makeEntryItem({
         label: 'Coins',
         iconType: 'assets',
         href: currentSafeRoutes.ASSETS_BALANCES,
@@ -129,6 +136,12 @@ const useSidebarItems = (): ListItemType[] => {
         label: 'NFTs',
         iconType: 'collectibles',
         href: currentSafeRoutes.ASSETS_BALANCES_COLLECTIBLES,
+      }),
+      makeEntryItem({
+        disabled: !isCollectiblesEnabled,
+        label: 'Data Gems',
+        iconType: 'collectibles',
+        href: currentSafeRoutes.ASSETS_BALANCES_DATA_GEMS,
       }),
       makeEntryItem({
         label: 'Assets',

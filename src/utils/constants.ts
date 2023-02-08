@@ -1,6 +1,7 @@
 import { CHAIN_ID } from 'src/config/chain.d'
 
-export const APP_ENV = process.env.REACT_APP_ENV
+// Chains won't load with APP_ENV=dev
+export const APP_ENV = process.env.REACT_APP_ENV || 'production'
 export const NODE_ENV = process.env.NODE_ENV
 //export const IS_PRODUCTION = APP_ENV === 'production'
 export const IS_PRODUCTION = true
@@ -23,6 +24,9 @@ export const ETHERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY || ''
 export const ETHGASSTATION_API_KEY = process.env.REACT_APP_ETHGASSTATION_API_KEY
 export const IPFS_GATEWAY = process.env.REACT_APP_IPFS_GATEWAY
 export const WC_BRIDGE = process.env.REACT_APP_WC_BRIDGE || 'https://safe-walletconnect.gnosis.io/'
+
+export const PINATA_API_KEY = process.env.REACT_APP_PINATA_API_KEY || ''
+export const PINATA_JWT = process.env.REACT_APP_PINATA_JWT || ''
 
 export const DEMO_SAFE_MAINNET = '0xfF501B324DC6d78dC9F983f140B9211c3EdB4dc7'
 

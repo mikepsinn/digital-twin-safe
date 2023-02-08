@@ -39,6 +39,7 @@ describe('<SafeAppLandingPage>', () => {
             type: safeAppsGatewaySDK.SafeAppAccessPolicyTypes.NoRestrictions,
           },
           tags: [],
+          safeAppsPermissions: [],
         },
       ]),
     )

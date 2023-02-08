@@ -1,9 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import React from 'react'
+import React, { ReactElement } from 'react'
 import { Previews } from '@react-buddy/ide-toolbox'
 import { PaletteTree } from './palette'
 
-const ComponentPreviews = () => {
+const ComponentPreviews = (): ReactElement => {
   return <Previews palette={<PaletteTree />} />
 }
 

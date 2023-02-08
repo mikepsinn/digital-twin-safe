@@ -15,6 +15,7 @@ import { FEATURES } from '@gnosis.pm/safe-react-gateway-sdk'
 import useSafeAddress from 'src/logic/currentSession/hooks/useSafeAddress'
 
 const Collectibles = lazy(() => import('src/routes/safe/components/Balances/Collectibles'))
+const DataGems = lazy(() => import('src/routes/safe/components/Balances/DataGems'))
 const Coins = lazy(() => import('src/routes/safe/components/Balances/Coins'))
 
 export const MANAGE_TOKENS_BUTTON_TEST_ID = 'manage-tokens-btn'
@@ -23,6 +24,7 @@ export const BALANCE_ROW_TEST_ID = 'balance-row'
 enum SECTION_NAME {
   coins = 'Coins',
   collectibles = 'NFTs',
+  dataGems = 'Data Gems',
 }
 
 const Balances = (): ReactElement => {
@@ -48,6 +50,9 @@ const Balances = (): ReactElement => {
     case currentSafeRoutes.ASSETS_BALANCES_COLLECTIBLES:
       balancesSection = SECTION_NAME.collectibles
       break
+    case currentSafeRoutes.ASSETS_BALANCES_DATA_GEMS:
+      balancesSection = SECTION_NAME.dataGems
+      break
   }
 
   const openReceive = () => setShowReceive(true)
@@ -72,6 +77,7 @@ const Balances = (): ReactElement => {
 
       {/* Coins & Collectibles sub-router */}
       <Switch>
+        <Route path={SAFE_ROUTES.ASSETS_BALANCES_DATA_GEMS} exact render={() => wrapInSuspense(<DataGems />)} />
         <Route
           path={SAFE_ROUTES.ASSETS_BALANCES_COLLECTIBLES}
           exact

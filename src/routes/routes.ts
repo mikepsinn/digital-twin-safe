@@ -62,6 +62,7 @@ export const SAFE_ROUTES = {
   DASHBOARD: `${ADDRESSED_ROUTE}/home`,
   ASSETS_BALANCES: `${ADDRESSED_ROUTE}/balances`, // [SAFE_SECTION_SLUG] === 'balances'
   ASSETS_BALANCES_COLLECTIBLES: `${ADDRESSED_ROUTE}/balances/nfts`, // [SAFE_SUBSECTION_SLUG] === 'nfts'
+  ASSETS_BALANCES_DATA_GEMS: `${ADDRESSED_ROUTE}/balances/data-gems`, // [SAFE_SUBSECTION_SLUG] === 'nfts'
   LEGACY_COLLECTIBLES: `${ADDRESSED_ROUTE}/balances/collectibles`,
   TRANSACTIONS: `${ADDRESSED_ROUTE}/transactions`,
   TRANSACTIONS_HISTORY: `${ADDRESSED_ROUTE}/transactions/history`,
@@ -76,6 +77,7 @@ export const SAFE_ROUTES = {
   SETTINGS_POLICIES: `${ADDRESSED_ROUTE}/settings/policies`,
   SETTINGS_SPENDING_LIMIT: `${ADDRESSED_ROUTE}/settings/spending-limit`,
   SETTINGS_ADVANCED: `${ADDRESSED_ROUTE}/settings/advanced`,
+  SETTINGS_SAFE_APPS_PERMISSIONS: `${ADDRESSED_ROUTE}/settings/safe-apps-permissions`,
   MEASUREMENTS_HISTORY: `${ADDRESSED_ROUTE}/measurements/history`,
   //MEASUREMENTS_SINGULAR: `${ADDRESSED_ROUTE}/measurements/history:${MEASUREMENT_ID_SLUG}`,
 }
