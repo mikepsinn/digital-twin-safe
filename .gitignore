@@ -4,7 +4,8 @@
 yarn-error.log
 .env*
 .eslintcache
-/.idea
+/.idea/*
+!.idea/rcb-settings.xml
 dist
 electron-builder.yml
 /.yalc
