@@ -11,6 +11,7 @@ const calculateStyleFrom = (color, margin) => ({
   margin: `${getSize(margin)} 0px`,
 })
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const Hairline = ({ className, color, margin, style }: any): ReactElement => {
   const calculatedStyles = calculateStyleFrom(color, margin)
   const mergedStyles = { ...calculatedStyles, ...(style || {}) }

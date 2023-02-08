@@ -77,11 +77,8 @@ const Balances = (): ReactElement => {
 
       {/* Coins & Collectibles sub-router */}
       <Switch>
-        <Route
-          path={SAFE_ROUTES.ASSETS_BALANCES_DATA_GEMS}
-          exact
-          render={() => (wrapInSuspense(<DataGems />))}
-        />
+        <Route path={SAFE_ROUTES.ASSETS_BALANCES_DATA_GEMS} exact render={() => wrapInSuspense(<DataGems />)} />
+        <Route path={SAFE_ROUTES.ASSETS_BALANCES_DATA_GEMS} exact render={() => wrapInSuspense(<DataGems />)} />
         <Route
           path={SAFE_ROUTES.ASSETS_BALANCES_COLLECTIBLES}
           exact

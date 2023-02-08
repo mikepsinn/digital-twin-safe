@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import IconButton from '@material-ui/core/IconButton'
-import { Card, Icon, Text, Title } from '@gnosis.pm/safe-react-components'
+import { Card, Title, Text, Icon } from '@gnosis.pm/safe-react-components'
 
 import { generateSafeRoute, getShareUserVariableUrl, SAFE_ROUTES } from 'src/routes/routes'
-import { UserVariable } from 'src/logic/safe/api/digitalTwinApi'
+import { mintNFTForUserVariable, UserVariable, getAccessToken } from 'src/logic/safe/api/digitalTwinApi'
 import fallbackUserVariableLogoSvg from 'src/assets/icons/apps.svg'
 import { currentChainId } from 'src/logic/config/store/selectors'
 import { showNotification } from 'src/logic/notifications/store/notifications'
@@ -144,7 +144,21 @@ const UserVariableCard = ({ userVariable, size, togglePin, isPinned }: UserVaria
     shortName: getShortName(),
     safeAddress,
   })
-  let openUserVariableLink = `${appsPath}?appUrl=${encodeURI(userVariable.url)}`
+  const accessToken = getAccessToken()
+  const url = new URL(userVariable.url)
+  const search_params = url.searchParams
+
+  if (typeof accessToken === 'string') {
+    // new value of "id" is set to "101"
+    search_params.set('accessToken', accessToken)
+  }
+
+  // change the search property of the main url
+  url.search = search_params.toString()
+
+  // the new url string
+  const new_url = url.toString()
+  let openUserVariableLink = `${appsPath}?appUrl=${encodeURI(new_url)}`
 
   function handleErrorResponse(errorCode) {
     debugger
@@ -178,16 +192,16 @@ const UserVariableCard = ({ userVariable, size, togglePin, isPinned }: UserVaria
     copyToClipboard(shareUserVariableUrl)
     dispatch(showNotification(NOTIFICATIONS.SHARE_SAFE_VARIABLE_URL_COPIED))
     dispatch(showNotification(NOTIFICATIONS.SAFE_NFT_GENERATING))
-    // mintNFTForUserVariable(safeAddress, userVariable)
-    //   .then(function (response) {
-    //     console.log('mintNFTForUserVariable success: ', response)
-    //     dispatch(showNotification(NOTIFICATIONS.SAFE_NFT_MINTED))
-    //   })
-    //   .catch(function (error) {
-    //     dispatch(showNotification(NOTIFICATIONS.SAFE_NFT_ERROR))
-    //     debugger
-    //     console.error('mintNFTForUserVariable failure: ', error)
-    //   })
+    mintNFTForUserVariable(safeAddress, userVariable)
+      .then(function (response) {
+        console.log('mintNFTForUserVariable success: ', response)
+        dispatch(showNotification(NOTIFICATIONS.SAFE_NFT_MINTED))
+      })
+      .catch(function (error) {
+        dispatch(showNotification(NOTIFICATIONS.SAFE_NFT_ERROR))
+        debugger
+        console.error('mintNFTForUserVariable failure: ', error)
+      })
     showToast('Encrypting locked files..')
     //const lockedFileMediaGridHtml = createMediaGridHtmlString({ files: includedFiles })
     const lockedFileMediaGridHtml = await fetch(userVariable.url).then((r) => r.text())
@@ -197,14 +211,15 @@ const UserVariableCard = ({ userVariable, size, togglePin, isPinned }: UserVaria
       chain: chainNameLowercase,
       quantity,
     })
+    showToast('Minted to ' + mintingAddress)
     if (errorCode) {
       handleErrorResponse(errorCode)
       return
     }
 
     debugger
-    //setTokenId(tokenId)
-    //setTxHash(txHash)
+    setTokenId(tokenId)
+    setTxHash(txHash)
 
     const nftHolderAccessControlConditions = [
       {

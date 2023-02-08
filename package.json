@@ -77,7 +77,6 @@
   "dependencies": {
     "@ethersproject/contracts": "^5.7.0",
     "@ethersproject/hash": "^5.5.0",
-    "@glazed/did-datastore": "^0.3.2",
     "@gnosis.pm/safe-apps-sdk": "7.3.0",
     "@gnosis.pm/safe-apps-sdk-v1": "npm:@gnosis.pm/safe-apps-sdk@0.4.2",
     "@gnosis.pm/safe-core-sdk": "^2.0.0",
@@ -86,6 +85,7 @@
     "@gnosis.pm/safe-react-components": "^1.1.2",
     "@gnosis.pm/safe-react-gateway-sdk": "^3.1.1",
     "@gnosis.pm/safe-web3-lib": "^1.0.0",
+    "lit-js-sdk": "^1.1.198",
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.0",
     "@material-ui/lab": "4.0.0-alpha.60",
@@ -111,14 +111,12 @@
     "final-form-calculate": "^1.3.2",
     "framer-motion": "^4.1.17",
     "fuse.js": "^6.4.6",
-    "hardhat": "^2.10.2",
     "history": "4.10.1",
     "immutable": "4.0.0-rc.12",
     "js-cookie": "^3.0.0",
     "lit-js-sdk": "^1.1.218",
     "lodash": "^4.17.21",
     "mathjs": "^11.0.1",
-    "nft.storage": "^7.0.0",
     "notistack": "1.0.10",
     "object-hash": "^2.1.1",
     "qrcode.react": "1.0.1",
@@ -198,7 +196,7 @@
     "redux-mock-store": "^1.5.4",
     "sass": "^1.32.0",
     "typechain": "^5.1.2",
-    "typescript": "4.5.5",
+    "typescript": "^4.3.5",
     "wait-on": "^6.0.0"
   }
 }

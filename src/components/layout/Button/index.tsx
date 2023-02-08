@@ -6,6 +6,7 @@ const calculateStyleBased = (minWidth, minHeight) => ({
   minHeight: minHeight && `${minHeight}px`,
 })
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const GnoButton = ({ minWidth, minHeight = 35, testId = '', style = {}, ...props }: any): ReactElement => {
   const calculatedStyle = calculateStyleBased(minWidth, minHeight)
 

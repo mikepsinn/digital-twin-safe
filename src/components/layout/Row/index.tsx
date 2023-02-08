@@ -7,6 +7,7 @@ import { capitalize } from 'src/utils/css'
 
 const cx = classNames.bind(styles)
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const Row = ({ align, children, className, grow, margin, testId = '', ...props }: any): ReactElement => {
   const rowClassNames = cx(
     styles.row,

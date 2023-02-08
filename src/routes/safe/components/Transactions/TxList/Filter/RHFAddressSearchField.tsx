@@ -15,7 +15,7 @@ import { parsePrefixedAddress } from 'src/utils/prefixedAddress'
 import { formatInputValue, getFilterHelperText } from 'src/routes/safe/components/Transactions/TxList/Filter/utils'
 import { checksumAddress } from 'src/utils/checksumAddress'
 
-type Props<T> = {
+type Props<T extends FieldValues> = {
   name: Path<T>
   methods: UseFormReturn<T>
   label: string
