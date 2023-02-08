@@ -66,12 +66,12 @@ const useSidebarItems = (): ListItemType[] => {
         iconType: 'collectibles',
         href: currentSafeRoutes.ASSETS_BALANCES_COLLECTIBLES,
       }),
-      makeEntryItem({
+      /*      makeEntryItem({
         disabled: !isCollectiblesEnabled,
         label: 'Data Gems',
         iconType: 'collectibles',
         href: currentSafeRoutes.ASSETS_BALANCES_DATA_GEMS,
-      }),
+      }),*/
       makeEntryItem({
         label: 'Coins',
         iconType: 'assets',
@@ -140,7 +140,8 @@ const useSidebarItems = (): ListItemType[] => {
         disabled: !isCollectiblesEnabled,
         label: 'Data Gems',
         iconType: 'collectibles',
-        href: currentSafeRoutes.ASSETS_BALANCES_DATA_GEMS,
+        //href: currentSafeRoutes.ASSETS_BALANCES_DATA_GEMS,
+        href: currentSafeRoutes.ASSETS_BALANCES_COLLECTIBLES,
       }),
       makeEntryItem({
         label: 'Assets',

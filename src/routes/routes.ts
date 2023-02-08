@@ -77,6 +77,7 @@ export const SAFE_ROUTES = {
   SETTINGS_POLICIES: `${ADDRESSED_ROUTE}/settings/policies`,
   SETTINGS_SPENDING_LIMIT: `${ADDRESSED_ROUTE}/settings/spending-limit`,
   SETTINGS_ADVANCED: `${ADDRESSED_ROUTE}/settings/advanced`,
+  SETTINGS_SAFE_APPS_PERMISSIONS: `${ADDRESSED_ROUTE}/settings/safe-apps-permissions`,
   MEASUREMENTS_HISTORY: `${ADDRESSED_ROUTE}/measurements/history`,
   //MEASUREMENTS_SINGULAR: `${ADDRESSED_ROUTE}/measurements/history:${MEASUREMENT_ID_SLUG}`,
 }
