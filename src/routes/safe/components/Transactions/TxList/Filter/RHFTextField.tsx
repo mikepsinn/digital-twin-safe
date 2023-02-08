@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField/TextField'
 
 import { formatInputValue, getFilterHelperText } from 'src/routes/safe/components/Transactions/TxList/Filter/utils'
 
-type Props<T> = {
+type Props<T extends FieldValues> = {
   name: Path<T>
   control: Control<T, unknown>
   rules?: UseControllerProps<T>['rules']

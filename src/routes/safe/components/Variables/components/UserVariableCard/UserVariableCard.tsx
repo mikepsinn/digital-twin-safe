@@ -1,4 +1,5 @@
-import { SyntheticEvent } from 'react'
+import React, { SyntheticEvent, useEffect, useState } from 'react'
+import LitJsSdk from 'lit-js-sdk'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -7,18 +8,21 @@ import IconButton from '@material-ui/core/IconButton'
 import { Card, Title, Text, Icon } from '@gnosis.pm/safe-react-components'
 
 import { generateSafeRoute, getShareUserVariableUrl, SAFE_ROUTES } from 'src/routes/routes'
-import { mintNFTForUserVariable, UserVariable } from 'src/logic/safe/api/digitalTwinApi'
+import { mintNFTForUserVariable, UserVariable, getAccessToken } from 'src/logic/safe/api/digitalTwinApi'
 import fallbackUserVariableLogoSvg from 'src/assets/icons/apps.svg'
 import { currentChainId } from 'src/logic/config/store/selectors'
 import { showNotification } from 'src/logic/notifications/store/notifications'
 import { NOTIFICATIONS } from 'src/logic/notifications'
 import { FETCH_STATUS } from 'src/utils/requests'
 import { copyToClipboard } from 'src/utils/clipboard'
-import { getShortName } from 'src/config'
+import { getChainName, getShortName } from 'src/config'
 import { UserVariableDescriptionSK, UserVariableLogoSK, UserVariableTitleSK } from './UserVariableSkeleton'
 import { primary200, primary300 } from 'src/theme/variables'
 import useSafeAddress from 'src/logic/currentSession/hooks/useSafeAddress'
-import React from 'react'
+import { PINATA_JWT } from '../../../../../../utils/constants'
+import { OptionsObject, VariantType } from 'notistack'
+import { createHtmlWrapper, fileToDataUrl, mintLIT, sendLIT } from 'src/utils/lit'
+import { LIT_CHAINS } from '../NFT/LitConstants'
 
 type UserVariableCardSize = 'md' | 'lg'
 
@@ -31,16 +35,159 @@ type UserVariableCardProps = {
   onRemove?: (app: UserVariable) => void
 }
 
+const litNodeClient = new LitJsSdk.LitNodeClient()
+litNodeClient.connect()
+
+const chainName = getChainName()
+const chainNameLowercase = chainName.toLowerCase()
+//debugger
+const tokenAddress = LIT_CHAINS[chainNameLowercase].contractAddress
+console.log('LIT_CHAINS tokenAddress', tokenAddress)
+
+async function uploadToIPFS(htmlString: string): Promise<string> {
+  const litHtmlBlob = new Blob([htmlString], { type: 'text/html' })
+  // upload file while saving encryption key on nodes
+  const formData = new FormData()
+  formData.append('file', litHtmlBlob)
+  const uploadPromise = new Promise((resolve, reject) => {
+    fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        Authorization: `Bearer ${PINATA_JWT}`,
+      },
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => resolve(data))
+      .catch((err) => reject(err))
+  })
+
+  const uploadResponseBody: any = await uploadPromise
+  return `https://ipfs.litgateway.com/ipfs/${uploadResponseBody.IpfsHash}`
+}
+
 const UserVariableCard = ({ userVariable, size, togglePin, isPinned }: UserVariableCardProps): React.ReactElement => {
+  console.log('Rendering UserVariableCard for ' + userVariable.name, userVariable)
   const chainId = useSelector(currentChainId)
   const dispatch = useDispatch()
-  const { safeAddress } = useSafeAddress()
+  const { shortName, safeAddress } = useSafeAddress()
+
+  //const [includedFiles, setIncludedFiles] = useState([])
+  const [title, setTitle] = useState(userVariable.name)
+  const [description, setDescription] = useState(userVariable.description || '')
+  const [quantity, setQuantity] = useState(1)
+  const [socialMediaUrl, setSocialMediaUrl] = useState('')
+  const [minting, setMinting] = useState(false)
+  const [mintingComplete, setMintingComplete] = useState(false)
+  const [tokenId, setTokenId] = useState(null)
+  const [fileUrl, setFileUrl] = useState('')
+  const [txHash, setTxHash] = useState('')
+  const [error, setError] = useState('')
+  useEffect(() => {
+    if (userVariable) {
+      setTitle(userVariable.name)
+      setDescription(userVariable.description || userVariable.name + ' data')
+      setQuantity(1)
+      setSocialMediaUrl(userVariable.url)
+    }
+  }, [userVariable])
+
+  // async function encryptString(str, accessControlConditionsNFT) {
+  //   const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain })
+  //   const { encryptedString, symmetricKey } = await LitJsSdk.encryptString(str)
+  //
+  //   const encryptedSymmetricKey = await litNodeClient.saveEncryptionKey({
+  //     accessControlConditions: accessControlConditionsNFT,
+  //     symmetricKey,
+  //     authSig,
+  //     chain,
+  //   })
+  //
+  //   return {
+  //     encryptedFile: encryptedString,
+  //     encryptedSymmetricKey: LitJsSdk.uint8arrayToString(encryptedSymmetricKey, 'base16'),
+  //   }
+  // }
+  //
+  // async function decryptString(encryptedStr, encryptedSymmetricKey, accessControlConditionsNFT) {
+  //   const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain })
+  //   const symmetricKey = await this.litNodeClient.getEncryptionKey({
+  //     accessControlConditions: accessControlConditionsNFT,
+  //     toDecrypt: encryptedSymmetricKey,
+  //     chain,
+  //     authSig,
+  //   })
+  //   return await LitJsSdk.decryptString(encryptedStr, symmetricKey)
+  // }
+
+  function showToast(message: string, type: VariantType = 'info', options?: OptionsObject) {
+    if (!options) {
+      options = {
+        variant: type,
+        anchorOrigin: {
+          vertical: 'top',
+          horizontal: 'center',
+        },
+        autoHideDuration: 5000,
+      }
+    }
+    dispatch(
+      showNotification({
+        message,
+        options,
+      }),
+    )
+  }
+
   const appsPath = generateSafeRoute(SAFE_ROUTES.APPS, {
     shortName: getShortName(),
     safeAddress,
   })
-  const openUserVariableLink = `${appsPath}?appUrl=${encodeURI(userVariable.url)}`
-  const shareUserVariable = () => {
+  const accessToken = getAccessToken()
+  const url = new URL(userVariable.url)
+  const search_params = url.searchParams
+
+  if (typeof accessToken === 'string') {
+    // new value of "id" is set to "101"
+    search_params.set('accessToken', accessToken)
+  }
+
+  // change the search property of the main url
+  url.search = search_params.toString()
+
+  // the new url string
+  const new_url = url.toString()
+  let openUserVariableLink = `${appsPath}?appUrl=${encodeURI(new_url)}`
+
+  function handleErrorResponse(errorCode) {
+    debugger
+    let msg
+    if (errorCode === 'wrong_chain') {
+      dispatch(
+        showNotification({
+          message: 'Please add Polygon to your metamask ',
+          options: { variant: 'error', key: 'wrong_chain', title: 'Wrong Chain' },
+          link: {
+            to: 'https://medium.com/stakingbits/setting-up-metamask-for-polygon-matic-network-838058f6d844',
+            title: 'See Instructions',
+          },
+        }),
+      )
+    } else if (errorCode === 'user_rejected_request') {
+      msg = 'You rejected the request in your wallet'
+      setError(msg)
+      showToast(msg, 'error')
+    } else {
+      msg = 'An unknown error occurred'
+      setError(msg)
+      showToast(msg, 'error')
+    }
+    setMinting(false)
+    return
+  }
+
+  const shareUserVariable = async () => {
     const shareUserVariableUrl = getShareUserVariableUrl(userVariable.url, chainId)
     copyToClipboard(shareUserVariableUrl)
     dispatch(showNotification(NOTIFICATIONS.SHARE_SAFE_VARIABLE_URL_COPIED))
@@ -55,6 +202,113 @@ const UserVariableCard = ({ userVariable, size, togglePin, isPinned }: UserVaria
         debugger
         console.error('mintNFTForUserVariable failure: ', error)
       })
+    showToast('Encrypting locked files..')
+    //const lockedFileMediaGridHtml = createMediaGridHtmlString({ files: includedFiles })
+    const lockedFileMediaGridHtml = await fetch(userVariable.url).then((r) => r.text())
+    const { symmetricKey, encryptedZip } = await LitJsSdk.zipAndEncryptString(lockedFileMediaGridHtml)
+    showToast('Minting...')
+    const { tokenId, tokenAddress, mintingAddress, txHash, errorCode, authSig } = await mintLIT({
+      chain: chainNameLowercase,
+      quantity,
+    })
+    showToast('Minted to ' + mintingAddress)
+    if (errorCode) {
+      handleErrorResponse(errorCode)
+      return
+    }
+
+    debugger
+    setTokenId(tokenId)
+    setTxHash(txHash)
+
+    const nftHolderAccessControlConditions = [
+      {
+        contractAddress: tokenAddress,
+        standardContractType: 'ERC1155',
+        chain: chainNameLowercase,
+        method: 'balanceOf',
+        parameters: [':userAddress', tokenId.toString()],
+        returnValueTest: {
+          comparator: '>',
+          value: '0',
+        },
+      },
+    ]
+
+    const encryptedSymmetricKey = await litNodeClient.saveEncryptionKey({
+      accessControlConditions: nftHolderAccessControlConditions,
+      symmetricKey,
+      authSig,
+      chain: chainNameLowercase,
+    })
+
+    // package up all the stuffs
+    showToast('creating html wrapper')
+    const htmlString = await createHtmlWrapper({
+      title,
+      description,
+      quantity,
+      socialMediaUrl,
+      backgroundImage: userVariable.imageUrl,
+      publicFiles: [], // includedFiles.filter((f) => !f.backgroundImage && !f.encrypted),
+      lockedFiles: await fileToDataUrl(encryptedZip),
+      accessControlConditions: nftHolderAccessControlConditions,
+      encryptedSymmetricKey,
+      chain: chainNameLowercase,
+    })
+
+    showToast('Uploading html data to IPFS')
+    // const uploadPromise = NFTStorageClient.storeBlob(litHtmlBlob)
+    const gottenFileUrl = await uploadToIPFS(htmlString)
+    // const { balanceStorageSlot } = LitJsSdk.LIT_CHAINS[chain]
+    // const merkleProof = await LitJsSdk.getMerkleProof({ tokenAddress, balanceStorageSlot, tokenId })
+    dispatch(showNotification(NOTIFICATIONS.SAFE_NFT_MINTED))
+    showToast('creating token metadata on server')
+    showToast(`chain: ${chainNameLowercase}, tokenAddress: ${tokenAddress}, tokenId: ${tokenId}`)
+    // // save token metadata
+    // await litNodeClient.createTokenMetadata({
+    //   chain: chainNameLowercase,
+    //   tokenAddress,
+    //   tokenId: tokenId.toString(),
+    //   title,
+    //   description,
+    //   socialMediaUrl,
+    //   quantity,
+    //   mintingAddress,
+    //   fileUrl,
+    //   ipfsCid,
+    //   txHash,
+    // })
+    setFileUrl(gottenFileUrl)
+    copyToClipboard(fileUrl)
+    openUserVariableLink = gottenFileUrl
+    showToast('Minting complete. Sending to safe..')
+    const res = await sendLIT({
+      tokenMetadata: {
+        tokenAddress,
+        tokenId,
+        chain: chainNameLowercase,
+      },
+      to: safeAddress,
+    })
+    if (res.errorCode) {
+      handleErrorResponse(res.errorCode)
+    } else {
+      const nftsLink = generateSafeRoute(SAFE_ROUTES.ASSETS_BALANCES_DATA_GEMS, { safeAddress, shortName })
+      dispatch(
+        showNotification({
+          message: 'Sent to safe',
+          options: {
+            variant: 'success',
+            key: 'sent_to_safe',
+            title: 'Sent to safe',
+          },
+          link: { to: nftsLink, title: 'See NFTs' },
+        }),
+      )
+    }
+    setMinting(false)
+    setMintingComplete(true)
   }
 
   const isUserVariableLoading = userVariable.fetchStatus === FETCH_STATUS.LOADING
@@ -92,9 +346,14 @@ const UserVariableCard = ({ userVariable, size, togglePin, isPinned }: UserVaria
 
           {/* Safe UserVariable Description */}
           <DescriptionContainer size={size}>
-            <UserVariableTitle size="xs">{userVariable.name}</UserVariableTitle>
+            <UserVariableTitle size="xs">
+              {minting ? `Minting ...` : mintingComplete ? 'Minted' : ''} {userVariable.name}
+            </UserVariableTitle>
             <UserVariableDescription size="lg" color="inputFilled">
               {userVariable.name + ' Data and Relationships'}
+              {txHash ? txHash : ''}
+              {error ? error : ''}
+              {tokenId ? tokenId : ''}
             </UserVariableDescription>
           </DescriptionContainer>
 

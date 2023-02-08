@@ -5,6 +5,7 @@ import styles from './index.module.scss'
 
 const cx = cn.bind(styles)
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const GnoButtonLink = ({
   className = '',
   color = 'secondary',

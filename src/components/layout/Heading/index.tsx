@@ -7,6 +7,7 @@ import { capitalize } from 'src/utils/css'
 
 const cx = classNames.bind(styles)
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const Heading = (props) => {
   const { align, children, className = '', color, margin, tag, testId, truncate, ...rest } = props
 

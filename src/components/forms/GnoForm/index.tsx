@@ -7,6 +7,7 @@ const stylesBasedOn = (padding) => ({
   flex: '1 0 auto',
 })
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const GnoForm = ({
   children,
   decorators,

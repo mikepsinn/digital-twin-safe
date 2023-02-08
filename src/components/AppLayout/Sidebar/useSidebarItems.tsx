@@ -125,15 +125,15 @@ const useSidebarItems = (): ListItemType[] => {
         href: currentSafeRoutes.DASHBOARD,
       }),
       makeEntryItem({
-        label: 'You Data',
+        label: 'Your Data',
         iconType: 'apps',
         href: currentSafeRoutes.VARIABLES,
       }),
       makeEntryItem({
         disabled: !isCollectiblesEnabled,
-        label: 'Health NFTs',
+        label: 'Data Gems',
         iconType: 'collectibles',
-        href: currentSafeRoutes.ASSETS_BALANCES_COLLECTIBLES,
+        href: currentSafeRoutes.ASSETS_BALANCES_DATA_GEMS,
       }),
       /*      makeEntryItem({
         label: 'Assets',
