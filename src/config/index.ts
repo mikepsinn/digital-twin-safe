@@ -129,9 +129,14 @@ export const getHashedExplorerUrl = (hash: string): string => {
 export const getExplorerInfo = (hash: string): (() => { url: string; alt: string }) => {
   const url = getHashedExplorerUrl(hash)
 
-  const { hostname } = new URL(url)
-  const alt = `View on ${hostname}` // Not returned by CGW
-  return () => ({ url, alt })
+  try {
+    const { hostname } = new URL(url)
+    const alt = `View on ${hostname}` // Not returned by CGW
+    return () => ({ url, alt })
+  } catch (e) {
+    console.error('Invalid URL: ' + url, e)
+    return () => ({ url: '', alt: '' })
+  }
 }
 
 const getExplorerApiKey = (apiUrl: string): string | undefined => {

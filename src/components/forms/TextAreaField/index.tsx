@@ -23,6 +23,7 @@ const styles = createStyles({
 
 const useStyles = makeStyles(styles)
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const TextAreaField = ({ ...props }): ReactElement => {
   const classes = useStyles()
   return <Field {...props} className={classes.textarea} component={TextField} multiline rows="5" />
