@@ -7,6 +7,7 @@ let chains: ChainInfo[] = []
 export const getChains = (): ChainInfo[] => chains
 
 export const loadChains = async () => {
+  //const { results = [] } = mockGetChainsConfigResponse
   const { results = [] } = await getChainsConfig()
   chains = results
   // Set the initail web3 provider after loading chains
