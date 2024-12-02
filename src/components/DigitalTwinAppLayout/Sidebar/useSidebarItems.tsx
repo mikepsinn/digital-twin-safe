@@ -138,12 +138,6 @@ const useSidebarItems = (): ListItemType[] => {
         href: currentSafeRoutes.ASSETS_BALANCES_COLLECTIBLES,
       }),
       makeEntryItem({
-        disabled: !isCollectiblesEnabled,
-        label: 'Data Gems',
-        iconType: 'collectibles',
-        href: currentSafeRoutes.ASSETS_BALANCES_DATA_GEMS,
-      }),
-      makeEntryItem({
         label: 'Assets',
         iconType: 'assets',
         href: currentSafeRoutes.ASSETS_BALANCES,

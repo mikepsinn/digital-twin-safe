@@ -1,7 +1,11 @@
 import { Dispatch } from 'redux'
 
 import { getConfiguredSource } from 'src/logic/collectibles/sources'
-import { addNftAssets, addNftTokens, setNftTokensLoaded } from 'src/logic/collectibles/store/actions/addCollectibles'
+import {
+  addNftAssets,
+  addNftTokens,
+  setNftTokensLoaded,
+} from 'src/logic/collectibles/store/actions/addCollectibles'
 
 export const fetchCollectibles =
   (safeAddress: string) =>
